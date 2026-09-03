@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { GalleryAlbum } from './gallery-album';
+import './gallery.css';
 
 export const metadata: Metadata = {
   title: "Gallery | Surprise Bro's",

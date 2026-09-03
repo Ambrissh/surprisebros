@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { ArrowLeft, ChevronLeft, ChevronRight, Images, X } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -96,24 +98,24 @@ export function GalleryAlbum() {
   return (
     <main className="gallery-page">
       <header className="gallery-header">
-        <a className="gallery-brand" href="/" aria-label="Surprise Bro's home">
+        <Link className="gallery-brand" href="/" aria-label="Surprise Bro's home">
           <span className="gallery-monogram" aria-hidden="true">SB</span>
           <span>
             <strong>Surprise Bro&apos;s</strong>
             <small>Events · Tirunelveli</small>
           </span>
-        </a>
+        </Link>
 
         <nav className="gallery-nav" aria-label="Primary navigation">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.label}
               href={item.href}
               className={item.label === 'Gallery' ? 'is-active' : undefined}
               aria-current={item.label === 'Gallery' ? 'page' : undefined}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
       </header>
@@ -135,6 +137,7 @@ export function GalleryAlbum() {
               photos={photos.slice(0, 4)}
               offset={0}
               onSelect={setSelectedPhoto}
+              isInteractive={isOpen}
             />
 
             <div className="album-binding" aria-hidden="true">
@@ -146,6 +149,7 @@ export function GalleryAlbum() {
               photos={photos.slice(4)}
               offset={4}
               onSelect={setSelectedPhoto}
+              isInteractive={isOpen}
             />
           </div>
 
@@ -181,10 +185,10 @@ export function GalleryAlbum() {
             <X aria-hidden="true" />
             Close album
           </Button>
-          <a href="/">
+          <Link href="/">
             <ArrowLeft aria-hidden="true" />
             Back to the beginning
-          </a>
+          </Link>
         </div>
       </section>
 
@@ -212,7 +216,13 @@ export function GalleryAlbum() {
               </button>
 
               <div className="lightbox-photo-wrap">
-                <img src={photos[selectedPhoto].src} alt={photos[selectedPhoto].alt} />
+                <Image
+                  src={photos[selectedPhoto].src}
+                  alt={photos[selectedPhoto].alt}
+                  width={1600}
+                  height={1067}
+                  sizes="94vw"
+                />
               </div>
 
               <div className="lightbox-caption">
@@ -255,11 +265,13 @@ function AlbumPage({
   photos: pagePhotos,
   offset,
   onSelect,
+  isInteractive,
 }: {
   side: 'left' | 'right';
   photos: ReadonlyArray<(typeof photos)[number]>;
   offset: number;
   onSelect: (index: number) => void;
+  isInteractive: boolean;
 }) {
   return (
     <div className={`album-page album-page-${side}`}>
@@ -277,9 +289,16 @@ function AlbumPage({
             key={photo.src}
             onClick={() => onSelect(offset + index)}
             aria-label={`Expand photograph: ${photo.caption}`}
+            tabIndex={isInteractive ? 0 : -1}
           >
             <span className="photo-print">
-              <img src={photo.src} alt="" />
+              <Image
+                src={photo.src}
+                alt=""
+                width={800}
+                height={540}
+                sizes="(max-width: 680px) 42vw, 20vw"
+              />
             </span>
             <span className="photo-caption">
               <strong>{photo.caption}</strong>
