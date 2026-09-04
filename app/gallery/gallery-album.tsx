@@ -216,9 +216,6 @@ export function GalleryAlbum() {
   const [turning, setTurning] = useState<TurnState | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const swipeOrigin = useRef<number | null>(null);
-  const indexTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const turnTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showPreviousPhoto = useCallback(() => {
     setSelectedPhoto((current) => {
@@ -258,28 +255,12 @@ export function GalleryAlbum() {
     });
   }, [spreadIndex]);
 
-  useEffect(
-    () => () => {
-      if (indexTimer.current) clearTimeout(indexTimer.current);
-      if (turnTimer.current) clearTimeout(turnTimer.current);
-      if (closeTimer.current) clearTimeout(closeTimer.current);
-    },
-    [],
-  );
-
   const beginTurn = (to: number, direction: -1 | 1) => {
     if (turning || to === spreadIndex) return;
 
     const from = spreadIndex;
     setTurning({ direction, from, to });
-
-    indexTimer.current = setTimeout(() => {
-      setSpreadIndex(to);
-    }, 440);
-
-    turnTimer.current = setTimeout(() => {
-      setTurning(null);
-    }, 920);
+    setSpreadIndex(to);
   };
 
   const changeSpread = (direction: -1 | 1) => {
@@ -291,10 +272,6 @@ export function GalleryAlbum() {
     if (turning || isClosing) return;
     setIsClosing(true);
     setIsOpen(false);
-    closeTimer.current = setTimeout(() => {
-      setSpreadIndex(0);
-      setIsClosing(false);
-    }, 1050);
   };
 
   const spreadStart = spreadIndex * photosPerSpread;
@@ -346,7 +323,11 @@ export function GalleryAlbum() {
             </div>
 
             {turning ? (
-              <TurningPage turn={turning} onSelect={setSelectedPhoto} />
+              <TurningPage
+                turn={turning}
+                onSelect={setSelectedPhoto}
+                onComplete={() => setTurning(null)}
+              />
             ) : null}
           </div>
 
@@ -364,6 +345,11 @@ export function GalleryAlbum() {
             aria-expanded={isOpen}
             tabIndex={isOpen || isClosing ? -1 : 0}
             disabled={isClosing}
+            onTransitionEnd={(event) => {
+              if (event.propertyName !== "transform" || !isClosing) return;
+              setSpreadIndex(0);
+              setIsClosing(false);
+            }}
           >
             <span className="cover-inset" aria-hidden="true" />
             <span className="cover-brand">Surprise Bro&apos;s</span>
@@ -496,9 +482,11 @@ function getSpreadPhotos(index: number) {
 function TurningPage({
   turn,
   onSelect,
+  onComplete,
 }: {
   turn: TurnState;
   onSelect: (index: number) => void;
+  onComplete: () => void;
 }) {
   const fromPhotos = getSpreadPhotos(turn.from);
   const toPhotos = getSpreadPhotos(turn.to);
@@ -507,31 +495,47 @@ function TurningPage({
   const frontOffset = (isForward ? turn.from : turn.to) * photosPerSpread + 2;
   const backPhotos = isForward ? toPhotos.slice(0, 2) : fromPhotos.slice(0, 2);
   const backOffset = (isForward ? turn.to : turn.from) * photosPerSpread;
+  const heldPhotos = isForward ? fromPhotos.slice(0, 2) : fromPhotos.slice(2, 4);
+  const heldOffset = turn.from * photosPerSpread + (isForward ? 0 : 2);
+  const heldSide = isForward ? "left" : "right";
 
   return (
-    <div
-      className={`turning-page ${isForward ? "turning-forward" : "turning-backward"}`}
-      aria-hidden="true"
-    >
-      <div className="turn-face turn-front">
+    <>
+      <div className={`turning-hold turning-hold-${heldSide}`} aria-hidden="true">
         <AlbumPage
-          side="right"
-          photos={frontPhotos}
-          offset={frontOffset}
+          side={heldSide}
+          photos={heldPhotos}
+          offset={heldOffset}
           onSelect={onSelect}
           inactive
         />
       </div>
-      <div className="turn-face turn-back">
-        <AlbumPage
-          side="left"
-          photos={backPhotos}
-          offset={backOffset}
-          onSelect={onSelect}
-          inactive
-        />
+
+      <div
+        className={`turning-page ${isForward ? "turning-forward" : "turning-backward"}`}
+        aria-hidden="true"
+        onAnimationEnd={onComplete}
+      >
+        <div className="turn-face turn-front">
+          <AlbumPage
+            side="right"
+            photos={frontPhotos}
+            offset={frontOffset}
+            onSelect={onSelect}
+            inactive
+          />
+        </div>
+        <div className="turn-face turn-back">
+          <AlbumPage
+            side="left"
+            photos={backPhotos}
+            offset={backOffset}
+            onSelect={onSelect}
+            inactive
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
