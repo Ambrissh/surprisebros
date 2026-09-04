@@ -1,1089 +1,1102 @@
-.flight-page {
-  --flight-night: #120d13;
-  --flight-aubergine: #24101e;
-  --flight-wine: #541c34;
-  --flight-ivory: #f0e7da;
-  --flight-paper: #f7f1e8;
-  --flight-sand: #cbb79e;
-  --flight-blush: #d6b0b6;
-  --flight-gold: #b79561;
-  --flight-ink: #23171c;
-  --flight-serif:
-    'Iowan Old Style', Baskerville, 'Palatino Linotype', Palatino, Georgia,
-    serif;
+.balloon-page {
+  --ink: #123d35;
+  --paper: #fff8e9;
+  --paper-bright: #fffdf5;
+  --aqua: #a8ddd5;
+  --butter: #f3d96f;
+  --coral: #ef8977;
+  --line: #204b42;
   min-height: 100vh;
   overflow: clip;
-  color: var(--flight-ink);
-  background: var(--flight-ivory);
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--font-geist-sans), Arial, sans-serif;
 }
 
-.flight-page,
-.flight-page * {
+.balloon-page,
+.balloon-page * {
   box-sizing: border-box;
 }
 
-.flight-page a {
+.balloon-page a {
   color: inherit;
   text-decoration: none;
 }
 
-.flight-header {
+.balloon-header {
   position: absolute;
-  z-index: 20;
+  z-index: 30;
   top: 0;
   left: 0;
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  padding: 1.6rem clamp(1.25rem, 4vw, 4.5rem);
-  color: var(--flight-ivory);
+  padding: 1.35rem clamp(1.2rem, 4vw, 4rem);
 }
 
-.flight-brand {
-  display: grid;
-  gap: 0.18rem;
-  line-height: 1;
+.balloon-brand {
+  display: inline-grid;
+  color: var(--ink);
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: clamp(1.25rem, 1.6vw, 1.65rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.82;
 }
 
-.flight-brand span {
-  font-family: var(--flight-serif);
-  font-size: clamp(1.15rem, 1.6vw, 1.55rem);
-  letter-spacing: -0.02em;
+.balloon-brand small {
+  justify-self: end;
+  color: inherit;
+  font-family: var(--font-doodle), cursive;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  transform: rotate(-3deg);
 }
 
-.flight-brand small,
-.flight-nav,
-.flight-kicker,
-.flight-index,
-.flight-review-meta,
-.flight-review footer,
-.flight-footer,
-.flight-note div {
-  font-family: var(--font-geist-sans), Arial, sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.16em;
-}
-
-.flight-brand small {
-  color: rgb(240 231 218 / 62%);
-  font-size: 0.55rem;
-}
-
-.flight-nav {
+.balloon-header nav {
   display: flex;
-  gap: clamp(1rem, 2.4vw, 2.5rem);
   align-items: center;
-  font-size: 0.62rem;
-  font-weight: 600;
+  gap: clamp(1rem, 2.4vw, 2.5rem);
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
 }
 
-.flight-nav a {
+.balloon-header nav > a:not(.balloon-nav-cta) {
   position: relative;
-  padding: 0.4rem 0;
-  color: rgb(240 231 218 / 65%);
-  transition: color 180ms ease;
+  padding: 0.35rem 0;
 }
 
-.flight-nav a::after {
+.balloon-header nav > a:not(.balloon-nav-cta)::after {
   position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
-  height: 1px;
+  height: 2px;
   content: '';
-  background: var(--flight-gold);
-  transform: scaleX(0);
-  transform-origin: right;
-  transition: transform 220ms ease;
+  background: var(--coral);
+  transform: scaleX(0) rotate(-1deg);
+  transition: transform 180ms ease;
 }
 
-.flight-nav a:hover,
-.flight-nav a:focus-visible,
-.flight-nav .is-active {
-  color: var(--flight-ivory);
+.balloon-header nav > a:hover::after,
+.balloon-header nav > a:focus-visible::after,
+.balloon-header nav > .is-active::after {
+  transform: scaleX(1) rotate(-1deg);
 }
 
-.flight-nav a:hover::after,
-.flight-nav a:focus-visible::after,
-.flight-nav .is-active::after {
-  transform: scaleX(1);
-  transform-origin: left;
+.balloon-nav-cta {
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.75rem 1.05rem;
+  color: var(--paper) !important;
+  background: var(--ink);
+  box-shadow: 3px 3px 0 var(--butter);
+  transition:
+    box-shadow 180ms ease,
+    transform 180ms ease;
 }
 
-.flight-hero {
+.balloon-nav-cta:hover,
+.balloon-nav-cta:focus-visible {
+  box-shadow: 1px 1px 0 var(--butter);
+  transform: translate(2px, 2px);
+}
+
+.balloon-hero {
   position: relative;
   display: grid;
   min-height: 100svh;
   isolation: isolate;
-  align-items: center;
-  padding: 9rem clamp(1.25rem, 7vw, 8rem) 7rem;
-  color: var(--flight-ivory);
-  background:
-    radial-gradient(circle at 76% 42%, rgb(183 149 97 / 15%), transparent 24%),
-    radial-gradient(circle at 22% 70%, rgb(84 28 52 / 34%), transparent 40%),
-    linear-gradient(
-      125deg,
-      #0c080d 0%,
-      var(--flight-aubergine) 58%,
-      #160d14 100%
-    );
+  place-items: center;
+  padding: 8rem clamp(1.2rem, 6vw, 6rem) 5rem;
+  background: var(--paper);
 }
 
-.flight-hero::before {
+.balloon-hero::after {
   position: absolute;
   z-index: -1;
   inset: 0;
   content: '';
-  opacity: 0.42;
-  background-image: radial-gradient(
-    rgb(255 255 255 / 16%) 0.6px,
-    transparent 0.6px
-  );
-  background-size: 5px 5px;
-  mask-image: linear-gradient(90deg, black, transparent 55%);
+  opacity: 0.24;
+  background-image: radial-gradient(var(--ink) 0.55px, transparent 0.55px);
+  background-size: 7px 7px;
+  mask-image: linear-gradient(180deg, black, transparent 70%);
 }
 
-.flight-hero-copy {
-  position: relative;
-  z-index: 3;
-  width: min(51rem, 62vw);
-  padding-top: 2rem;
-}
-
-.flight-back {
-  display: inline-flex;
-  margin-bottom: clamp(3rem, 8vh, 7rem);
-  align-items: center;
-  gap: 0.65rem;
-  color: rgb(240 231 218 / 64%);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.flight-back svg,
-.flight-follow svg {
-  width: 1rem;
-  height: 1rem;
-  transition: transform 180ms ease;
-}
-
-.flight-back:hover svg {
-  transform: translateX(-0.25rem);
-}
-
-.flight-kicker {
-  margin: 0 0 1.2rem;
-  color: var(--flight-gold);
-  font-size: clamp(0.58rem, 0.8vw, 0.7rem);
-  font-weight: 650;
-}
-
-.flight-hero h1,
-.flight-intro h2,
-.flight-notes h2,
-.flight-cta h2 {
-  margin: 0;
-  font-family: var(--flight-serif);
-  font-weight: 400;
-  letter-spacing: -0.055em;
-  line-height: 0.84;
-}
-
-.flight-hero h1 {
-  max-width: 9ch;
-  font-size: clamp(4rem, 9.5vw, 9.6rem);
-}
-
-.flight-hero h1 span,
-.flight-intro h2 span {
-  display: block;
-  color: var(--flight-blush);
-  font-style: italic;
-  font-weight: 400;
-}
-
-.flight-hero-copy > p:not(.flight-kicker) {
-  max-width: 31rem;
-  margin: 2.5rem 0 0;
-  color: rgb(240 231 218 / 68%);
-  font-family: var(--font-geist-sans), Arial, sans-serif;
-  font-size: clamp(0.92rem, 1.2vw, 1.08rem);
-  line-height: 1.7;
-}
-
-.flight-follow {
-  display: inline-flex;
-  margin-top: 2rem;
-  align-items: center;
-  gap: 0.7rem;
-  border-bottom: 1px solid rgb(183 149 97 / 48%);
-  padding: 0.55rem 0;
-  color: var(--flight-ivory);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.flight-follow:hover svg {
-  transform: translateY(0.25rem);
-}
-
-.flight-hero-balloons {
+.color-swoop,
+.sky-shape {
   position: absolute;
-  z-index: 2;
-  top: 9%;
-  right: clamp(-9rem, -2vw, -1rem);
-  bottom: -9%;
-  width: min(52vw, 48rem);
+  z-index: -2;
   pointer-events: none;
 }
 
-.flight-hero-balloons img {
+.color-swoop {
+  border: 2px solid rgb(18 61 53 / 28%);
+}
+
+.color-swoop-aqua {
+  top: -21rem;
+  left: -20rem;
+  width: clamp(35rem, 57vw, 63rem);
+  height: clamp(35rem, 57vw, 63rem);
+  border-radius: 43% 57% 55% 45% / 48% 43% 57% 52%;
+  background: var(--aqua);
+  transform: rotate(13deg);
+}
+
+.color-swoop-butter {
+  right: -25rem;
+  bottom: -28rem;
+  width: clamp(46rem, 68vw, 74rem);
+  height: clamp(45rem, 67vw, 72rem);
+  border-radius: 61% 39% 42% 58% / 47% 51% 49% 53%;
+  background: var(--butter);
+  transform: rotate(-16deg);
+}
+
+.color-swoop-coral {
+  top: 11%;
+  right: -10rem;
+  width: clamp(20rem, 31vw, 34rem);
+  height: clamp(18rem, 28vw, 31rem);
+  border-radius: 43% 57% 41% 59% / 62% 43% 57% 38%;
+  background: var(--coral);
+  transform: rotate(11deg);
+}
+
+.balloon-back {
   position: absolute;
-  display: block;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 2rem 2.5rem rgb(0 0 0 / 28%));
-  transform-origin: 50% 16%;
-}
-
-.flight-hero-wine {
-  z-index: 3;
-  top: 10%;
-  left: 4%;
-  width: min(24vw, 22rem);
-}
-
-.flight-hero-pearl {
-  z-index: 1;
-  top: -1%;
-  left: 34%;
-  width: min(25vw, 23rem);
-}
-
-.flight-hero-gold {
-  z-index: 2;
-  top: 25%;
-  left: 56%;
-  width: min(23vw, 21rem);
-}
-
-.flight-score {
-  position: absolute;
-  z-index: 4;
-  right: clamp(1.25rem, 5vw, 5rem);
-  bottom: 2.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.05rem;
-  border-top: 1px solid rgb(240 231 218 / 28%);
-  padding-top: 0.8rem;
-}
-
-.flight-score strong {
-  font-family: var(--flight-serif);
-  font-size: 2.5rem;
-  font-weight: 400;
-  line-height: 1;
-}
-
-.flight-score > span {
-  display: grid;
-  gap: 0.16rem;
-  color: rgb(240 231 218 / 58%);
-  font-size: 0.58rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.flight-score small {
-  color: var(--flight-gold);
-  font-size: 0.66rem;
-  letter-spacing: 0.12em;
-}
-
-.flight-index {
-  display: flex;
-  min-height: 5rem;
-  align-items: center;
-  gap: clamp(1.3rem, 4vw, 4.5rem);
-  overflow-x: auto;
-  padding: 0 clamp(1.25rem, 5vw, 5rem);
-  color: var(--flight-ink);
-  background: var(--flight-paper);
-  border-bottom: 1px solid rgb(35 23 28 / 14%);
-  scrollbar-width: none;
-}
-
-.flight-index::-webkit-scrollbar {
-  display: none;
-}
-
-.flight-index span,
-.flight-index a {
-  flex: 0 0 auto;
-  font-size: 0.6rem;
-  font-weight: 650;
-}
-
-.flight-index span {
-  color: var(--flight-wine);
-}
-
-.flight-index a {
-  position: relative;
-  color: rgb(35 23 28 / 54%);
-  transition: color 180ms ease;
-}
-
-.flight-index a::before {
-  position: absolute;
-  top: 50%;
-  left: -0.85rem;
-  width: 0.25rem;
-  height: 0.25rem;
-  border-radius: 50%;
-  content: '';
-  background: var(--flight-gold);
-  transform: translateY(-50%) scale(0);
-  transition: transform 180ms ease;
-}
-
-.flight-index a:hover,
-.flight-index a:focus-visible {
-  color: var(--flight-wine);
-}
-
-.flight-index a:hover::before,
-.flight-index a:focus-visible::before {
-  transform: translateY(-50%) scale(1);
-}
-
-.flight-intro {
-  display: grid;
-  min-height: 86svh;
-  place-content: center;
-  padding: 8rem 1.5rem;
-  text-align: center;
-  background: var(--flight-ivory);
-}
-
-.flight-intro h2 {
-  max-width: 9ch;
-  margin-inline: auto;
-  font-size: clamp(4rem, 10vw, 10.5rem);
-}
-
-.flight-intro h2 span {
-  color: var(--flight-wine);
-}
-
-.flight-intro > p:last-child {
-  max-width: 33rem;
-  margin: 2.5rem auto 0;
-  color: rgb(35 23 28 / 58%);
-  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
-  line-height: 1.65;
-}
-
-.flight-trail {
-  --flight-progress: 0;
-  position: relative;
-  isolation: isolate;
-}
-
-.flight-spine {
-  position: absolute;
-  z-index: 5;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: rgb(35 23 28 / 13%);
-  pointer-events: none;
-  transform: translateX(-50%);
-}
-
-.flight-spine i {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  height: calc(var(--flight-progress) * 100%);
-  background: linear-gradient(
-    var(--flight-gold),
-    var(--flight-wine) 55%,
-    var(--flight-gold)
-  );
-  box-shadow: 0 0 1.1rem rgb(183 149 97 / 28%);
-}
-
-.flight-stop {
-  position: relative;
-  display: grid;
-  min-height: 94svh;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  align-items: center;
-  padding: clamp(5rem, 9vw, 9rem) clamp(1.5rem, 6vw, 7rem);
-}
-
-.flight-stop.is-reversed .flight-balloon {
-  grid-column: 2;
-}
-
-.flight-stop.is-reversed .flight-review {
-  grid-row: 1;
-  grid-column: 1;
-}
-
-.flight-stop-ivory {
-  background: var(--flight-paper);
-}
-
-.flight-stop-blush {
-  background: var(--flight-blush);
-}
-
-.flight-stop-wine {
-  color: var(--flight-ivory);
-  background: var(--flight-wine);
-}
-
-.flight-stop-sand {
-  background: var(--flight-sand);
-}
-
-.flight-balloon {
-  position: relative;
   z-index: 6;
-  display: grid;
-  min-height: 36rem;
-  place-items: center;
-}
-
-.flight-balloon::after {
-  position: absolute;
-  z-index: -1;
-  top: 50%;
-  width: 50%;
-  height: 1px;
-  content: '';
-  background: currentcolor;
-  opacity: 0.22;
-}
-
-.flight-stop:not(.is-reversed) .flight-balloon::after {
-  right: 0;
-}
-
-.flight-stop.is-reversed .flight-balloon::after {
-  left: 0;
-}
-
-.flight-balloon img {
-  display: block;
-  width: min(24vw, 22rem);
-  height: min(64vh, 42rem);
-  object-fit: contain;
-  filter: drop-shadow(0 1.75rem 2rem rgb(35 23 28 / 16%));
-  transform-origin: 50% 14%;
-}
-
-.flight-balloon span {
-  position: absolute;
-  z-index: 3;
-  top: 47%;
-  left: 50%;
-  display: grid;
-  width: 3.2rem;
-  height: 3.2rem;
-  place-items: center;
-  border: 1px solid currentcolor;
-  border-radius: 50%;
-  color: currentcolor;
-  background: color-mix(in srgb, transparent 84%, currentcolor);
-  backdrop-filter: blur(8px);
-  font-family: var(--font-geist-mono), monospace;
-  font-size: 0.68rem;
-  transform: translate(-50%, -50%);
-}
-
-.flight-review {
-  position: relative;
-  z-index: 7;
-  width: min(100%, 38rem);
-  justify-self: center;
-  padding: clamp(1rem, 3vw, 3rem);
-}
-
-.flight-review-meta {
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  border-top: 1px solid currentcolor;
-  padding-top: 1rem;
-  font-size: 0.58rem;
-  font-weight: 650;
-  opacity: 0.62;
-}
-
-.flight-review-meta small {
-  font-size: inherit;
-}
-
-.flight-review blockquote {
-  margin: clamp(2.2rem, 5vw, 4.7rem) 0;
-  font-family: var(--flight-serif);
-  font-size: clamp(2.2rem, 3.6vw, 4.2rem);
-  font-weight: 400;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
-}
-
-.flight-review footer {
-  display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1rem;
-  border-bottom: 1px solid currentcolor;
-  padding-bottom: 1rem;
-  font-size: 0.61rem;
-}
-
-.flight-review footer strong {
-  font-size: 0.72rem;
+  top: 7.4rem;
+  left: clamp(1.2rem, 4vw, 4rem);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.7rem;
   font-weight: 700;
 }
 
-.flight-review footer span {
-  opacity: 0.55;
+.balloon-back svg {
+  width: 1rem;
+  height: 1rem;
+  transition: transform 180ms ease;
 }
 
-.flight-notes {
+.balloon-back:hover svg {
+  transform: translateX(-0.25rem);
+}
+
+.balloon-hero-copy {
   position: relative;
-  padding: clamp(7rem, 12vw, 12rem) clamp(1.25rem, 5vw, 5rem) 8rem;
-  color: var(--flight-ivory);
-  background:
-    radial-gradient(circle at 50% 0%, rgb(84 28 52 / 42%), transparent 45%),
-    var(--flight-night);
-}
-
-.flight-notes-heading {
-  max-width: 50rem;
-  margin: 0 auto clamp(4rem, 8vw, 8rem);
+  z-index: 5;
+  width: min(61rem, 80vw);
   text-align: center;
 }
 
-.flight-notes h2 {
-  font-size: clamp(3.4rem, 7vw, 7.5rem);
-  line-height: 0.92;
-}
-
-.flight-notes-heading > p:last-child {
-  max-width: 34rem;
-  margin: 2rem auto 0;
-  color: rgb(240 231 218 / 58%);
-  font-size: 0.95rem;
-  line-height: 1.65;
-}
-
-.flight-note-grid {
-  display: grid;
-  max-width: 88rem;
-  margin: 0 auto;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: clamp(0.25rem, 2vw, 2rem);
-  align-items: end;
-}
-
-.flight-note {
-  position: relative;
-  display: grid;
-  min-width: 0;
-  justify-items: center;
-}
-
-.flight-note:nth-child(even) {
-  padding-bottom: 5rem;
-}
-
-.flight-note img {
-  display: block;
-  width: min(100%, 10.5rem);
-  aspect-ratio: 2 / 3;
-  object-fit: contain;
-  filter: drop-shadow(0 1.5rem 1.5rem rgb(0 0 0 / 26%));
-  transform-origin: 50% 14%;
-}
-
-.flight-note div {
-  display: grid;
-  width: 100%;
-  gap: 0.38rem;
-  border-top: 1px solid rgb(240 231 218 / 22%);
-  padding-top: 0.85rem;
-  text-align: center;
-}
-
-.flight-note b {
-  color: var(--flight-gold);
-  font-family: var(--flight-serif);
-  font-size: 1.8rem;
-  font-weight: 400;
-  letter-spacing: -0.03em;
+.doodle-note {
+  margin: 0 0 0.8rem;
+  color: var(--ink);
+  font-family: var(--font-doodle), cursive;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  font-weight: 700;
+  letter-spacing: 0.015em;
   line-height: 1;
+  transform: rotate(-1.8deg);
 }
 
-.flight-note strong {
-  color: var(--flight-ivory);
-  font-size: 0.56rem;
+.balloon-hero h1,
+.review-sky-heading h2,
+.balloon-cta h2 {
+  margin: 0;
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.065em;
 }
 
-.flight-note span {
-  color: rgb(240 231 218 / 46%);
-  font-size: 0.48rem;
+.balloon-hero h1 {
+  font-size: clamp(4.7rem, 10.8vw, 10.8rem);
+  line-height: 0.74;
 }
 
-.flight-cta {
-  position: relative;
-  display: grid;
-  min-height: 84svh;
-  isolation: isolate;
-  place-items: center;
-  overflow: hidden;
-  padding: 6rem 1.5rem;
-  color: var(--flight-ivory);
-  background: #100d0d;
+.bubble-word {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  white-space: nowrap;
 }
 
-.flight-cta-image {
-  position: absolute;
-  z-index: -2;
-  inset: 0;
-  background-image: url('/assets/gallery/moment-03.jpg');
-  background-position: center;
-  background-size: cover;
-  filter: saturate(0.65) contrast(1.08);
-  transform: scale(1.02);
+.bubble-word i {
+  display: inline-block;
+  font-style: normal;
+  text-shadow: 4px 5px 0 rgb(255 253 245 / 72%);
+  transform-origin: center bottom;
 }
 
-.flight-cta::after {
-  position: absolute;
-  z-index: -1;
-  inset: 0;
-  content: '';
-  background:
-    linear-gradient(180deg, rgb(18 13 19 / 50%), rgb(18 13 19 / 82%)),
-    radial-gradient(circle at center, transparent 0%, rgb(18 13 19 / 42%) 68%);
+.bubble-word i:nth-child(3n + 1) {
+  transform: translateY(-0.08em) rotate(-2deg);
 }
 
-.flight-cta-copy {
-  width: min(62rem, 100%);
-  text-align: center;
+.bubble-word i:nth-child(3n + 2) {
+  transform: translateY(0.04em) rotate(1.5deg);
 }
 
-.flight-cta h2 {
-  max-width: 11ch;
-  margin: 0 auto;
-  font-size: clamp(4rem, 8.2vw, 8.5rem);
-  line-height: 0.9;
+.bubble-word i:nth-child(5n) {
+  transform: translateY(-0.03em) rotate(3deg);
 }
 
-.flight-cta a {
-  display: inline-flex;
-  margin-top: 3rem;
+.balloon-hero h1 em {
+  display: block;
+  margin-top: 0.22em;
+  font-family: var(--font-doodle), cursive;
+  font-size: 0.62em;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.7;
+  transform: rotate(-1.4deg);
+}
+
+.balloon-hero-intro {
+  max-width: 38rem;
+  margin: clamp(2.6rem, 5vw, 4.5rem) auto 0;
+  font-family: 'Iowan Old Style', Baskerville, Georgia, serif;
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.55;
+}
+
+.balloon-hero-actions {
+  display: flex;
+  margin-top: 1.8rem;
   align-items: center;
-  gap: 0.8rem;
-  border: 1px solid rgb(240 231 218 / 45%);
+  justify-content: center;
+  gap: 1.4rem;
+}
+
+.balloon-hero-actions > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  border: 2px solid var(--ink);
   border-radius: 999px;
-  padding: 1rem 1.35rem;
-  background: rgb(18 13 19 / 34%);
-  backdrop-filter: blur(10px);
-  font-size: 0.66rem;
-  font-weight: 650;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  transition:
-    color 180ms ease,
-    background 180ms ease,
-    border-color 180ms ease;
+  padding: 0.85rem 1.1rem;
+  color: var(--paper-bright);
+  background: var(--ink);
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--coral);
 }
 
-.flight-cta a:hover,
-.flight-cta a:focus-visible {
-  color: var(--flight-night);
-  border-color: var(--flight-ivory);
-  background: var(--flight-ivory);
-}
-
-.flight-cta a svg {
+.balloon-hero-actions svg {
   width: 1rem;
   height: 1rem;
 }
 
-.flight-footer {
-  display: grid;
-  min-height: 14rem;
-  grid-template-columns: 1fr 1.4fr auto;
-  align-items: center;
-  gap: 2.5rem;
-  padding: 3rem clamp(1.25rem, 5vw, 5rem);
-  color: var(--flight-ivory);
-  background: var(--flight-night);
-  border-top: 1px solid rgb(240 231 218 / 12%);
-  font-size: 0.54rem;
-  line-height: 1.65;
+.balloon-hero-actions > span {
+  font-size: 0.68rem;
+  font-weight: 650;
 }
 
-.flight-footer > div {
+.balloon-hero-actions b {
+  margin-right: 0.3rem;
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 1.45rem;
+}
+
+.hero-balloon {
+  position: absolute;
+  z-index: 4;
+  display: grid;
+  justify-items: center;
+  pointer-events: none;
+}
+
+.hero-balloon img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1rem 1.1rem rgb(18 61 53 / 13%));
+  transform-origin: 50% 15%;
+}
+
+.hero-balloon span {
+  position: absolute;
+  bottom: 2%;
+  border: 1.5px solid var(--ink);
+  border-radius: 0.4rem 0.65rem 0.5rem 0.75rem;
+  padding: 0.48rem 0.7rem;
+  color: var(--ink);
+  font-family: var(--font-doodle), cursive;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.hero-balloon-one {
+  top: 12%;
+  left: 2.5%;
+  width: clamp(8rem, 13vw, 12rem);
+  transform: rotate(-4deg);
+}
+
+.hero-balloon-one span {
+  background: var(--butter);
+}
+
+.hero-balloon-two {
+  top: 7%;
+  right: 13%;
+  width: clamp(7.5rem, 11vw, 10rem);
+  transform: rotate(5deg);
+}
+
+.hero-balloon-two span {
+  background: var(--aqua);
+}
+
+.hero-balloon-three {
+  right: 1.5%;
+  bottom: 3%;
+  width: clamp(8rem, 12vw, 11rem);
+  transform: rotate(-3deg);
+}
+
+.hero-balloon-three span {
+  background: var(--coral);
+}
+
+.hero-doodle {
+  position: absolute;
+  z-index: 5;
+  font-family: var(--font-doodle), cursive;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.hero-doodle-one {
+  bottom: 17%;
+  left: 6%;
+  font-size: 1.5rem;
+  transform: rotate(-11deg);
+}
+
+.hero-doodle-two {
+  top: 26%;
+  right: 24%;
+  font-size: 3rem;
+  transform: rotate(-19deg);
+}
+
+.occasion-strip {
+  position: relative;
+  z-index: 7;
+  display: flex;
+  min-height: 5rem;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.1rem, 3vw, 3.3rem);
+  overflow-x: auto;
+  padding: 1rem 1.5rem;
+  color: var(--paper);
+  background: var(--ink);
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.occasion-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.occasion-strip i {
+  color: var(--butter);
+  font-style: normal;
+}
+
+.occasion-strip i:nth-of-type(2) {
+  color: var(--coral);
+}
+
+.occasion-strip i:nth-of-type(3) {
+  color: var(--aqua);
+}
+
+.review-sky {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(7rem, 11vw, 11rem) clamp(1.2rem, 5vw, 5rem) 10rem;
+  background: var(--paper);
+}
+
+.sky-shape {
+  opacity: 0.52;
+}
+
+.sky-shape-aqua {
+  top: 13%;
+  left: -23rem;
+  width: 48rem;
+  height: 58rem;
+  border-radius: 43% 57% 36% 64% / 55% 31% 69% 45%;
+  background: var(--aqua);
+  transform: rotate(-18deg);
+}
+
+.sky-shape-coral {
+  top: 43%;
+  right: -25rem;
+  width: 52rem;
+  height: 65rem;
+  border-radius: 61% 39% 54% 46% / 39% 57% 43% 61%;
+  background: var(--coral);
+  transform: rotate(14deg);
+}
+
+.sky-shape-butter {
+  bottom: -20rem;
+  left: -16rem;
+  width: 47rem;
+  height: 51rem;
+  border-radius: 52% 48% 34% 66% / 67% 44% 56% 33%;
+  background: var(--butter);
+  transform: rotate(18deg);
+}
+
+.review-sky-heading {
+  position: relative;
+  z-index: 3;
+  max-width: 60rem;
+  margin: 0 auto clamp(6rem, 10vw, 10rem);
+  text-align: center;
+}
+
+.review-sky-heading h2 {
+  font-size: clamp(3.9rem, 8.4vw, 8.8rem);
+  line-height: 0.82;
+}
+
+.review-sky-heading > p:last-child {
+  max-width: 32rem;
+  margin: 2rem auto 0;
+  font-family: 'Iowan Old Style', Baskerville, Georgia, serif;
+  font-size: 1.05rem;
+  line-height: 1.55;
+}
+
+.balloon-review-grid {
+  position: relative;
+  z-index: 4;
+  max-width: 86rem;
+  margin: 0 auto;
+  columns: 3;
+  column-gap: clamp(2rem, 4vw, 4.5rem);
+}
+
+.balloon-review {
+  --card-fill: var(--butter);
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 clamp(4rem, 8vw, 8rem);
+  break-inside: avoid;
+  vertical-align: top;
+}
+
+.balloon-review-aqua {
+  --card-fill: var(--aqua);
+}
+
+.balloon-review-butter {
+  --card-fill: var(--butter);
+}
+
+.balloon-review-coral {
+  --card-fill: var(--coral);
+}
+
+.balloon-review:nth-child(3n + 2) {
+  margin-top: 4.5rem;
+}
+
+.balloon-review:nth-child(5n) {
+  margin-top: 1.5rem;
+}
+
+.review-balloon {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  height: clamp(17rem, 29vw, 25rem);
+  place-items: center;
+}
+
+.review-balloon img {
+  display: block;
+  width: clamp(8.5rem, 14vw, 12rem);
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1.2rem 1.2rem rgb(18 61 53 / 14%));
+  transform-origin: 50% 14%;
+}
+
+.balloon-review:nth-child(4n + 2) .review-balloon img {
+  width: clamp(7.8rem, 12.5vw, 10.5rem);
+}
+
+.balloon-review:nth-child(4n + 3) .review-balloon img {
+  width: clamp(9rem, 15vw, 13rem);
+}
+
+.review-string {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  height: 2.8rem;
+  justify-items: center;
+  margin-top: -3.3rem;
+}
+
+.review-string i {
+  width: 1.5px;
+  height: 4rem;
+  background: var(--line);
+  transform: rotate(var(--card-turn));
+  transform-origin: top;
+}
+
+.review-card {
+  position: relative;
+  z-index: 4;
+  border: 2px solid var(--ink);
+  border-radius: 0.9rem 1.3rem 0.75rem 1.55rem;
+  padding: clamp(1.35rem, 2.3vw, 2rem);
+  color: var(--ink);
+  background: var(--card-fill);
+  box-shadow: 7px 8px 0 var(--ink);
+  transform: rotate(var(--card-turn));
+  transform-origin: 50% 0;
+}
+
+.balloon-review:nth-child(even) .review-card {
+  border-radius: 1.45rem 0.75rem 1.25rem 0.8rem;
+}
+
+.balloon-review:nth-child(3n) .review-card {
+  border-radius: 0.75rem 1.5rem 0.95rem 1.25rem;
+}
+
+.review-card::after {
+  position: absolute;
+  right: 0.85rem;
+  bottom: 0.45rem;
+  content: '↗';
+  font-family: var(--font-doodle), cursive;
+  font-size: 1.25rem;
+  opacity: 0.38;
+  transform: rotate(-8deg);
+}
+
+.card-hole {
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  width: 0.72rem;
+  height: 0.72rem;
+  border: 1.5px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  box-shadow: inset 1px 1px 0 rgb(18 61 53 / 18%);
+  transform: translateX(-50%);
+}
+
+.review-card header {
   display: grid;
   gap: 0.5rem;
+  border-bottom: 1.5px dashed rgb(18 61 53 / 55%);
+  padding: 0.55rem 0 0.9rem;
 }
 
-.flight-footer strong {
-  font-family: var(--flight-serif);
-  font-size: 1.45rem;
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  text-transform: none;
+.review-card header span {
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
 
-.flight-footer div span,
-.flight-footer p {
-  color: rgb(240 231 218 / 48%);
+.review-card header b {
+  font-size: 0.72rem;
+  letter-spacing: 0.13em;
 }
 
-.flight-footer p {
-  max-width: 40rem;
+.review-card blockquote {
+  margin: clamp(1.45rem, 3vw, 2.4rem) 0;
+  font-family: 'Iowan Old Style', Baskerville, Georgia, serif;
+  font-size: clamp(1.35rem, 2vw, 1.8rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+  line-height: 1.18;
+}
+
+.review-card footer {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1.5px solid rgb(18 61 53 / 60%);
+  padding-top: 0.9rem;
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.64rem;
+}
+
+.review-card footer strong {
+  font-size: 0.75rem;
+}
+
+.review-card footer span {
+  opacity: 0.68;
+}
+
+.five-star-note {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1.6rem 0 2rem;
+  font-family: 'Iowan Old Style', Baskerville, Georgia, serif;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.five-star-note strong {
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: clamp(3.6rem, 6vw, 5.4rem);
+  font-weight: 800;
+  letter-spacing: -0.08em;
+  line-height: 0.78;
+}
+
+.balloon-cta {
+  position: relative;
+  display: grid;
+  min-height: 83svh;
+  isolation: isolate;
+  place-items: center;
+  overflow: hidden;
+  padding: 7rem 1.2rem;
+  background: var(--coral);
+  border-top: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
+}
+
+.balloon-cta::before,
+.balloon-cta::after {
+  position: absolute;
+  z-index: -2;
+  content: '';
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+}
+
+.balloon-cta::before {
+  top: -28rem;
+  left: -20rem;
+  width: 48rem;
+  height: 48rem;
+  background: var(--aqua);
+}
+
+.balloon-cta::after {
+  right: -22rem;
+  bottom: -30rem;
+  width: 52rem;
+  height: 52rem;
+  background: var(--butter);
+}
+
+.balloon-cta-card {
+  position: relative;
+  z-index: 4;
+  width: min(56rem, 82vw);
+  border: 2px solid var(--ink);
+  border-radius: 1.5rem 2.2rem 1.3rem 2.6rem;
+  padding: clamp(3rem, 7vw, 7rem);
+  text-align: center;
+  background: var(--paper-bright);
+  box-shadow: 10px 12px 0 var(--ink);
+  transform: rotate(-0.7deg);
+}
+
+.balloon-cta h2 {
+  font-size: clamp(3.4rem, 7vw, 7rem);
+  line-height: 0.84;
+}
+
+.balloon-cta-card > a {
+  display: inline-flex;
+  margin-top: 2.4rem;
+  align-items: center;
+  gap: 0.65rem;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 0.9rem 1.2rem;
+  color: var(--paper-bright);
+  background: var(--ink);
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  box-shadow: 4px 4px 0 var(--butter);
+}
+
+.balloon-cta-card svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.cta-balloon {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cta-balloon img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1rem 1rem rgb(18 61 53 / 18%));
+}
+
+.cta-balloon-left {
+  bottom: -11rem;
+  left: clamp(-5rem, -2vw, -1rem);
+  width: clamp(13rem, 24vw, 23rem);
+  transform: rotate(-8deg);
+}
+
+.cta-balloon-right {
+  top: -10rem;
+  right: clamp(-5rem, -2vw, -1rem);
+  width: clamp(12rem, 22vw, 21rem);
+  transform: rotate(8deg);
+}
+
+.balloon-footer {
+  display: grid;
+  min-height: 13rem;
+  grid-template-columns: 1fr minmax(16rem, 1.5fr) auto;
+  align-items: center;
+  gap: 2.5rem;
+  padding: 3rem clamp(1.2rem, 5vw, 5rem);
+  color: var(--paper);
+  background: var(--ink);
+}
+
+.balloon-footer .balloon-brand {
+  justify-self: start;
+  color: var(--paper);
+}
+
+.balloon-footer p {
+  max-width: 39rem;
   margin: 0;
+  color: rgb(255 248 233 / 68%);
+  font-family: 'Iowan Old Style', Baskerville, Georgia, serif;
+  font-size: 0.82rem;
+  line-height: 1.55;
 }
 
-.flight-footer > a {
+.balloon-footer > a:last-child {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  color: var(--flight-gold);
+  gap: 0.5rem;
+  color: var(--butter);
+  font-family: var(--font-balloon), 'Arial Rounded MT Bold', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
   white-space: nowrap;
 }
 
-.flight-footer > a svg {
-  width: 0.9rem;
-  height: 0.9rem;
+.balloon-footer svg {
+  width: 0.95rem;
+  height: 0.95rem;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .flight-page.is-motion-ready [data-reveal] {
+  .balloon-page.is-motion-ready [data-float-in] {
     opacity: 0;
+    transform: translateY(7rem) rotate(0.8deg) scale(0.97);
     transition:
-      opacity 900ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+      opacity 700ms ease var(--float-delay, 0ms),
+      transform 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--float-delay, 0ms);
   }
 
-  .flight-page.is-motion-ready [data-reveal='up'] {
-    transform: translateY(2rem);
-  }
-
-  .flight-page.is-motion-ready [data-reveal='copy'],
-  .flight-page.is-motion-ready [data-reveal='right'] {
-    transform: translateX(-2.5rem);
-  }
-
-  .flight-page.is-motion-ready [data-reveal='left'] {
-    transform: translateX(2.5rem);
-  }
-
-  .flight-page.is-motion-ready [data-reveal='float'],
-  .flight-page.is-motion-ready [data-reveal='balloons'] {
-    transform: translateY(3rem) scale(0.96);
-  }
-
-  .flight-page.is-motion-ready [data-reveal].is-revealed {
+  .balloon-page.is-motion-ready [data-float-in].is-floating-in {
     opacity: 1;
-    transform: translate(0) scale(1);
+    transform: translateY(0) rotate(0) scale(1);
   }
 
-  .flight-hero-balloons.is-revealed img,
-  .flight-balloon.is-revealed img,
-  .flight-note.is-revealed img {
-    animation: flight-breathe 6.5s ease-in-out infinite alternate;
-    animation-delay: var(--note-delay, 0ms);
+  .balloon-review.is-floating-in .review-balloon img,
+  .hero-balloon.is-floating-in img {
+    animation: balloon-bob 5.8s ease-in-out infinite alternate;
   }
 
-  .flight-hero-balloons.is-revealed .flight-hero-pearl,
-  .flight-note:nth-child(even).is-revealed img {
+  .balloon-review:nth-child(even).is-floating-in .review-balloon img,
+  .hero-balloon-two.is-floating-in img {
     animation-direction: alternate-reverse;
-    animation-duration: 7.5s;
+    animation-duration: 6.8s;
   }
 
-  .flight-hero-balloons.is-revealed .flight-hero-gold {
-    animation-delay: -2s;
+  .balloon-review:nth-child(3n).is-floating-in .review-balloon img {
+    animation-delay: -2.2s;
   }
 
-  @keyframes flight-breathe {
+  @keyframes balloon-bob {
     from {
-      transform: rotate(-0.8deg) translateY(0);
+      transform: translateY(0) rotate(-1deg);
     }
 
     to {
-      transform: rotate(0.8deg) translateY(-0.65rem);
+      transform: translateY(-0.8rem) rotate(1deg);
     }
   }
 }
 
-@media (max-width: 980px) {
-  .flight-nav a:not(.is-active):not(:last-child) {
+@media (max-width: 960px) {
+  .balloon-hero-copy {
+    width: min(48rem, 82vw);
+  }
+
+  .hero-balloon-two {
+    right: 5%;
+  }
+
+  .hero-doodle-two {
     display: none;
   }
 
-  .flight-hero-copy {
-    width: min(42rem, 74vw);
+  .balloon-review-grid {
+    columns: 2;
   }
 
-  .flight-hero-balloons {
-    right: -11rem;
-    width: 58vw;
-    opacity: 0.86;
+  .balloon-review:nth-child(3n + 2),
+  .balloon-review:nth-child(5n) {
+    margin-top: 0;
   }
 
-  .flight-stop {
-    min-height: 86svh;
-    padding-right: 2.5rem;
-    padding-left: 2.5rem;
+  .balloon-review:nth-child(even) {
+    margin-top: 4rem;
   }
 
-  .flight-review blockquote {
-    font-size: clamp(2rem, 4.4vw, 3.3rem);
+  .review-balloon {
+    height: 23rem;
   }
 
-  .flight-note-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 3rem 1.5rem;
+  .balloon-footer {
+    grid-template-columns: 1fr 1.5fr;
   }
 
-  .flight-note:nth-child(even) {
-    padding-bottom: 0;
-  }
-
-  .flight-note:nth-child(3n + 2) {
-    padding-bottom: 3.5rem;
-  }
-
-  .flight-footer {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .flight-footer > a {
+  .balloon-footer > a:last-child {
     justify-self: start;
   }
 }
 
 @media (max-width: 700px) {
-  .flight-header {
-    padding: 1.2rem;
+  .balloon-header {
+    padding: 1.1rem;
   }
 
-  .flight-nav {
-    gap: 1rem;
+  .balloon-header nav {
+    gap: 0.75rem;
   }
 
-  .flight-hero {
-    min-height: 52rem;
-    align-items: end;
-    padding: 7rem 1.2rem 6rem;
-  }
-
-  .flight-hero::after {
-    position: absolute;
-    z-index: 1;
-    inset: 0;
-    content: '';
-    background: linear-gradient(
-      180deg,
-      transparent 18%,
-      rgb(18 13 19 / 14%) 38%,
-      rgb(18 13 19 / 96%) 73%
-    );
-    pointer-events: none;
-  }
-
-  .flight-hero-copy {
-    z-index: 4;
-    width: 100%;
-    padding: 0;
-  }
-
-  .flight-back {
-    margin-bottom: 13rem;
-  }
-
-  .flight-hero h1 {
-    font-size: clamp(4rem, 19vw, 6rem);
-  }
-
-  .flight-hero-copy > p:not(.flight-kicker) {
-    max-width: 27rem;
-    margin-top: 1.6rem;
-    font-size: 0.9rem;
-  }
-
-  .flight-hero-balloons {
-    z-index: 2;
-    top: 4rem;
-    right: -4.5rem;
-    bottom: auto;
-    width: 27rem;
-    height: 35rem;
-    opacity: 0.9;
-  }
-
-  .flight-hero-wine {
-    width: 11rem;
-  }
-
-  .flight-hero-pearl {
-    width: 12rem;
-  }
-
-  .flight-hero-gold {
-    width: 10.5rem;
-  }
-
-  .flight-score {
-    right: 1.2rem;
-    bottom: 1.4rem;
-  }
-
-  .flight-index {
-    gap: 2rem;
-    padding-inline: 1.2rem;
-  }
-
-  .flight-index span {
+  .balloon-header nav > a:not(.is-active):not(.balloon-nav-cta) {
     display: none;
   }
 
-  .flight-intro {
-    min-height: 42rem;
-    padding: 7rem 1.2rem;
+  .balloon-nav-cta {
+    padding: 0.65rem 0.8rem;
+    box-shadow: 2px 2px 0 var(--butter);
   }
 
-  .flight-intro h2 {
-    font-size: clamp(3.8rem, 17vw, 6rem);
+  .balloon-hero {
+    min-height: 56rem;
+    padding: 11rem 1.1rem 6rem;
   }
 
-  .flight-spine {
-    left: 1.35rem;
+  .balloon-back {
+    top: 5.2rem;
+    left: 1.1rem;
   }
 
-  .flight-stop,
-  .flight-stop.is-reversed {
-    min-height: auto;
-    grid-template-columns: 1fr;
-    gap: 0;
-    padding: 5rem 1.2rem 6rem 2.7rem;
+  .color-swoop-aqua {
+    top: -17rem;
+    left: -24rem;
+    width: 39rem;
+    height: 39rem;
   }
 
-  .flight-stop .flight-balloon,
-  .flight-stop.is-reversed .flight-balloon {
-    grid-row: 1;
-    grid-column: 1;
+  .color-swoop-butter {
+    right: -27rem;
+    bottom: -23rem;
+    width: 47rem;
+    height: 47rem;
   }
 
-  .flight-stop .flight-review,
-  .flight-stop.is-reversed .flight-review {
-    grid-row: 2;
-    grid-column: 1;
+  .color-swoop-coral {
+    top: 10rem;
+    right: -13rem;
+    width: 22rem;
+    height: 22rem;
   }
 
-  .flight-balloon {
-    min-height: 27rem;
-  }
-
-  .flight-balloon::after,
-  .flight-stop.is-reversed .flight-balloon::after {
-    top: 54%;
-    right: auto;
-    left: -1.35rem;
-    width: calc(50% + 1.35rem);
-  }
-
-  .flight-balloon img {
-    width: min(61vw, 17rem);
-    height: 30rem;
-  }
-
-  .flight-balloon span {
-    top: 51%;
-  }
-
-  .flight-review {
+  .balloon-hero-copy {
     width: 100%;
-    padding: 1rem 0 0;
   }
 
-  .flight-review-meta {
-    display: grid;
+  .balloon-hero h1 {
+    font-size: clamp(4.1rem, 20vw, 6.1rem);
   }
 
-  .flight-review blockquote {
-    margin: 2.3rem 0;
-    font-size: clamp(2.25rem, 10vw, 3.25rem);
+  .balloon-hero h1 em {
+    font-size: 0.66em;
   }
 
-  .flight-notes {
-    padding: 6.5rem 1.2rem;
+  .balloon-hero-intro {
+    max-width: 29rem;
+    margin-top: 3rem;
+    padding-inline: 1rem;
   }
 
-  .flight-notes h2 {
-    font-size: clamp(3.6rem, 16vw, 5.5rem);
+  .balloon-hero-actions {
+    flex-direction: column;
+    gap: 1rem;
   }
 
-  .flight-note-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 3rem 1rem;
+  .hero-balloon-one {
+    top: 7.5rem;
+    left: -1.5rem;
+    width: 7rem;
   }
 
-  .flight-note:nth-child(3n + 2) {
-    padding-bottom: 0;
+  .hero-balloon-two {
+    top: 5.6rem;
+    right: -1.1rem;
+    width: 6.5rem;
   }
 
-  .flight-note:nth-child(even) {
-    padding-bottom: 3rem;
+  .hero-balloon-three,
+  .hero-doodle {
+    display: none;
   }
 
-  .flight-note img {
-    width: min(100%, 9rem);
+  .hero-balloon span {
+    bottom: 0;
+    padding: 0.35rem 0.48rem;
+    font-size: 0.82rem;
+    box-shadow: 2px 2px 0 var(--ink);
   }
 
-  .flight-cta {
-    min-height: 46rem;
+  .occasion-strip {
+    justify-content: flex-start;
+    padding-inline: 1.2rem;
   }
 
-  .flight-cta h2 {
-    font-size: clamp(3.7rem, 16vw, 5.8rem);
+  .review-sky {
+    padding: 6.5rem 1.15rem 7rem;
   }
 
-  .flight-footer {
+  .review-sky-heading {
+    margin-bottom: 5rem;
+  }
+
+  .review-sky-heading h2 {
+    font-size: clamp(3.7rem, 17vw, 5.5rem);
+  }
+
+  .balloon-review-grid {
+    max-width: 30rem;
+    columns: 1;
+  }
+
+  .balloon-review,
+  .balloon-review:nth-child(even) {
+    margin-top: 0;
+    margin-bottom: 5.5rem;
+  }
+
+  .review-balloon {
+    height: 20rem;
+  }
+
+  .review-balloon img {
+    width: 10rem;
+  }
+
+  .review-card {
+    padding: 1.45rem;
+    box-shadow: 5px 6px 0 var(--ink);
+  }
+
+  .review-card blockquote {
+    font-size: clamp(1.35rem, 6vw, 1.72rem);
+  }
+
+  .sky-shape {
+    opacity: 0.42;
+  }
+
+  .sky-shape-aqua {
+    left: -36rem;
+  }
+
+  .sky-shape-coral {
+    right: -39rem;
+  }
+
+  .balloon-cta {
+    min-height: 47rem;
+    padding: 6rem 1.1rem;
+  }
+
+  .balloon-cta-card {
+    width: calc(100% - 1rem);
+    padding: 3.4rem 1.4rem;
+    box-shadow: 6px 7px 0 var(--ink);
+  }
+
+  .balloon-cta h2 {
+    font-size: clamp(3.4rem, 16vw, 5rem);
+  }
+
+  .cta-balloon-left {
+    bottom: -8rem;
+    left: -5rem;
+    width: 13rem;
+  }
+
+  .cta-balloon-right {
+    top: -7rem;
+    right: -5rem;
+    width: 12rem;
+  }
+
+  .balloon-footer {
     grid-template-columns: 1fr;
     gap: 1.5rem;
-    padding-top: 3.5rem;
-    padding-bottom: 3.5rem;
+    padding: 3.5rem 1.2rem;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .flight-page {
-    scroll-behavior: auto;
-  }
-
-  .flight-page *,
-  .flight-page *::before,
-  .flight-page *::after {
+  .balloon-page *,
+  .balloon-page *::before,
+  .balloon-page *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;

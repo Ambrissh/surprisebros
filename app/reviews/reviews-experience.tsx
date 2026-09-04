@@ -3,86 +3,126 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { ArrowDown, ArrowLeft, ArrowUpRight } from 'lucide-react';
 
+type BalloonColor = 'wine' | 'pearl' | 'champagne';
+type CardColor = 'aqua' | 'butter' | 'coral';
+
 type Review = {
   id: string;
-  number: string;
   name: string;
   date: string;
   occasion: string;
-  service: string;
-  quote: string;
-  balloon: 'wine' | 'pearl' | 'champagne';
-  tone: 'ivory' | 'blush' | 'wine' | 'sand';
+  quote?: string;
+  balloon: BalloonColor;
+  card: CardColor;
+  ratingOnly?: boolean;
 };
 
 const reviews: Review[] = [
   {
-    id: 'birthday',
-    number: '01',
+    id: 'pratheep',
     name: 'Pratheep',
     date: '26 Feb 2023',
     occasion: "Son's first birthday",
-    service: 'Home styling · Balloons',
     quote:
       'We planned our son’s first birthday from out of town. The team stayed responsive, shared options, and had the home ready when we arrived. We loved the result—and our baby enjoyed every bit of it.',
-    balloon: 'wine',
-    tone: 'ivory',
+    balloon: 'pearl',
+    card: 'butter',
   },
   {
-    id: 'cake',
-    number: '02',
+    id: 'suresh',
+    name: 'Suresh',
+    date: '01 Nov 2025',
+    occasion: 'A five-star hello',
+    balloon: 'wine',
+    card: 'aqua',
+    ratingOnly: true,
+  },
+  {
+    id: 'nisha',
     name: 'Mrs. Nisha',
     date: '19 Jun 2022',
     occasion: "Father's Day surprise",
-    service: 'White-forest cake · Keepsake',
     quote:
       'The video-call cake cutting, the photo slam book, even the three little pieces on the cake—every detail felt personal to our family. It was our fourth celebration with the team, and they made the day memorable again.',
     balloon: 'champagne',
-    tone: 'blush',
+    card: 'coral',
   },
   {
-    id: 'engagement',
-    number: '03',
+    id: 'kalviselvan',
+    name: 'Kalviselvan',
+    date: '11 Dec 2024',
+    occasion: 'Five stars, sent our way',
+    balloon: 'pearl',
+    card: 'butter',
+    ratingOnly: true,
+  },
+  {
+    id: 'gifty',
     name: 'Gifty Sahana',
     date: '26 Apr 2021',
     occasion: 'Engagement celebration',
-    service: 'Stage design · Florals',
     quote:
       'They listened to every preference with patience and were genuinely friendly throughout. The decor made our engagement feel grander and more special than we had imagined.',
-    balloon: 'pearl',
-    tone: 'wine',
+    balloon: 'wine',
+    card: 'aqua',
   },
   {
-    id: 'event',
-    number: '04',
+    id: 'palani',
+    name: 'Palani',
+    date: '07 Nov 2024',
+    occasion: 'A little five-star lift',
+    balloon: 'champagne',
+    card: 'coral',
+    ratingOnly: true,
+  },
+  {
+    id: 'niyaz',
     name: 'Niyaz',
     date: '02 Apr 2022',
     occasion: 'Event decor',
-    service: 'Full-service celebration',
     quote: 'Awesome work by the Surprise Bro’s team.',
+    balloon: 'pearl',
+    card: 'butter',
+  },
+  {
+    id: 'madevi',
+    name: 'Madevi',
+    date: '24 Aug 2025',
+    occasion: 'Five stars in the air',
     balloon: 'wine',
-    tone: 'sand',
+    card: 'aqua',
+    ratingOnly: true,
+  },
+  {
+    id: 'guest',
+    name: 'Guest review',
+    date: '07 Nov 2024',
+    occasion: 'Five stars, no note needed',
+    balloon: 'champagne',
+    card: 'coral',
+    ratingOnly: true,
+  },
+  {
+    id: 'siva',
+    name: 'Siva Guru',
+    date: '28 Sep 2023',
+    occasion: 'Another five-star moment',
+    balloon: 'pearl',
+    card: 'butter',
+    ratingOnly: true,
   },
 ];
 
-const ratingNotes = [
-  { name: 'Suresh', date: '01 Nov 2025', balloon: 'pearl' },
-  { name: 'Madevi', date: '24 Aug 2025', balloon: 'wine' },
-  { name: 'Kalviselvan', date: '11 Dec 2024', balloon: 'champagne' },
-  { name: 'Palani', date: '07 Nov 2024', balloon: 'pearl' },
-  { name: 'Guest review', date: '07 Nov 2024', balloon: 'wine' },
-  { name: 'Siva Guru', date: '28 Sep 2023', balloon: 'champagne' },
-] as const;
-
-const balloonSource = {
+const balloonSource: Record<BalloonColor, string> = {
   wine: '/assets/reviews/balloon-wine.png',
   pearl: '/assets/reviews/balloon-pearl.png',
   champagne: '/assets/reviews/balloon-champagne.png',
 };
 
+const bubbleLetters = 'Kind words'.split('');
+
 export function ReviewsExperience() {
   const pageRef = useRef<HTMLElement>(null);
-  const trailRef = useRef<HTMLElement>(null);
   const [motionReady, setMotionReady] = useState(false);
 
   useEffect(() => {
@@ -94,241 +134,227 @@ export function ReviewsExperience() {
     if (!page) return;
 
     const items = Array.from(
-      page.querySelectorAll<HTMLElement>('[data-reveal]'),
+      page.querySelectorAll<HTMLElement>('[data-float-in]'),
     );
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-revealed');
+          entry.target.classList.add('is-floating-in');
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.12 },
+      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
     );
 
     items.forEach((item) => observer.observe(item));
     return () => observer.disconnect();
   }, []);
 
-  useEffect(() => {
-    const trail = trailRef.current;
-    if (!trail) return;
-
-    let frame = 0;
-    const updateTrail = () => {
-      const bounds = trail.getBoundingClientRect();
-      const distance = Math.max(bounds.height - window.innerHeight, 1);
-      const progress = Math.min(Math.max(-bounds.top / distance, 0), 1);
-      trail.style.setProperty('--flight-progress', String(progress));
-    };
-    const onScroll = () => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(updateTrail);
-    };
-
-    updateTrail();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-    };
-  }, []);
-
   return (
     <main
       ref={pageRef}
-      className={`flight-page ${motionReady ? 'is-motion-ready' : ''}`}
+      className={`balloon-page ${motionReady ? 'is-motion-ready' : ''}`}
     >
-      <header className="flight-header">
-        <a className="flight-brand" href="/" aria-label="Surprise Bro's home">
-          <span>Surprise Bro&apos;s</span>
-          <small>Events · Tirunelveli</small>
+      <header className="balloon-header">
+        <a className="balloon-brand" href="/" aria-label="Surprise Bro's home">
+          Surprise Bro&apos;s
+          <small>tirunelveli</small>
         </a>
-        <nav className="flight-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation">
           <a href="/">Home</a>
           <a href="/gallery">Gallery</a>
           <a className="is-active" href="/reviews" aria-current="page">
             Reviews
           </a>
-          <a href="https://wa.me/918488991284" target="_blank" rel="noreferrer">
-            Reach out
+          <a
+            className="balloon-nav-cta"
+            href="https://wa.me/918488991284"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Plan a surprise
           </a>
         </nav>
       </header>
 
-      <section className="flight-hero" aria-labelledby="flight-heading">
-        <div className="flight-hero-copy" data-reveal="copy">
-          <a className="flight-back" href="/">
-            <ArrowLeft aria-hidden="true" />
-            Back home
-          </a>
-          <p className="flight-kicker">408 voices · One unbroken thread</p>
-          <h1 id="flight-heading">
-            Stories that
-            <span>still float.</span>
+      <section className="balloon-hero" aria-labelledby="balloon-heading">
+        <div className="color-swoop color-swoop-aqua" aria-hidden="true" />
+        <div className="color-swoop color-swoop-butter" aria-hidden="true" />
+        <div className="color-swoop color-swoop-coral" aria-hidden="true" />
+
+        <a className="balloon-back" href="/">
+          <ArrowLeft aria-hidden="true" /> Back home
+        </a>
+
+        <div className="balloon-hero-copy" data-float-in>
+          <p className="doodle-note">real notes from real celebrations</p>
+          <h1 id="balloon-heading">
+            <span className="bubble-word" aria-label="Kind words">
+              {bubbleLetters.map((letter, index) => (
+                <i
+                  aria-hidden="true"
+                  key={`${letter}-${index}`}
+                  style={{ '--letter': index } as CSSProperties}
+                >
+                  {letter === ' ' ? '\u00a0' : letter}
+                </i>
+              ))}
+            </span>
+            <em>keep us floating.</em>
           </h1>
-          <p>
-            Every review is tied to a real moment: a room ready on time, a cake
-            made personal, a stage that felt bigger than imagined.
+          <p className="balloon-hero-intro">
+            Every string leads to somebody&apos;s day—a first birthday, a cake
+            call, an engagement, or one happy five-star tap.
           </p>
-          <a className="flight-follow" href="#the-thread">
-            Follow the string <ArrowDown aria-hidden="true" />
-          </a>
+          <div className="balloon-hero-actions">
+            <a href="#review-sky">
+              Follow the balloons <ArrowDown aria-hidden="true" />
+            </a>
+            <span>
+              <b>4.8</b> from 408 public ratings
+            </span>
+          </div>
         </div>
 
         <div
-          className="flight-hero-balloons"
+          className="hero-balloon hero-balloon-one"
           aria-hidden="true"
-          data-reveal="balloons"
+          data-float-in
         >
-          <img className="flight-hero-wine" src={balloonSource.wine} alt="" />
-          <img className="flight-hero-pearl" src={balloonSource.pearl} alt="" />
-          <img
-            className="flight-hero-gold"
-            src={balloonSource.champagne}
-            alt=""
-          />
+          <img src={balloonSource.wine} alt="" />
+          <span>birthdays</span>
+        </div>
+        <div
+          className="hero-balloon hero-balloon-two"
+          aria-hidden="true"
+          data-float-in
+        >
+          <img src={balloonSource.champagne} alt="" />
+          <span>cake calls</span>
+        </div>
+        <div
+          className="hero-balloon hero-balloon-three"
+          aria-hidden="true"
+          data-float-in
+        >
+          <img src={balloonSource.pearl} alt="" />
+          <span>big days</span>
         </div>
 
-        <div className="flight-score" data-reveal="up">
-          <strong>4.8</strong>
-          <span>
-            Public rating
-            <small>★★★★★</small>
-          </span>
-        </div>
+        <span className="hero-doodle hero-doodle-one" aria-hidden="true">
+          up, up
+        </span>
+        <span className="hero-doodle hero-doodle-two" aria-hidden="true">
+          ↗
+        </span>
       </section>
 
-      <nav className="flight-index" aria-label="Jump to a review occasion">
-        <span>Choose a moment</span>
-        <a href="#birthday">First birthday</a>
-        <a href="#cake">Cake surprise</a>
-        <a href="#engagement">Engagement</a>
-        <a href="#event">Event decor</a>
+      <nav className="occasion-strip" aria-label="Review occasions">
+        <span>Birthday rooms</span>
+        <i aria-hidden="true">✦</i>
+        <span>Cakes &amp; calls</span>
+        <i aria-hidden="true">✦</i>
+        <span>Engagement stages</span>
+        <i aria-hidden="true">✦</i>
+        <span>Little surprises</span>
       </nav>
 
       <section
-        className="flight-intro"
-        id="the-thread"
-        aria-labelledby="thread-heading"
+        className="review-sky"
+        id="review-sky"
+        aria-labelledby="review-sky-heading"
       >
-        <p className="flight-kicker" data-reveal="up">
-          Hold the line
-        </p>
-        <h2 id="thread-heading" data-reveal="up">
-          One string.
-          <span>Every kind word.</span>
-        </h2>
-        <p data-reveal="up">
-          Scroll slowly. The thread grows with you, moving from one celebration
-          to the next.
-        </p>
-      </section>
+        <div className="sky-shape sky-shape-aqua" aria-hidden="true" />
+        <div className="sky-shape sky-shape-coral" aria-hidden="true" />
+        <div className="sky-shape sky-shape-butter" aria-hidden="true" />
 
-      <section
-        ref={trailRef}
-        className="flight-trail"
-        aria-label="Customer review journey"
-      >
-        <div className="flight-spine" aria-hidden="true">
-          <i />
-        </div>
-
-        {reviews.map((review, index) => (
-          <section
-            className={`flight-stop flight-stop-${review.tone} ${index % 2 ? 'is-reversed' : ''}`}
-            id={review.id}
-            key={review.number}
-            aria-labelledby={`${review.id}-name`}
-          >
-            <div className="flight-balloon" data-reveal="float">
-              <img
-                src={balloonSource[review.balloon]}
-                alt={`${review.balloon} helium balloon carrying review ${review.number}`}
-              />
-              <span aria-hidden="true">{review.number}</span>
-            </div>
-
-            <article
-              className="flight-review"
-              data-reveal={index % 2 ? 'left' : 'right'}
-            >
-              <div className="flight-review-meta">
-                <span>{review.occasion}</span>
-                <small>{review.service}</small>
-              </div>
-              <blockquote>“{review.quote}”</blockquote>
-              <footer>
-                <strong id={`${review.id}-name`}>{review.name}</strong>
-                <span>{review.date}</span>
-              </footer>
-            </article>
-          </section>
-        ))}
-      </section>
-
-      <section className="flight-notes" aria-labelledby="notes-heading">
-        <div className="flight-notes-heading" data-reveal="up">
-          <p className="flight-kicker">Still rising</p>
-          <h2 id="notes-heading">Six more five-star moments.</h2>
+        <div className="review-sky-heading" data-float-in>
+          <p className="doodle-note">pull a string. meet a moment.</p>
+          <h2 id="review-sky-heading">The good word gets airborne.</h2>
           <p>
-            Public ratings posted without a written note—kept in the story, not
-            pushed aside.
+            Every card is tied to its balloon. Scroll and watch the whole wall
+            rise.
           </p>
         </div>
 
-        <div className="flight-note-grid">
-          {ratingNotes.map((note, index) => (
+        <div className="balloon-review-grid">
+          {reviews.map((review, index) => (
             <article
-              className="flight-note"
-              key={`${note.name}-${note.date}`}
-              data-reveal="float"
-              style={{ '--note-delay': `${index * 80}ms` } as CSSProperties}
+              className={`balloon-review balloon-review-${review.card} ${review.ratingOnly ? 'is-rating-only' : ''}`}
+              id={review.id}
+              key={review.id}
+              data-float-in
+              style={
+                {
+                  '--float-delay': `${(index % 3) * 100}ms`,
+                  '--card-turn': `${[-1.2, 0.9, -0.5, 1.4][index % 4]}deg`,
+                } as CSSProperties
+              }
             >
-              <img
-                src={balloonSource[note.balloon]}
-                alt=""
-                aria-hidden="true"
-              />
-              <div>
-                <b aria-label="5 out of 5">5.0</b>
-                <strong>{note.name}</strong>
-                <span>{note.date}</span>
+              <div className="review-balloon" aria-hidden="true">
+                <img src={balloonSource[review.balloon]} alt="" />
+              </div>
+              <div className="review-string" aria-hidden="true">
+                <i />
+              </div>
+              <div className="review-card">
+                <span className="card-hole" aria-hidden="true" />
+                <header>
+                  <span>{review.occasion}</span>
+                  <b aria-label="5 out of 5 stars">★★★★★</b>
+                </header>
+                {review.quote ? (
+                  <blockquote>“{review.quote}”</blockquote>
+                ) : (
+                  <p className="five-star-note">
+                    <strong>5.0</strong>
+                    A five-star rating, left without a written note.
+                  </p>
+                )}
+                <footer>
+                  <strong>{review.name}</strong>
+                  <span>{review.date}</span>
+                </footer>
               </div>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="flight-cta" aria-labelledby="cta-heading">
-        <div className="flight-cta-image" aria-hidden="true" />
-        <div className="flight-cta-copy" data-reveal="up">
-          <p className="flight-kicker">The next thread starts here</p>
-          <h2 id="cta-heading">Give them something worth remembering.</h2>
+      <section className="balloon-cta" aria-labelledby="balloon-cta-heading">
+        <div className="cta-balloon cta-balloon-left" aria-hidden="true">
+          <img src={balloonSource.pearl} alt="" />
+        </div>
+        <div className="cta-balloon cta-balloon-right" aria-hidden="true">
+          <img src={balloonSource.wine} alt="" />
+        </div>
+        <div className="balloon-cta-card" data-float-in>
+          <p className="doodle-note">have a date in mind?</p>
+          <h2 id="balloon-cta-heading">
+            Let&apos;s make the next good story yours.
+          </h2>
           <a href="https://wa.me/918488991284" target="_blank" rel="noreferrer">
-            Plan your celebration <ArrowUpRight aria-hidden="true" />
+            Tell us the date <ArrowUpRight aria-hidden="true" />
           </a>
         </div>
       </section>
 
-      <footer className="flight-footer">
-        <div>
-          <strong>Surprise Bro&apos;s</strong>
-          <span>Balloon decor · Cakes · Surprises · Weddings</span>
-        </div>
+      <footer className="balloon-footer">
+        <a className="balloon-brand" href="/">
+          Surprise Bro&apos;s
+          <small>tirunelveli</small>
+        </a>
         <p>
           Reviews are lightly edited for length and clarity. Ratings and dates
-          are based on the public business listing.
+          come from the public business listing.
         </p>
         <a
           href="https://www.justdial.com/Tirunelveli/Surprise-Bros-Near-By-Primary-Health-Centre-Vannarpettai/0462PX462-X462-201205161205-C4U3_BZDET"
           target="_blank"
           rel="noreferrer"
         >
-          View source <ArrowUpRight aria-hidden="true" />
+          Review source <ArrowUpRight aria-hidden="true" />
         </a>
       </footer>
     </main>
