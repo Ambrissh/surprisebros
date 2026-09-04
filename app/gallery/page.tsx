@@ -4,8 +4,7 @@ import './gallery.css';
 
 export const metadata: Metadata = {
   title: "Gallery | Surprise Bro's",
-  description:
-    "Open the Surprise Bro's album and explore a collection of thoughtfully composed celebrations.",
+  description: "Wedding and event gallery by Surprise Bro's in Tirunelveli.",
 };
 
 export default function GalleryPage() {

@@ -13,12 +13,12 @@ const navItems = [
 
 export function ActOne() {
   const heroImageRef = useRef<HTMLImageElement>(null);
-  const replayTimerRef = useRef<number | null>(null);
   const [heroReady, setHeroReady] = useState(false);
   const [curtainReady, setCurtainReady] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [copyVisible, setCopyVisible] = useState(false);
-  const [isResetting, setIsResetting] = useState(false);
+  const [isOpening, setIsOpening] = useState(false);
+  const [lightsOn, setLightsOn] = useState(false);
+  const [sceneVisible, setSceneVisible] = useState(false);
+  const [contentVisible, setContentVisible] = useState(false);
   const [sequence, setSequence] = useState(0);
 
   useEffect(() => {
@@ -42,63 +42,43 @@ export function ActOne() {
   useEffect(() => {
     if (!heroReady || !curtainReady) return;
 
-    const openingTimer = window.setTimeout(() => setIsOpen(true), 520);
-    return () => window.clearTimeout(openingTimer);
+    setIsOpening(false);
+    setLightsOn(false);
+    setSceneVisible(false);
+    setContentVisible(false);
+
+    const timers = [
+      window.setTimeout(() => setIsOpening(true), 520),
+      window.setTimeout(() => setLightsOn(true), 4920),
+      window.setTimeout(() => setSceneVisible(true), 5180),
+      window.setTimeout(() => setContentVisible(true), 5720),
+    ];
+
+    return () => {
+      timers.forEach((timer) => window.clearTimeout(timer));
+    };
   }, [heroReady, curtainReady, sequence]);
 
-  useEffect(() => {
-    const revealCopy = () => {
-      const threshold = Math.min(150, window.innerHeight * 0.1);
-      setCopyVisible(isOpen && window.scrollY >= threshold);
-    };
-
-    revealCopy();
-    window.addEventListener('scroll', revealCopy, { passive: true });
-    window.addEventListener('resize', revealCopy);
-
-    return () => {
-      window.removeEventListener('scroll', revealCopy);
-      window.removeEventListener('resize', revealCopy);
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    return () => {
-      if (replayTimerRef.current) window.clearTimeout(replayTimerRef.current);
-    };
-  }, []);
-
   const replayReveal = () => {
-    if (isResetting) return;
-
-    setIsResetting(true);
-    setCopyVisible(false);
-    setIsOpen(false);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-
-    replayTimerRef.current = window.setTimeout(() => {
-      setSequence((value) => value + 1);
-      setIsResetting(false);
-    }, 3650);
+    setSequence((value) => value + 1);
   };
 
   return (
     <main className="act-one-page">
       <section
         id="home"
-        className={`act-one-stage ${isOpen ? 'is-open' : ''} ${copyVisible ? 'copy-visible' : ''}`}
+        className={`act-one-stage ${isOpening ? 'is-opening' : ''} ${lightsOn ? 'lights-on' : ''} ${sceneVisible ? 'scene-visible' : ''} ${contentVisible ? 'content-visible' : ''}`}
         aria-label="Surprise Bro's theatrical introduction"
       >
         <div className="hero-media" aria-hidden="true">
           <img
             ref={heroImageRef}
-            src="/assets/surprise-bros-studio-hero-v2.png"
+            src="/assets/surprise-bros-black-stage-hero-v3.png"
             alt=""
             onLoad={() => setHeroReady(true)}
           />
         </div>
 
-        <div className="studio-blackout" aria-hidden="true" />
         <div className="lamp-glow lamp-glow-one" aria-hidden="true" />
         <div className="lamp-glow lamp-glow-two" aria-hidden="true" />
         <div className="light-ignition" aria-hidden="true" />
@@ -123,27 +103,12 @@ export function ActOne() {
         </header>
 
         <div className="hero-copy">
-          <p className="hero-kicker">Thoughtfully composed celebrations</p>
+          <p className="hero-kicker">It all begins with</p>
           <h1 aria-label="It all begins with good design">
-            <span className="line-mask">
-              <span className="headline-line headline-line-one">It all</span>
-            </span>
-            <span className="line-mask">
-              <span className="headline-line headline-line-two">
-                begins with
-              </span>
-            </span>
-            <span className="line-mask">
-              <span className="headline-line headline-line-three">
-                good design.
-              </span>
-            </span>
+            <span className="headline-line headline-line-one">good</span>
+            <span className="headline-line headline-line-two">design.</span>
           </h1>
-        </div>
-
-        <div className="scroll-cue" aria-hidden="true">
-          <span>Scroll to reveal</span>
-          <i />
+          <p className="hero-signature">Celebrations, thoughtfully composed.</p>
         </div>
 
         <Button
@@ -151,7 +116,6 @@ export function ActOne() {
           variant="ghost"
           className="replay-button"
           onClick={replayReveal}
-          disabled={isResetting}
           aria-label="Replay the curtain reveal"
         >
           <RotateCcw aria-hidden="true" />
@@ -161,7 +125,6 @@ export function ActOne() {
         <div className="theatre-curtain" aria-hidden="true">
           <div className="curtain-panel curtain-panel-left" />
           <div className="curtain-panel curtain-panel-right" />
-          <div className="curtain-valance" />
           <div className="curtain-seam" />
         </div>
       </section>
