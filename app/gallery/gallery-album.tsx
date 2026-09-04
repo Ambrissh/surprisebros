@@ -203,11 +203,20 @@ const photosPerSpread = 4;
 const spreadCount = Math.ceil(photos.length / photosPerSpread);
 const rings = Array.from({ length: 12 });
 
+type TurnState = {
+  direction: -1 | 1;
+  from: number;
+  to: number;
+};
+
 export function GalleryAlbum() {
   const [isOpen, setIsOpen] = useState(false);
   const [spreadIndex, setSpreadIndex] = useState(0);
+  const [turning, setTurning] = useState<TurnState | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const swipeOrigin = useRef<number | null>(null);
+  const indexTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const turnTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showPreviousPhoto = useCallback(() => {
     setSelectedPhoto((current) => {
@@ -235,12 +244,48 @@ export function GalleryAlbum() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [selectedPhoto, showNextPhoto, showPreviousPhoto]);
 
+  useEffect(() => {
+    const adjacentPhotos = [
+      ...getSpreadPhotos((spreadIndex + 1) % spreadCount),
+      ...getSpreadPhotos((spreadIndex - 1 + spreadCount) % spreadCount),
+    ];
+
+    adjacentPhotos.forEach((photo) => {
+      const image = new window.Image();
+      image.src = photo.src;
+    });
+  }, [spreadIndex]);
+
+  useEffect(
+    () => () => {
+      if (indexTimer.current) clearTimeout(indexTimer.current);
+      if (turnTimer.current) clearTimeout(turnTimer.current);
+    },
+    [],
+  );
+
+  const beginTurn = (to: number, direction: -1 | 1) => {
+    if (turning || to === spreadIndex) return;
+
+    const from = spreadIndex;
+    setTurning({ direction, from, to });
+
+    indexTimer.current = setTimeout(() => {
+      setSpreadIndex(to);
+    }, 440);
+
+    turnTimer.current = setTimeout(() => {
+      setTurning(null);
+    }, 920);
+  };
+
   const changeSpread = (direction: -1 | 1) => {
-    setSpreadIndex((current) => (current + direction + spreadCount) % spreadCount);
+    const next = (spreadIndex + direction + spreadCount) % spreadCount;
+    beginTurn(next, direction);
   };
 
   const spreadStart = spreadIndex * photosPerSpread;
-  const spreadPhotos = photos.slice(spreadStart, spreadStart + photosPerSpread);
+  const spreadPhotos = getSpreadPhotos(spreadIndex);
   const selected = selectedPhoto === null ? null : photos[selectedPhoto];
 
   return (
@@ -269,7 +314,7 @@ export function GalleryAlbum() {
       <section className="album-stage" aria-label="Celebration gallery">
         <div className={`album ${isOpen ? "is-open" : ""}`}>
           <div id="album-pages" className="album-pages" aria-hidden={!isOpen}>
-            <div className="spread-content" key={spreadIndex}>
+            <div className="spread-content">
               <AlbumPage
                 side="left"
                 photos={spreadPhotos.slice(0, 2)}
@@ -293,7 +338,17 @@ export function GalleryAlbum() {
                 onSelect={setSelectedPhoto}
               />
             </div>
+
+            {turning ? (
+              <TurningPage turn={turning} onSelect={setSelectedPhoto} />
+            ) : null}
           </div>
+
+          <span className="cover-binding" aria-hidden="true">
+            {rings.map((_, index) => (
+              <span key={index} />
+            ))}
+          </span>
 
           <button
             className="album-cover"
@@ -303,15 +358,11 @@ export function GalleryAlbum() {
             aria-expanded={isOpen}
             tabIndex={isOpen ? -1 : 0}
           >
-            <span className="cover-binding" aria-hidden="true">
-              {rings.map((_, index) => (
-                <span key={index} />
-              ))}
-            </span>
             <span className="cover-inset" aria-hidden="true" />
             <span className="cover-brand">Surprise Bro&apos;s</span>
             <strong>Gallery</strong>
-            <span className="cover-action">Open</span>
+            <span className="cover-rule" aria-hidden="true" />
+            <span className="cover-action">Open gallery</span>
           </button>
         </div>
 
@@ -320,7 +371,7 @@ export function GalleryAlbum() {
             type="button"
             onClick={() => changeSpread(-1)}
             aria-label="Previous album pages"
-            disabled={!isOpen}
+            disabled={!isOpen || turning !== null}
           >
             <ChevronLeft aria-hidden="true" />
           </button>
@@ -331,10 +382,10 @@ export function GalleryAlbum() {
                 type="button"
                 key={index}
                 className={index === spreadIndex ? "is-active" : undefined}
-                onClick={() => setSpreadIndex(index)}
+                onClick={() => beginTurn(index, index > spreadIndex ? 1 : -1)}
                 aria-label={`Open album pages ${index + 1}`}
                 aria-current={index === spreadIndex ? "page" : undefined}
-                disabled={!isOpen}
+                disabled={!isOpen || turning !== null}
               />
             ))}
           </div>
@@ -343,7 +394,7 @@ export function GalleryAlbum() {
             type="button"
             onClick={() => changeSpread(1)}
             aria-label="Next album pages"
-            disabled={!isOpen}
+            disabled={!isOpen || turning !== null}
           >
             <ChevronRight aria-hidden="true" />
           </button>
@@ -353,7 +404,7 @@ export function GalleryAlbum() {
             type="button"
             onClick={() => setIsOpen(false)}
             aria-label="Close album"
-            disabled={!isOpen}
+            disabled={!isOpen || turning !== null}
           >
             <X aria-hidden="true" />
           </button>
@@ -431,16 +482,65 @@ export function GalleryAlbum() {
 
 export default GalleryAlbum;
 
+function getSpreadPhotos(index: number) {
+  const start = index * photosPerSpread;
+  return photos.slice(start, start + photosPerSpread);
+}
+
+function TurningPage({
+  turn,
+  onSelect,
+}: {
+  turn: TurnState;
+  onSelect: (index: number) => void;
+}) {
+  const fromPhotos = getSpreadPhotos(turn.from);
+  const toPhotos = getSpreadPhotos(turn.to);
+  const isForward = turn.direction === 1;
+  const frontPhotos = isForward ? fromPhotos.slice(2, 4) : toPhotos.slice(2, 4);
+  const frontOffset = (isForward ? turn.from : turn.to) * photosPerSpread + 2;
+  const backPhotos = isForward ? toPhotos.slice(0, 2) : fromPhotos.slice(0, 2);
+  const backOffset = (isForward ? turn.to : turn.from) * photosPerSpread;
+
+  return (
+    <div
+      className={`turning-page ${isForward ? "turning-forward" : "turning-backward"}`}
+      aria-hidden="true"
+    >
+      <div className="turn-face turn-front">
+        <AlbumPage
+          side="right"
+          photos={frontPhotos}
+          offset={frontOffset}
+          onSelect={onSelect}
+          inactive
+        />
+      </div>
+      <div className="turn-face turn-back">
+        <AlbumPage
+          side="left"
+          photos={backPhotos}
+          offset={backOffset}
+          onSelect={onSelect}
+          inactive
+        />
+      </div>
+    </div>
+  );
+}
+
 function AlbumPage({
   side,
   photos: pagePhotos,
   offset,
   onSelect,
+  inactive = false,
 }: {
   side: "left" | "right";
   photos: GalleryPhoto[];
   offset: number;
   onSelect: (index: number) => void;
+  inactive?: boolean;
 }) {
   return (
     <div className={`album-page album-page-${side}`}>
@@ -455,6 +555,7 @@ function AlbumPage({
               key={photo.src}
               onClick={() => onSelect(photoIndex)}
               aria-label={`View photograph ${photoIndex + 1}`}
+              tabIndex={inactive ? -1 : 0}
             >
               <Image
                 src={photo.src}

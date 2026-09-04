@@ -674,6 +674,18 @@
       radial-gradient(ellipse at 30% 52%, transparent 36%, rgb(0 0 0 / 28%) 78%, rgb(0 0 0 / 55%) 100%);
   }
 
+  .lamp-glow-one {
+    display: none;
+  }
+
+  .lamp-glow-two {
+    background: radial-gradient(ellipse at 54% 23%, rgb(255 232 184 / 58%) 0%, rgb(255 210 132 / 18%) 8%, transparent 28%);
+  }
+
+  .light-ignition {
+    background: radial-gradient(circle at 54% 23%, #fffdf3 0 0.35%, rgb(255 235 193 / 92%) 0.9%, rgb(255 216 151 / 24%) 4%, transparent 13%);
+  }
+
   .site-header {
     align-items: center;
     padding: 1.05rem 1rem 0.9rem;
@@ -744,6 +756,35 @@
     transform: none;
   }
 
+  .site-header {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+    padding: 0.9rem 1rem 0.65rem;
+  }
+
+  .primary-nav {
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding-top: 0.55rem;
+    border-top: 1px solid rgb(248 241 230 / 10%);
+  }
+
+  .primary-nav a {
+    display: block;
+    font-size: 0.43rem;
+    letter-spacing: 0.09em;
+  }
+
+  .lamp-glow-two {
+    background: radial-gradient(ellipse at 91% 23%, rgb(255 232 184 / 58%) 0%, rgb(255 210 132 / 18%) 8%, transparent 30%);
+  }
+
+  .light-ignition {
+    background: radial-gradient(circle at 91% 23%, #fffdf3 0 0.4%, rgb(255 235 193 / 92%) 1%, rgb(255 216 151 / 24%) 4.5%, transparent 14%);
+  }
+
   .hero-copy h1 {
     font-size: clamp(4.9rem, 20.5vw, 6.8rem);
   }
@@ -757,9 +798,6 @@
     display: none;
   }
 
-  .primary-nav a:nth-child(3) {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

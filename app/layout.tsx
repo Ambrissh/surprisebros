@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import {
   Alex_Brush,
+  Bodoni_Moda,
   Cormorant_Garamond,
-  DM_Serif_Display,
   Geist,
   Geist_Mono,
   Montserrat,
@@ -31,10 +31,10 @@ const peristiwaFallback = Alex_Brush({
   weight: '400',
 });
 
-const seasonsFallback = DM_Serif_Display({
+const seasonsFallback = Bodoni_Moda({
   variable: '--font-seasons-fallback',
   subsets: ['latin'],
-  weight: '400',
+  weight: ['400', '500'],
 });
 
 const gothamFallback = Montserrat({

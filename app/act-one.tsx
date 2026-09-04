@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { RotateCcw } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
 const navItems = [
@@ -42,11 +44,6 @@ export function ActOne() {
   useEffect(() => {
     if (!heroReady || !curtainReady) return;
 
-    setIsOpening(false);
-    setLightsOn(false);
-    setSceneVisible(false);
-    setContentVisible(false);
-
     const timers = [
       window.setTimeout(() => setIsOpening(true), 520),
       window.setTimeout(() => setLightsOn(true), 4920),
@@ -60,6 +57,10 @@ export function ActOne() {
   }, [heroReady, curtainReady, sequence]);
 
   const replayReveal = () => {
+    setIsOpening(false);
+    setLightsOn(false);
+    setSceneVisible(false);
+    setContentVisible(false);
     setSequence((value) => value + 1);
   };
 
@@ -71,10 +72,13 @@ export function ActOne() {
         aria-label="Surprise Bro's theatrical introduction"
       >
         <div className="hero-media" aria-hidden="true">
-          <img
+          <Image
             ref={heroImageRef}
             src="/assets/surprise-bros-black-stage-hero-v3.png"
             alt=""
+            fill
+            priority
+            sizes="100vw"
             onLoad={() => setHeroReady(true)}
           />
         </div>
@@ -84,20 +88,20 @@ export function ActOne() {
         <div className="light-ignition" aria-hidden="true" />
 
         <header className="site-header">
-          <a className="brand-lockup" href="/" aria-label="Surprise Bro's home">
+          <Link className="brand-lockup" href="/" aria-label="Surprise Bro's home">
             <strong>Surprise Bro&apos;s</strong>
             <small>Events · Tirunelveli</small>
-          </a>
+          </Link>
 
           <nav className="primary-nav" aria-label="Primary navigation">
             {navItems.map((item, index) => (
-              <a
+              <Link
                 key={item.label}
                 href={item.href}
                 className={index === 0 ? 'is-active' : undefined}
               >
                 {item.label}
-              </a>
+              </Link>
             ))}
           </nav>
         </header>
