@@ -4,17 +4,16 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react';
 import { ArrowDown, ArrowLeft, ArrowUpRight } from 'lucide-react';
 
 type BalloonColor = 'wine' | 'pearl' | 'champagne';
-type CardColor = 'aqua' | 'butter' | 'coral';
+type Accent = 'sapphire' | 'oxblood' | 'champagne';
 
 type Review = {
   id: string;
   name: string;
   date: string;
-  occasion: string;
+  occasion?: string;
   quote?: string;
   balloon: BalloonColor;
-  card: CardColor;
-  ratingOnly?: boolean;
+  accent: Accent;
 };
 
 const reviews: Review[] = [
@@ -26,16 +25,14 @@ const reviews: Review[] = [
     quote:
       'We planned our son’s first birthday from out of town. The team stayed responsive, shared options, and had the home ready when we arrived. We loved the result—and our baby enjoyed every bit of it.',
     balloon: 'pearl',
-    card: 'butter',
+    accent: 'sapphire',
   },
   {
     id: 'suresh',
     name: 'Suresh',
     date: '01 Nov 2025',
-    occasion: 'A five-star hello',
     balloon: 'wine',
-    card: 'aqua',
-    ratingOnly: true,
+    accent: 'oxblood',
   },
   {
     id: 'nisha',
@@ -45,16 +42,14 @@ const reviews: Review[] = [
     quote:
       'The video-call cake cutting, the photo slam book, even the three little pieces on the cake—every detail felt personal to our family. It was our fourth celebration with the team, and they made the day memorable again.',
     balloon: 'champagne',
-    card: 'coral',
+    accent: 'champagne',
   },
   {
     id: 'kalviselvan',
     name: 'Kalviselvan',
     date: '11 Dec 2024',
-    occasion: 'Five stars, sent our way',
     balloon: 'pearl',
-    card: 'butter',
-    ratingOnly: true,
+    accent: 'sapphire',
   },
   {
     id: 'gifty',
@@ -64,16 +59,14 @@ const reviews: Review[] = [
     quote:
       'They listened to every preference with patience and were genuinely friendly throughout. The decor made our engagement feel grander and more special than we had imagined.',
     balloon: 'wine',
-    card: 'aqua',
+    accent: 'oxblood',
   },
   {
     id: 'palani',
     name: 'Palani',
     date: '07 Nov 2024',
-    occasion: 'A little five-star lift',
     balloon: 'champagne',
-    card: 'coral',
-    ratingOnly: true,
+    accent: 'champagne',
   },
   {
     id: 'niyaz',
@@ -82,34 +75,28 @@ const reviews: Review[] = [
     occasion: 'Event decor',
     quote: 'Awesome work by the Surprise Bro’s team.',
     balloon: 'pearl',
-    card: 'butter',
+    accent: 'sapphire',
   },
   {
     id: 'madevi',
     name: 'Madevi',
     date: '24 Aug 2025',
-    occasion: 'Five stars in the air',
     balloon: 'wine',
-    card: 'aqua',
-    ratingOnly: true,
+    accent: 'oxblood',
   },
   {
     id: 'guest',
     name: 'Guest review',
     date: '07 Nov 2024',
-    occasion: 'Five stars, no note needed',
     balloon: 'champagne',
-    card: 'coral',
-    ratingOnly: true,
+    accent: 'champagne',
   },
   {
     id: 'siva',
     name: 'Siva Guru',
     date: '28 Sep 2023',
-    occasion: 'Another five-star moment',
     balloon: 'pearl',
-    card: 'butter',
-    ratingOnly: true,
+    accent: 'sapphire',
   },
 ];
 
@@ -118,8 +105,6 @@ const balloonSource: Record<BalloonColor, string> = {
   pearl: '/assets/reviews/balloon-pearl.png',
   champagne: '/assets/reviews/balloon-champagne.png',
 };
-
-const bubbleLetters = 'Kind words'.split('');
 
 export function ReviewsExperience() {
   const pageRef = useRef<HTMLElement>(null);
@@ -133,18 +118,16 @@ export function ReviewsExperience() {
     const page = pageRef.current;
     if (!page) return;
 
-    const items = Array.from(
-      page.querySelectorAll<HTMLElement>('[data-float-in]'),
-    );
+    const items = Array.from(page.querySelectorAll<HTMLElement>('[data-rise]'));
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
-          entry.target.classList.add('is-floating-in');
+          entry.target.classList.add('has-risen');
           observer.unobserve(entry.target);
         });
       },
-      { rootMargin: '0px 0px -8% 0px', threshold: 0.08 },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0.08 },
     );
 
     items.forEach((item) => observer.observe(item));
@@ -154,12 +137,12 @@ export function ReviewsExperience() {
   return (
     <main
       ref={pageRef}
-      className={`balloon-page ${motionReady ? 'is-motion-ready' : ''}`}
+      className={`gift-page ${motionReady ? 'is-motion-ready' : ''}`}
     >
-      <header className="balloon-header">
-        <a className="balloon-brand" href="/" aria-label="Surprise Bro's home">
+      <header className="gift-header">
+        <a className="gift-brand" href="/" aria-label="Surprise Bro's home">
           Surprise Bro&apos;s
-          <small>tirunelveli</small>
+          <small>Tirunelveli</small>
         </a>
         <nav aria-label="Primary navigation">
           <a href="/">Home</a>
@@ -168,150 +151,119 @@ export function ReviewsExperience() {
             Reviews
           </a>
           <a
-            className="balloon-nav-cta"
+            className="gift-contact"
             href="https://wa.me/918488991284"
             target="_blank"
             rel="noreferrer"
           >
-            Plan a surprise
+            Get in touch
           </a>
         </nav>
       </header>
 
-      <section className="balloon-hero" aria-labelledby="balloon-heading">
-        <div className="color-swoop color-swoop-aqua" aria-hidden="true" />
-        <div className="color-swoop color-swoop-butter" aria-hidden="true" />
-        <div className="color-swoop color-swoop-coral" aria-hidden="true" />
+      <section className="gift-hero" aria-labelledby="gift-hero-heading">
+        <div className="hero-wash hero-wash-sapphire" aria-hidden="true" />
+        <div className="hero-wash hero-wash-oxblood" aria-hidden="true" />
+        <div className="hero-wash hero-wash-champagne" aria-hidden="true" />
 
-        <a className="balloon-back" href="/">
+        <a className="gift-back" href="/">
           <ArrowLeft aria-hidden="true" /> Back home
         </a>
 
-        <div className="balloon-hero-copy" data-float-in>
-          <p className="doodle-note">real notes from real celebrations</p>
-          <h1 id="balloon-heading">
-            <span className="bubble-word" aria-label="Kind words">
-              {bubbleLetters.map((letter, index) => (
-                <i
-                  aria-hidden="true"
-                  key={`${letter}-${index}`}
-                  style={{ '--letter': index } as CSSProperties}
-                >
-                  {letter === ' ' ? '\u00a0' : letter}
-                </i>
-              ))}
-            </span>
-            <em>keep us floating.</em>
+        <div className="gift-hero-copy" data-rise>
+          <p className="gift-eyebrow">Customer notes · Tirunelveli</p>
+          <h1 id="gift-hero-heading">
+            Reviews,
+            <em>tied with care.</em>
           </h1>
-          <p className="balloon-hero-intro">
-            Every string leads to somebody&apos;s day—a first birthday, a cake
-            call, an engagement, or one happy five-star tap.
+          <p>
+            Real words from birthdays, cake surprises, engagements and family
+            celebrations.
           </p>
-          <div className="balloon-hero-actions">
-            <a href="#review-sky">
-              Follow the balloons <ArrowDown aria-hidden="true" />
-            </a>
+          <div className="gift-rating">
+            <strong>4.8</strong>
             <span>
-              <b>4.8</b> from 408 public ratings
+              <b>★★★★★</b>
+              408 public ratings
             </span>
           </div>
+          <a className="gift-scroll" href="#gift-notes">
+            Read the notes <ArrowDown aria-hidden="true" />
+          </a>
         </div>
 
-        <div
-          className="hero-balloon hero-balloon-one"
-          aria-hidden="true"
-          data-float-in
-        >
+        <div className="hero-float hero-float-one" data-rise aria-hidden="true">
           <img src={balloonSource.wine} alt="" />
-          <span>birthdays</span>
+        </div>
+        <div className="hero-float hero-float-two" data-rise aria-hidden="true">
+          <img src={balloonSource.pearl} alt="" />
         </div>
         <div
-          className="hero-balloon hero-balloon-two"
+          className="hero-float hero-float-three"
+          data-rise
           aria-hidden="true"
-          data-float-in
         >
           <img src={balloonSource.champagne} alt="" />
-          <span>cake calls</span>
-        </div>
-        <div
-          className="hero-balloon hero-balloon-three"
-          aria-hidden="true"
-          data-float-in
-        >
-          <img src={balloonSource.pearl} alt="" />
-          <span>big days</span>
         </div>
 
-        <span className="hero-doodle hero-doodle-one" aria-hidden="true">
-          up, up
-        </span>
-        <span className="hero-doodle hero-doodle-two" aria-hidden="true">
-          ↗
+        <span className="gift-scribble" aria-hidden="true">
+          float gently ↑
         </span>
       </section>
 
-      <nav className="occasion-strip" aria-label="Review occasions">
-        <span>Birthday rooms</span>
-        <i aria-hidden="true">✦</i>
-        <span>Cakes &amp; calls</span>
-        <i aria-hidden="true">✦</i>
-        <span>Engagement stages</span>
-        <i aria-hidden="true">✦</i>
-        <span>Little surprises</span>
-      </nav>
-
       <section
-        className="review-sky"
-        id="review-sky"
-        aria-labelledby="review-sky-heading"
+        className="gift-notes"
+        id="gift-notes"
+        aria-labelledby="gift-notes-heading"
       >
-        <div className="sky-shape sky-shape-aqua" aria-hidden="true" />
-        <div className="sky-shape sky-shape-coral" aria-hidden="true" />
-        <div className="sky-shape sky-shape-butter" aria-hidden="true" />
+        <div className="notes-wash notes-wash-one" aria-hidden="true" />
+        <div className="notes-wash notes-wash-two" aria-hidden="true" />
 
-        <div className="review-sky-heading" data-float-in>
-          <p className="doodle-note">pull a string. meet a moment.</p>
-          <h2 id="review-sky-heading">The good word gets airborne.</h2>
+        <header className="gift-notes-heading" data-rise>
+          <span>01—10</span>
+          <h2 id="gift-notes-heading">Ten notes we kept.</h2>
           <p>
-            Every card is tied to its balloon. Scroll and watch the whole wall
-            rise.
+            Each review is presented as a gift tag, attached directly to its
+            balloon.
           </p>
-        </div>
+        </header>
 
-        <div className="balloon-review-grid">
+        <div className="gift-card-grid">
           {reviews.map((review, index) => (
             <article
-              className={`balloon-review balloon-review-${review.card} ${review.ratingOnly ? 'is-rating-only' : ''}`}
+              className={`gift-review gift-review-${review.accent} ${review.quote ? 'has-note' : 'rating-only'}`}
               id={review.id}
               key={review.id}
-              data-float-in
+              data-rise
               style={
                 {
-                  '--float-delay': `${(index % 3) * 100}ms`,
-                  '--card-turn': `${[-1.2, 0.9, -0.5, 1.4][index % 4]}deg`,
+                  '--rise-delay': `${(index % 2) * 120}ms`,
+                  '--tag-angle': `${[-0.65, 0.45, -0.3, 0.6][index % 4]}deg`,
                 } as CSSProperties
               }
             >
-              <div className="review-balloon" aria-hidden="true">
+              <div className="gift-balloon" aria-hidden="true">
                 <img src={balloonSource[review.balloon]} alt="" />
               </div>
-              <div className="review-string" aria-hidden="true">
-                <i />
-              </div>
-              <div className="review-card">
-                <span className="card-hole" aria-hidden="true" />
+              <div className="gift-string" aria-hidden="true" />
+
+              <div className="gift-card">
+                <span className="gift-eyelet" aria-hidden="true" />
+                <div className="gift-card-topline" aria-hidden="true" />
                 <header>
-                  <span>{review.occasion}</span>
+                  <span>{review.occasion ?? 'Public rating'}</span>
                   <b aria-label="5 out of 5 stars">★★★★★</b>
                 </header>
+
                 {review.quote ? (
                   <blockquote>“{review.quote}”</blockquote>
                 ) : (
-                  <p className="five-star-note">
+                  <div className="gift-score-card">
                     <strong>5.0</strong>
-                    A five-star rating, left without a written note.
-                  </p>
+                    <span>Public rating</span>
+                  </div>
                 )}
+
                 <footer>
                   <strong>{review.name}</strong>
                   <span>{review.date}</span>
@@ -322,28 +274,23 @@ export function ReviewsExperience() {
         </div>
       </section>
 
-      <section className="balloon-cta" aria-labelledby="balloon-cta-heading">
-        <div className="cta-balloon cta-balloon-left" aria-hidden="true">
-          <img src={balloonSource.pearl} alt="" />
+      <section className="gift-cta" aria-labelledby="gift-cta-heading">
+        <div className="gift-cta-balloon" aria-hidden="true">
+          <img src={balloonSource.champagne} alt="" />
         </div>
-        <div className="cta-balloon cta-balloon-right" aria-hidden="true">
-          <img src={balloonSource.wine} alt="" />
-        </div>
-        <div className="balloon-cta-card" data-float-in>
-          <p className="doodle-note">have a date in mind?</p>
-          <h2 id="balloon-cta-heading">
-            Let&apos;s make the next good story yours.
-          </h2>
+        <div className="gift-cta-copy" data-rise>
+          <p className="gift-eyebrow">Planning something?</p>
+          <h2 id="gift-cta-heading">Tell us the date.</h2>
           <a href="https://wa.me/918488991284" target="_blank" rel="noreferrer">
-            Tell us the date <ArrowUpRight aria-hidden="true" />
+            Start on WhatsApp <ArrowUpRight aria-hidden="true" />
           </a>
         </div>
       </section>
 
-      <footer className="balloon-footer">
-        <a className="balloon-brand" href="/">
+      <footer className="gift-footer">
+        <a className="gift-brand" href="/">
           Surprise Bro&apos;s
-          <small>tirunelveli</small>
+          <small>Tirunelveli</small>
         </a>
         <p>
           Reviews are lightly edited for length and clarity. Ratings and dates

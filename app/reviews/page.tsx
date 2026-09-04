@@ -1,18 +1,19 @@
 import type { Metadata } from 'next';
-import { Baloo_2, Caveat } from 'next/font/google';
+import { Fraunces, Manrope } from 'next/font/google';
 import { ReviewsExperience } from './reviews-experience';
 import './reviews.css';
 
-const balloonDisplay = Baloo_2({
-  variable: '--font-balloon',
+const giftDisplay = Fraunces({
+  variable: '--font-gift-display',
   subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
 });
 
-const doodle = Caveat({
-  variable: '--font-doodle',
+const giftSans = Manrope({
+  variable: '--font-gift-sans',
   subsets: ['latin'],
-  weight: ['500', '600', '700'],
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function ReviewsPage() {
   return (
-    <div className={`${balloonDisplay.variable} ${doodle.variable}`}>
+    <div className={`${giftDisplay.variable} ${giftSans.variable}`}>
       <ReviewsExperience />
     </div>
   );
