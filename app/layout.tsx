@@ -34,7 +34,7 @@ const peristiwaFallback = Alex_Brush({
 const seasonsFallback = Bodoni_Moda({
   variable: '--font-seasons-fallback',
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600', '700'],
 });
 
 const gothamFallback = Montserrat({

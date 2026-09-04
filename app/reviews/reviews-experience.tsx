@@ -1,7 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useRef, type CSSProperties } from 'react';
 import { ArrowDown, ArrowLeft, ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
 
 type BalloonColor = 'wine' | 'pearl' | 'champagne';
 type CardColor = 'powder' | 'cherry' | 'sand' | 'cobalt' | 'pearl';
@@ -110,11 +112,6 @@ const heroReviews = [reviews[0], reviews[2], reviews[4]];
 
 export function ReviewsExperience() {
   const pageRef = useRef<HTMLElement>(null);
-  const [motionReady, setMotionReady] = useState(false);
-
-  useEffect(() => {
-    setMotionReady(true);
-  }, []);
 
   useEffect(() => {
     const page = pageRef.current;
@@ -139,21 +136,18 @@ export function ReviewsExperience() {
   }, []);
 
   return (
-    <main
-      ref={pageRef}
-      className={`lane-page ${motionReady ? 'is-motion-ready' : ''}`}
-    >
+    <main ref={pageRef} className="lane-page is-motion-ready">
       <header className="lane-header">
-        <a className="lane-brand" href="/" aria-label="Surprise Bro's home">
+        <Link className="lane-brand" href="/" aria-label="Surprise Bro's home">
           Surprise Bro&apos;s
           <small>Tirunelveli</small>
-        </a>
+        </Link>
         <nav aria-label="Primary navigation">
-          <a href="/">Home</a>
-          <a href="/gallery">Gallery</a>
-          <a className="is-active" href="/reviews" aria-current="page">
+          <Link href="/">Home</Link>
+          <Link href="/gallery">Gallery</Link>
+          <Link className="is-active" href="/reviews" aria-current="page">
             Reviews
-          </a>
+          </Link>
           <a
             className="lane-contact"
             href="https://wa.me/918488991284"
@@ -174,9 +168,9 @@ export function ReviewsExperience() {
         </div>
 
         <div className="lane-hero-copy" data-reveal>
-          <a className="lane-back" href="/">
+          <Link className="lane-back" href="/">
             <ArrowLeft aria-hidden="true" /> Back home
-          </a>
+          </Link>
           <p className="lane-label">Surprise Bro&apos;s customer reviews</p>
           <h1 id="lane-heading">
             Customer
@@ -207,7 +201,13 @@ export function ReviewsExperience() {
               style={{ '--reveal-delay': `${index * 110}ms` } as CSSProperties}
             >
               <div className="hero-review-balloon" aria-hidden="true">
-                <img src={balloonSource[review.balloon]} alt="" />
+                <Image
+                  src={balloonSource[review.balloon]}
+                  alt=""
+                  width={1024}
+                  height={1536}
+                  sizes="9rem"
+                />
               </div>
               <div className="hero-review-string" aria-hidden="true" />
               <div className="hero-review-card">
@@ -247,7 +247,13 @@ export function ReviewsExperience() {
 
         <div className="lane-feature-visual" data-reveal>
           <div className="feature-balloon" aria-hidden="true">
-            <img src={balloonSource.pearl} alt="" />
+            <Image
+              src={balloonSource.pearl}
+              alt=""
+              width={1024}
+              height={1536}
+              sizes="14rem"
+            />
           </div>
           <div className="feature-string" aria-hidden="true" />
           <div className="feature-card">
@@ -265,10 +271,22 @@ export function ReviewsExperience() {
         aria-labelledby="all-reviews-heading"
       >
         <div className="wall-balloon wall-balloon-left" aria-hidden="true">
-          <img src={balloonSource.wine} alt="" />
+          <Image
+            src={balloonSource.wine}
+            alt=""
+            width={1024}
+            height={1536}
+            sizes="12rem"
+          />
         </div>
         <div className="wall-balloon wall-balloon-right" aria-hidden="true">
-          <img src={balloonSource.champagne} alt="" />
+          <Image
+            src={balloonSource.champagne}
+            alt=""
+            width={1024}
+            height={1536}
+            sizes="12rem"
+          />
         </div>
 
         <header className="lane-wall-heading" data-reveal>
@@ -288,7 +306,13 @@ export function ReviewsExperience() {
               }
             >
               <div className="lane-review-balloon" aria-hidden="true">
-                <img src={balloonSource[review.balloon]} alt="" />
+                <Image
+                  src={balloonSource[review.balloon]}
+                  alt=""
+                  width={1024}
+                  height={1536}
+                  sizes="7rem"
+                />
               </div>
               <div className="lane-review-string" aria-hidden="true" />
               <div className="lane-review-frame">
@@ -330,10 +354,10 @@ export function ReviewsExperience() {
       </section>
 
       <footer className="lane-footer">
-        <a className="lane-brand" href="/">
+        <Link className="lane-brand" href="/">
           Surprise Bro&apos;s
           <small>Tirunelveli</small>
-        </a>
+        </Link>
         <p>
           Reviews are lightly edited for length and clarity. Ratings and dates
           come from the public business listing.
