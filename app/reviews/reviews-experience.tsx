@@ -137,7 +137,7 @@ export function ReviewsExperience() {
 
   return (
     <main ref={pageRef} className="lane-page is-motion-ready">
-      <header className="lane-header">
+      <header className="lane-header" data-reveal>
         <Link className="lane-brand" href="/" aria-label="Surprise Bro's home">
           Surprise Bro&apos;s
           <small>Tirunelveli</small>
@@ -171,12 +171,10 @@ export function ReviewsExperience() {
           <Link className="lane-back" href="/">
             <ArrowLeft aria-hidden="true" /> Back home
           </Link>
-          <p className="lane-label">Surprise Bro&apos;s customer reviews</p>
           <h1 id="lane-heading">
             Customer
             <em>reviews.</em>
           </h1>
-          <p>Reviews from the public Surprise Bro&apos;s business listing.</p>
           <div className="lane-score">
             <strong>4.8</strong>
             <span>
@@ -220,7 +218,7 @@ export function ReviewsExperience() {
         </div>
       </section>
 
-      <nav className="lane-strip" aria-label="Review categories">
+      <nav className="lane-strip" aria-label="Review categories" data-reveal>
         <a href="#featured">First birthdays</a>
         <a href="#all-reviews">Cake surprises</a>
         <a href="#all-reviews">Engagement decor</a>
@@ -290,7 +288,6 @@ export function ReviewsExperience() {
         </div>
 
         <header className="lane-wall-heading" data-reveal>
-          <p className="lane-label">All reviews</p>
           <h2 id="all-reviews-heading">Customer reviews.</h2>
         </header>
 
@@ -344,16 +341,30 @@ export function ReviewsExperience() {
       </section>
 
       <section className="lane-cta" aria-labelledby="lane-cta-heading">
-        <div data-reveal>
+        <div className="lane-cta-copy" data-reveal>
           <p className="lane-label">Surprise Bro&apos;s</p>
           <h2 id="lane-cta-heading">Planning a celebration?</h2>
+        </div>
+
+        <div className="lane-cta-wreath" data-reveal aria-hidden="true">
+          <Image
+            src="/assets/reviews/christmas-wreath-premium.png"
+            alt=""
+            width={1278}
+            height={1230}
+            sizes="(max-width: 760px) 72vw, 30vw"
+          />
+        </div>
+
+        <div className="lane-cta-action" data-reveal>
+          <span>Decor · Cakes · Surprises</span>
           <a href="https://wa.me/918488991284" target="_blank" rel="noreferrer">
             Contact us <ArrowUpRight aria-hidden="true" />
           </a>
         </div>
       </section>
 
-      <footer className="lane-footer">
+      <footer className="lane-footer" data-reveal>
         <Link className="lane-brand" href="/">
           Surprise Bro&apos;s
           <small>Tirunelveli</small>
