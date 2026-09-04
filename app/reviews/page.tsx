@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { ReviewsExperience } from './reviews-experience';
+import './reviews.css';
 
 export const metadata: Metadata = {
   title: "Reviews | Surprise Bro's, Tirunelveli",
