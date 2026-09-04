@@ -1,19 +1,19 @@
 import type { Metadata } from 'next';
-import { Fraunces, Manrope } from 'next/font/google';
+import { Libre_Franklin, Lora } from 'next/font/google';
 import { ReviewsExperience } from './reviews-experience';
 import './reviews.css';
 
-const giftDisplay = Fraunces({
-  variable: '--font-gift-display',
+const reviewSans = Libre_Franklin({
+  variable: '--font-review-sans',
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
+  weight: ['400', '500', '600', '700', '800'],
 });
 
-const giftSans = Manrope({
-  variable: '--font-gift-sans',
+const reviewSerif = Lora({
+  variable: '--font-review-serif',
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
+  style: ['normal', 'italic'],
 });
 
 export const metadata: Metadata = {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
 
 export default function ReviewsPage() {
   return (
-    <div className={`${giftDisplay.variable} ${giftSans.variable}`}>
+    <div className={`${reviewSans.variable} ${reviewSerif.variable}`}>
       <ReviewsExperience />
     </div>
   );
