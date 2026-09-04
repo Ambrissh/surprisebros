@@ -1,9 +1,9 @@
 .gallery-shell {
   --ink: #09110f;
   --ink-soft: #17201d;
-  --emerald: #104936;
-  --emerald-deep: #082f25;
-  --emerald-lit: #1b6249;
+  --emerald: #0d5a42;
+  --emerald-deep: #06372b;
+  --emerald-lit: #17805a;
   --brass-dark: #775019;
   --brass: #c58b32;
   --brass-lit: #f4dda0;
@@ -12,11 +12,44 @@
   --paper-edge: #cabb8b;
   min-height: 100svh;
   overflow-x: hidden;
-  color: #f4ecda;
-  background:
-    radial-gradient(circle at 50% 38%, rgba(64, 105, 84, 0.28), transparent 46%),
-    #101512;
-  font-family: Gotham, var(--font-gotham-fallback), "Helvetica Neue", Arial, sans-serif;
+  color: #4c211f;
+  background: #f7f3ee;
+  font-family: var(--font-seasons-fallback), "Bodoni 72", "Bodoni MT", Didot, serif;
+}
+
+.gallery-site-header {
+  position: relative;
+  min-height: 86px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1.35rem, 2.1vw, 2rem) clamp(1.25rem, 4.5vw, 5rem) 1.15rem;
+  border-bottom: 1px solid rgb(76 33 31 / 12%);
+  color: #4c211f;
+  background: #f7f3ee;
+  opacity: 1;
+  transform: none;
+}
+
+.gallery-site-header .primary-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(2rem, 4.3vw, 5.25rem);
+}
+
+.gallery-site-header .primary-nav a {
+  color: rgb(72 38 33 / 66%);
+  font-family: var(--font-seasons-fallback), "Bodoni 72", "Bodoni MT", Didot, serif;
+  font-size: clamp(0.64rem, 0.72vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.15em;
+}
+
+.gallery-site-header .primary-nav a:hover,
+.gallery-site-header .primary-nav a:focus-visible,
+.gallery-site-header .primary-nav a.is-active {
+  color: #4c211f;
 }
 
 .gallery-header {
@@ -124,8 +157,8 @@
   left: 4%;
   height: 12%;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.72);
-  filter: blur(24px);
+  background: rgba(39, 52, 46, 0.34);
+  filter: blur(26px);
   content: "";
   transform: translateZ(-30px);
 }
@@ -415,9 +448,9 @@
   border: 1px solid #001e19;
   color: #e8c879;
   background:
-    linear-gradient(128deg, rgba(255, 255, 255, 0.06), transparent 28%),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.25), transparent 8%, transparent 92%, rgba(0, 0, 0, 0.22)),
-    var(--emerald);
+    linear-gradient(128deg, rgba(255, 255, 255, 0.16), transparent 24%),
+    radial-gradient(circle at 62% 22%, rgba(35, 182, 126, 0.2), transparent 30%),
+    linear-gradient(134deg, #126c4e 0%, #0d5741 33%, #073d30 72%, #0d6248 100%);
   box-shadow:
     inset 0 0 0 8px rgba(0, 20, 17, 0.22),
     inset 0 0 0 9px rgba(226, 180, 86, 0.18),
@@ -447,7 +480,7 @@
   inset: 0;
   background:
     repeating-linear-gradient(112deg, transparent 0 5px, rgba(255, 255, 255, 0.012) 6px, transparent 7px 12px),
-    linear-gradient(105deg, transparent 18%, rgba(255, 255, 255, 0.07) 45%, transparent 64%);
+    linear-gradient(105deg, transparent 18%, rgba(255, 255, 255, 0.12) 45%, transparent 64%);
   content: "";
   mix-blend-mode: screen;
   pointer-events: none;
@@ -457,6 +490,11 @@
   pointer-events: none;
   transform: rotateY(-178deg) translateZ(2px);
   box-shadow: none;
+}
+
+.album-cover:disabled {
+  opacity: 1;
+  cursor: default;
 }
 
 .cover-inset {
@@ -568,13 +606,14 @@
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
-  transition: opacity 240ms ease 690ms, transform 240ms ease 690ms;
+  transition: opacity 180ms ease, transform 180ms ease;
 }
 
 .album-controls.is-visible {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(0);
+  transition-delay: 690ms;
 }
 
 .album-controls > button,
@@ -584,19 +623,19 @@
   display: grid;
   place-items: center;
   padding: 0;
-  border: 1px solid rgba(224, 190, 113, 0.34);
+  border: 1px solid rgba(13, 90, 66, 0.3);
   border-radius: 50%;
-  color: #e9d08f;
-  background: rgba(9, 23, 19, 0.72);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.025);
+  color: var(--emerald);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 5px 16px rgba(29, 54, 44, 0.08);
   cursor: pointer;
   transition: color 180ms ease, background 180ms ease, border-color 180ms ease, transform 180ms ease;
 }
 
 .album-controls > button:hover:not(:disabled) {
-  border-color: #d3a957;
-  color: #10251f;
-  background: #d5ad5e;
+  border-color: var(--emerald);
+  color: #ffffff;
+  background: var(--emerald);
   transform: translateY(-1px);
 }
 
@@ -622,7 +661,7 @@
   width: 6px;
   height: 6px;
   padding: 0;
-  border: 1px solid rgba(221, 187, 107, 0.56);
+  border: 1px solid rgba(13, 90, 66, 0.48);
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
@@ -630,8 +669,8 @@
 }
 
 .spread-dots button.is-active {
-  border-color: var(--brass-lit);
-  background: var(--brass-lit);
+  border-color: var(--emerald);
+  background: var(--emerald);
   transform: scale(1.35);
 }
 
@@ -756,6 +795,25 @@
 }
 
 @media (max-width: 780px) {
+  .gallery-site-header {
+    min-height: 72px;
+    padding: 0.9rem 0.9rem 0.7rem;
+  }
+
+  .gallery-site-header .primary-nav {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    width: 100%;
+    gap: 0;
+  }
+
+  .gallery-site-header .primary-nav a {
+    display: block;
+    font-size: 0.48rem;
+    letter-spacing: 0.06em;
+    text-align: center;
+  }
+
   .gallery-header {
     width: min(100% - 30px, 680px);
     min-height: 72px;

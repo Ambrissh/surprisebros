@@ -193,10 +193,10 @@ const photos: GalleryPhoto[] = [
 ];
 
 const navItems = [
-  { label: "Home", href: "/" },
+  { label: "Home", href: "/#home" },
   { label: "Gallery", href: "/gallery" },
   { label: "Reviews", href: "/reviews" },
-  { label: "WhatsApp", href: "https://wa.me/919790321840" },
+  { label: "Reach out", href: "/#reach-out" },
 ];
 
 const photosPerSpread = 4;
@@ -211,12 +211,14 @@ type TurnState = {
 
 export function GalleryAlbum() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isClosing, setIsClosing] = useState(false);
   const [spreadIndex, setSpreadIndex] = useState(0);
   const [turning, setTurning] = useState<TurnState | null>(null);
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const swipeOrigin = useRef<number | null>(null);
   const indexTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const turnTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showPreviousPhoto = useCallback(() => {
     setSelectedPhoto((current) => {
@@ -260,6 +262,7 @@ export function GalleryAlbum() {
     () => () => {
       if (indexTimer.current) clearTimeout(indexTimer.current);
       if (turnTimer.current) clearTimeout(turnTimer.current);
+      if (closeTimer.current) clearTimeout(closeTimer.current);
     },
     [],
   );
@@ -284,26 +287,29 @@ export function GalleryAlbum() {
     beginTurn(next, direction);
   };
 
+  const closeAlbum = () => {
+    if (turning || isClosing) return;
+    setIsClosing(true);
+    setIsOpen(false);
+    closeTimer.current = setTimeout(() => {
+      setSpreadIndex(0);
+      setIsClosing(false);
+    }, 1050);
+  };
+
   const spreadStart = spreadIndex * photosPerSpread;
   const spreadPhotos = getSpreadPhotos(spreadIndex);
   const selected = selectedPhoto === null ? null : photos[selectedPhoto];
 
   return (
     <main className="gallery-shell">
-      <header className="gallery-header">
-        <Link className="gallery-brand" href="/" aria-label="Surprise Bro's home">
-          <strong>Surprise Bro&apos;s</strong>
-          <span>Tirunelveli</span>
-        </Link>
-
-        <nav className="gallery-nav" aria-label="Primary navigation">
+      <header className="site-header gallery-site-header">
+        <nav className="primary-nav" aria-label="Primary navigation">
           {navItems.map((item) => (
             <Link
               key={item.label}
               href={item.href}
-              className={item.label === "Gallery" ? "is-current" : undefined}
-              target={item.label === "WhatsApp" ? "_blank" : undefined}
-              rel={item.label === "WhatsApp" ? "noreferrer" : undefined}
+              className={item.label === "Gallery" ? "is-active" : undefined}
             >
               {item.label}
             </Link>
@@ -312,7 +318,7 @@ export function GalleryAlbum() {
       </header>
 
       <section className="album-stage" aria-label="Celebration gallery">
-        <div className={`album ${isOpen ? "is-open" : ""}`}>
+        <div className={`album ${isOpen ? "is-open" : ""} ${isClosing ? "is-closing" : ""}`}>
           <div id="album-pages" className="album-pages" aria-hidden={!isOpen}>
             <div className="spread-content">
               <AlbumPage
@@ -356,7 +362,8 @@ export function GalleryAlbum() {
             onClick={() => setIsOpen(true)}
             aria-controls="album-pages"
             aria-expanded={isOpen}
-            tabIndex={isOpen ? -1 : 0}
+            tabIndex={isOpen || isClosing ? -1 : 0}
+            disabled={isClosing}
           >
             <span className="cover-inset" aria-hidden="true" />
             <span className="cover-brand">Surprise Bro&apos;s</span>
@@ -401,7 +408,7 @@ export function GalleryAlbum() {
           <button
             className="close-album"
             type="button"
-            onClick={() => setIsOpen(false)}
+            onClick={closeAlbum}
             aria-label="Close album"
             disabled={!isOpen || turning !== null}
           >
