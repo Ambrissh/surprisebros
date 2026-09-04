@@ -1,9 +1,9 @@
 .gallery-shell {
   --ink: #09110f;
   --ink-soft: #17201d;
-  --emerald: #043e34;
-  --emerald-deep: #022c26;
-  --emerald-lit: #0a5949;
+  --emerald: #104936;
+  --emerald-deep: #082f25;
+  --emerald-lit: #1b6249;
   --brass-dark: #775019;
   --brass: #c58b32;
   --brass-lit: #f4dda0;
@@ -14,8 +14,8 @@
   overflow-x: hidden;
   color: #f4ecda;
   background:
-    radial-gradient(circle at 50% 36%, rgba(40, 74, 62, 0.25), transparent 48%),
-    #09100e;
+    radial-gradient(circle at 50% 38%, rgba(64, 105, 84, 0.28), transparent 46%),
+    #101512;
   font-family: Gotham, var(--font-gotham-fallback), "Helvetica Neue", Arial, sans-serif;
 }
 
@@ -39,8 +39,8 @@
 }
 
 .gallery-brand strong {
-  font-family: "The Seasons", var(--font-seasons-fallback), Georgia, serif;
-  font-size: clamp(1.35rem, 2vw, 1.75rem);
+  font-family: Liana, var(--font-peristiwa-fallback), cursive;
+  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
   font-weight: 400;
   letter-spacing: -0.02em;
 }
@@ -110,8 +110,10 @@
   position: relative;
   width: min(1160px, 88vw);
   aspect-ratio: 1.58 / 1;
+  isolation: isolate;
   perspective: 2500px;
   transform-style: preserve-3d;
+  animation: album-arrive 720ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
 }
 
 .album::after {
@@ -162,6 +164,27 @@
     #e6d8ad 3px
   );
   content: "";
+}
+
+.album-pages::before {
+  position: absolute;
+  z-index: -1;
+  top: 10px;
+  right: -10px;
+  bottom: -8px;
+  width: 11px;
+  border-radius: 0 6px 7px 0;
+  background: repeating-linear-gradient(
+    90deg,
+    #8f7d4e 0,
+    #d7c99b 2px,
+    #aa9868 3px,
+    #ecdfb8 4px
+  );
+  box-shadow: 5px 7px 14px rgba(0, 0, 0, 0.28);
+  content: "";
+  transform: skewY(24deg);
+  transform-origin: left top;
 }
 
 .spread-content {
@@ -333,6 +356,7 @@
   transform-style: preserve-3d;
   will-change: transform;
   pointer-events: none;
+  filter: drop-shadow(0 9px 9px rgba(37, 24, 4, 0.14));
 }
 
 .turning-forward {
@@ -418,6 +442,17 @@
   transform: translateZ(-8px);
 }
 
+.album-cover::before {
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(112deg, transparent 0 5px, rgba(255, 255, 255, 0.012) 6px, transparent 7px 12px),
+    linear-gradient(105deg, transparent 18%, rgba(255, 255, 255, 0.07) 45%, transparent 64%);
+  content: "";
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
 .album.is-open .album-cover {
   pointer-events: none;
   transform: rotateY(-178deg) translateZ(2px);
@@ -426,17 +461,15 @@
 
 .cover-inset {
   position: absolute;
-  inset: 5.2%;
-  border: 1px solid rgba(238, 204, 124, 0.72);
+  inset: 4.8%;
+  border: 1px solid rgba(238, 204, 124, 0.52);
   box-shadow:
-    0 0 0 6px var(--emerald),
-    0 0 0 7px rgba(191, 136, 45, 0.38),
-    inset 0 0 30px rgba(0, 21, 17, 0.22);
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    inset 0 0 34px rgba(0, 21, 17, 0.24);
 }
 
 .cover-brand,
 .album-cover strong,
-.cover-rule,
 .cover-action {
   position: absolute;
   left: 50%;
@@ -453,23 +486,16 @@
 }
 
 .album-cover strong {
-  top: 40%;
-  font-family: "The Seasons", var(--font-seasons-fallback), "Times New Roman", serif;
-  font-size: clamp(4.8rem, 9.1vw, 8.5rem);
+  top: 36%;
+  font-family: Liana, var(--font-peristiwa-fallback), cursive;
+  font-size: clamp(6rem, 11vw, 10.5rem);
   font-weight: 400;
-  letter-spacing: -0.05em;
-  line-height: 0.84;
+  letter-spacing: 0;
+  line-height: 0.92;
   text-shadow:
     0 1px 0 #fff1bf,
     0 2px 0 #95651c,
     0 5px 12px rgba(0, 0, 0, 0.24);
-}
-
-.cover-rule {
-  top: 61.5%;
-  width: 52px;
-  height: 1px;
-  background: rgba(237, 205, 128, 0.72);
 }
 
 .cover-action {
@@ -682,31 +708,50 @@
 
 @keyframes turn-forward {
   0% {
+    filter: drop-shadow(0 9px 9px rgba(37, 24, 4, 0.14));
     transform: rotateY(0deg) translateZ(2px);
   }
   42% {
+    filter: drop-shadow(-22px 15px 17px rgba(25, 15, 3, 0.38));
     transform: rotateY(-77deg) translateZ(30px);
   }
   58% {
+    filter: drop-shadow(22px 15px 17px rgba(25, 15, 3, 0.38));
     transform: rotateY(-103deg) translateZ(30px);
   }
   100% {
+    filter: drop-shadow(0 9px 9px rgba(37, 24, 4, 0.14));
     transform: rotateY(-180deg) translateZ(2px);
   }
 }
 
 @keyframes turn-backward {
   0% {
+    filter: drop-shadow(0 9px 9px rgba(37, 24, 4, 0.14));
     transform: rotateY(-180deg) translateZ(2px);
   }
   42% {
+    filter: drop-shadow(22px 15px 17px rgba(25, 15, 3, 0.38));
     transform: rotateY(-103deg) translateZ(30px);
   }
   58% {
+    filter: drop-shadow(-22px 15px 17px rgba(25, 15, 3, 0.38));
     transform: rotateY(-77deg) translateZ(30px);
   }
   100% {
+    filter: drop-shadow(0 9px 9px rgba(37, 24, 4, 0.14));
     transform: rotateY(0deg) translateZ(2px);
+  }
+}
+
+@keyframes album-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(24px) rotateX(3deg) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
   }
 }
 
@@ -801,7 +846,7 @@
   }
 
   .album-cover strong {
-    font-size: clamp(4rem, 17vw, 6.7rem);
+    font-size: clamp(4.8rem, 20vw, 7.8rem);
   }
 
   .album-controls {
@@ -855,15 +900,11 @@
   }
 
   .album-cover strong {
-    font-size: clamp(3.2rem, 18vw, 4.8rem);
+    font-size: clamp(4.3rem, 21vw, 6rem);
   }
 
   .cover-brand {
     top: 29%;
-  }
-
-  .cover-rule {
-    top: 64%;
   }
 
   .cover-action {
@@ -916,6 +957,10 @@
 
   .turning-forward,
   .turning-backward {
+    animation-duration: 1ms;
+  }
+
+  .album {
     animation-duration: 1ms;
   }
 }

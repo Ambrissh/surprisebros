@@ -361,7 +361,6 @@ export function GalleryAlbum() {
             <span className="cover-inset" aria-hidden="true" />
             <span className="cover-brand">Surprise Bro&apos;s</span>
             <strong>Gallery</strong>
-            <span className="cover-rule" aria-hidden="true" />
             <span className="cover-action">Open gallery</span>
           </button>
         </div>
