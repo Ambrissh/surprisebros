@@ -169,10 +169,7 @@ export function ActOne() {
       const titleExit = Math.min(Math.max((progress - 0.06) / 0.24, 0), 1);
       const storyEntrance = Math.min(Math.max((progress - 0.04) / 0.9, 0), 1);
       const celebrationEntrance = Math.min(progress / 0.32, 1);
-      const celebrationExit = Math.min(
-        Math.max((progress - 0.36) / 0.2, 0),
-        1,
-      );
+      const celebrationExit = Math.min(Math.max((progress - 0.36) / 0.2, 0), 1);
 
       title.style.opacity = `${1 - titleExit}`;
       title.style.transform = `translate3d(0, ${-titleExit * 14}vh, 0) scale(${1 - titleExit * 0.08})`;
@@ -190,7 +187,7 @@ export function ActOne() {
       const celebrationOpacity =
         (0.34 + celebrationEntrance * 0.52) * (1 - celebrationExit);
       decor.style.opacity = `${celebrationOpacity}`;
-      decor.style.visibility = celebrationExit >= 0.995 ? "hidden" : "visible";
+      decor.style.visibility = celebrationExit >= 0.995 ? 'hidden' : 'visible';
       decor.style.transform = `translate3d(0, ${celebrationY}vh, ${celebrationZ}px) rotateX(${celebrationTilt}deg) scale(${celebrationScale})`;
       decor.style.setProperty(
         '--celebration-left-shift',
@@ -236,7 +233,9 @@ export function ActOne() {
                 alt=""
                 fill
                 priority
+                unoptimized
                 sizes="100vw"
+                style={{ objectFit: 'contain' }}
                 onLoad={() => setHeroReady(true)}
               />
             </div>
@@ -340,7 +339,7 @@ export function ActOne() {
           <div ref={filmTrackRef} className="film-roll-track">
             <div className="film-reel" aria-hidden="true">
               <Image
-                src="/assets/film-reel-burgundy-v1.png"
+                src="/assets/film-reel-burgundy-v2.png"
                 alt=""
                 width={1536}
                 height={1024}
