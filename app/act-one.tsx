@@ -12,12 +12,12 @@ const navItems = [
 ];
 
 const filmPlaceholders = [
-  { number: '01', label: 'A little joy', tone: 'rose' },
-  { number: '02', label: 'The big reveal', tone: 'amber' },
-  { number: '03', label: 'Happy tears', tone: 'plum' },
-  { number: '04', label: 'All the dancing', tone: 'clay' },
-  { number: '05', label: 'One more surprise', tone: 'gold' },
-  { number: '06', label: 'The afterglow', tone: 'wine' },
+  { number: '01', label: 'Wedding stage' },
+  { number: '02', label: 'Couple portrait' },
+  { number: '03', label: 'Reception details' },
+  { number: '04', label: 'Celebration' },
+  { number: '05', label: 'Floral styling' },
+  { number: '06', label: 'Wedding aisle' },
 ];
 
 export function ActOne() {
@@ -28,7 +28,6 @@ export function ActOne() {
   const storyDecorRef = useRef<HTMLDivElement>(null);
   const filmSectionRef = useRef<HTMLElement>(null);
   const filmTrackRef = useRef<HTMLDivElement>(null);
-  const filmCopyRef = useRef<HTMLDivElement>(null);
   const [heroReady, setHeroReady] = useState(false);
   const [curtainReady, setCurtainReady] = useState(false);
   const [isOpening, setIsOpening] = useState(false);
@@ -44,9 +43,8 @@ export function ActOne() {
   useEffect(() => {
     const section = filmSectionRef.current;
     const track = filmTrackRef.current;
-    const copy = filmCopyRef.current;
 
-    if (!section || !track || !copy) return;
+    if (!section || !track) return;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
@@ -56,7 +54,6 @@ export function ActOne() {
 
       if (reduceMotion.matches) {
         track.removeAttribute('style');
-        copy.removeAttribute('style');
         return;
       }
 
@@ -64,21 +61,17 @@ export function ActOne() {
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
       const progress = Math.min(Math.max(-bounds.top / travel, 0), 1);
       const entrance = Math.min(progress / 0.12, 1);
-      const copyExit = Math.min(Math.max((progress - 0.7) / 0.18, 0), 1);
-      const startX = window.innerWidth * 0.26;
-      const endPadding = window.innerWidth * 0.16;
+      const startX = window.innerWidth * 0.04;
+      const endPadding = window.innerWidth * 0.04;
       const horizontalTravel = Math.max(
         track.scrollWidth - window.innerWidth + startX + endPadding,
         window.innerWidth * 0.85,
       );
       const x = startX - horizontalTravel * progress;
-      const y = (1 - entrance) * 10;
-      const rotation = 1.8 - progress * 2.5;
+      const y = (1 - entrance) * 7;
 
-      track.style.opacity = `${Math.min(entrance * 1.7, 1)}`;
-      track.style.transform = `translate3d(${x}px, calc(-50% + ${y}vh), 0) rotate(${rotation}deg)`;
-      copy.style.opacity = `${entrance * (1 - copyExit)}`;
-      copy.style.transform = `translate3d(0, ${1.5 - entrance * 1.5 - copyExit * 4}rem, 0)`;
+      track.style.opacity = `${Math.min(entrance * 1.6, 1)}`;
+      track.style.transform = `translate3d(${x}px, calc(-50% + ${y}vh), 0)`;
     };
 
     const requestRender = () => {
@@ -132,9 +125,10 @@ export function ActOne() {
 
     const timers = [
       window.setTimeout(() => setIsOpening(true), 180),
-      window.setTimeout(() => setSceneVisible(true), 1540),
-      window.setTimeout(() => setCopyVisible(true), 2250),
-      window.setTimeout(() => setNavVisible(true), 2450),
+      // Let the curtains clear and hold a dark studio before the practicals ignite.
+      window.setTimeout(() => setSceneVisible(true), 2180),
+      window.setTimeout(() => setCopyVisible(true), 4180),
+      window.setTimeout(() => setNavVisible(true), 4380),
     ];
 
     return () => {
@@ -237,7 +231,16 @@ export function ActOne() {
                 sizes="100vw"
                 style={{ objectFit: 'contain' }}
                 onLoad={() => setHeroReady(true)}
+                onError={() => setHeroReady(true)}
               />
+            </div>
+          </div>
+          <div className="hero-blackout" />
+          <div className="hero-exposure" />
+          <div className="hero-light-rig">
+            <div className="hero-light-frame">
+              <div className="hero-lamp hero-lamp-key" />
+              <div className="hero-lamp hero-lamp-fill" />
             </div>
           </div>
         </div>
@@ -257,7 +260,9 @@ export function ActOne() {
         </header>
 
         <div className="hero-copy">
-          <p className="hero-kicker">It all begins with</p>
+          <p className="hero-kicker" aria-hidden="true">
+            It all begins with
+          </p>
           <h1 aria-label="It all begins with good design">
             <span className="headline-line headline-line-one">good</span>
             <span className="headline-line headline-line-two">design.</span>
@@ -328,58 +333,32 @@ export function ActOne() {
         aria-labelledby="film-roll-title"
       >
         <div className="film-roll-sticky">
-          <div ref={filmCopyRef} className="film-roll-copy">
-            <p>Our favourite kind of stories</p>
-            <h2 id="film-roll-title">
-              Moments,
-              <em> in motion.</em>
-            </h2>
-          </div>
+          <h2 id="film-roll-title" className="film-roll-sr-only">
+            Moments in motion
+          </h2>
 
           <div ref={filmTrackRef} className="film-roll-track">
-            <div className="film-reel" aria-hidden="true">
+            <div className="film-roll-composite">
               <Image
-                src="/assets/film-reel-burgundy-v2.png"
+                src="/assets/film-roll-reference-composite.png"
                 alt=""
-                width={1536}
-                height={1024}
-                sizes="(max-width: 560px) 30rem, (max-width: 900px) 40rem, 48rem"
+                width={1672}
+                height={941}
+                unoptimized
+                sizes="(max-width: 560px) 420vw, (max-width: 820px) 210vw, 155vw"
               />
-            </div>
-
-            <div className="film-strip">
-              <div className="film-sprockets" aria-hidden="true" />
-              <div className="film-frame-row">
+              <div className="film-video-slots">
                 {filmPlaceholders.map((placeholder) => (
                   <article
                     key={placeholder.number}
-                    className={`film-card film-card-${placeholder.tone}`}
+                    className={`film-video-slot film-video-slot-${placeholder.number}`}
                     data-video-slot={placeholder.number}
                     aria-label={`Future video: ${placeholder.label}`}
-                  >
-                    <div className="film-card-inner">
-                      <span className="film-card-number">
-                        Frame {placeholder.number}
-                      </span>
-                      <span className="film-card-play" aria-hidden="true">
-                        <svg viewBox="0 0 40 40" role="presentation">
-                          <path d="M16 12.5 29 20 16 27.5Z" />
-                        </svg>
-                      </span>
-                      <span className="film-card-label">
-                        {placeholder.label}
-                      </span>
-                    </div>
-                  </article>
+                  />
                 ))}
               </div>
-              <div className="film-sprockets" aria-hidden="true" />
             </div>
           </div>
-
-          <p className="film-roll-note" aria-hidden="true">
-            Keep scrolling to unspool
-          </p>
         </div>
       </section>
     </main>
