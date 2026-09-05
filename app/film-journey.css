@@ -1,0 +1,503 @@
+.motion-film,
+.celebration-contact,
+.celebration-footer {
+  --celebration-gray: #cbd2cc;
+  --celebration-yellow: #ffbf12;
+  --celebration-ink: #232724;
+  font-family:
+    'SF Pro Display',
+    'SF Pro Text',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
+  color: var(--celebration-ink);
+}
+
+.motion-film {
+  position: relative;
+  height: 870svh;
+  background: var(--celebration-gray);
+}
+
+.motion-film-stage {
+  --film-settle: 0;
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #fff;
+}
+
+.motion-film-scene {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.motion-film-heading,
+.motion-film-caption {
+  position: absolute;
+  z-index: 2;
+  right: 4vw;
+  left: 4vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  pointer-events: none;
+}
+
+.motion-film-heading {
+  top: 2.5rem;
+  opacity: var(--film-heading, 1);
+}
+
+.motion-film-heading h2 {
+  margin: 0;
+  font-size: clamp(1rem, 1.4vw, 1.4rem);
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.motion-film-heading a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding-block: 0.5rem;
+  color: inherit;
+  font-size: 0.875rem;
+  text-decoration: none;
+  pointer-events: auto;
+}
+
+.motion-film-heading svg,
+.celebration-footer svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.motion-film-caption {
+  bottom: 2rem;
+  color: #5d615e;
+  font-size: 0.875rem;
+  opacity: calc(1 - var(--film-settle));
+}
+
+.motion-film-caption > :last-child {
+  font-variant-numeric: tabular-nums;
+}
+
+.motion-film-end-label {
+  fill: #fff;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 2px;
+}
+
+.motion-film-ending {
+  position: absolute;
+  top: 45%;
+  left: 6vw;
+  display: grid;
+  gap: 1.2rem;
+  max-width: 42%;
+  opacity: var(--film-settle);
+  transform: translateY(calc((1 - var(--film-settle)) * 30px));
+  pointer-events: none;
+}
+
+.motion-film-ending span {
+  font-size: clamp(1rem, 1.5vw, 1.5rem);
+}
+.motion-film-ending strong {
+  font-size: clamp(4rem, 9vw, 9rem);
+  font-weight: 550;
+  letter-spacing: -0.075em;
+  line-height: 0.9;
+}
+.motion-film-ending svg {
+  width: 2rem;
+  height: 2rem;
+  margin-top: 1rem;
+}
+.motion-film-accessible-gallery {
+  display: none;
+}
+
+.celebration-contact {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: min(880px, 88svh);
+  padding-inline: 6vw 3vw;
+  overflow: hidden;
+  background: var(--celebration-gray);
+  scroll-margin-top: 0;
+}
+
+.celebration-contact-copy {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: clamp(3rem, 6vw, 6.5rem) 0 clamp(3rem, 5vw, 5.5rem);
+}
+
+.celebration-eyebrow {
+  margin: 0 0 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.015em;
+}
+
+.celebration-contact h2 {
+  margin: 0;
+  font-size: clamp(3.25rem, 5.65vw, 6.9rem);
+  font-weight: 620;
+  letter-spacing: -0.065em;
+  line-height: 1.015;
+}
+
+.celebration-contact h2 em {
+  font-style: normal;
+  color: #5f282e;
+}
+
+.celebration-contact-link {
+  display: flex;
+  width: min(88%, 25rem);
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: clamp(2rem, 4vw, 4.5rem);
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgb(35 39 36 / 28%);
+  color: inherit;
+  font-size: clamp(1.1rem, 1.6vw, 1.5rem);
+  text-decoration: none;
+  transition:
+    color 180ms ease,
+    border-color 180ms ease;
+}
+
+.celebration-contact-link svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  transition: transform 180ms ease;
+}
+.celebration-contact-link:hover {
+  color: #6d2631;
+  border-color: #6d2631;
+}
+.celebration-contact-link:hover svg {
+  transform: translateX(5px);
+}
+.celebration-contact-description {
+  max-width: 28rem;
+  margin: clamp(2rem, 4.2vw, 4.8rem) 2rem 0 0;
+  color: #505954;
+  font-size: clamp(1rem, 1.25vw, 1.25rem);
+  line-height: 1.55;
+}
+
+.celebration-contact-art {
+  position: relative;
+  align-self: stretch;
+  min-width: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-top: 2.5rem;
+}
+
+.celebration-contact-art img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: min(820px, 83svh);
+  object-fit: contain;
+  object-position: center bottom;
+}
+
+.celebration-footer {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.6fr 0.65fr 0.95fr 1fr;
+  gap: 3rem;
+  padding: clamp(3rem, 6vw, 6rem) 6vw 1.75rem;
+  background: var(--celebration-yellow);
+}
+
+.celebration-footer a {
+  color: inherit;
+  text-decoration: none;
+}
+.celebration-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.celebration-footer h3 {
+  margin: 0 0 1.65rem;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+.celebration-footer nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.celebration-footer nav h3 {
+  margin-bottom: 0.65rem;
+}
+.celebration-footer p {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+.celebration-footer nav a {
+  min-height: 1.5rem;
+  font-size: 1rem;
+}
+.celebration-footer-brand {
+  display: inline-flex;
+  flex-direction: column;
+  font-size: clamp(1.6rem, 2.5vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1;
+}
+.celebration-footer-brand span {
+  margin-top: 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+.celebration-footer-about p {
+  max-width: 22rem;
+  margin: 1.65rem 0 2rem;
+}
+.celebration-footer-about > a:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 1rem;
+}
+
+.celebration-map-slot {
+  display: flex;
+  min-height: 10.5rem;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.65rem;
+  border: 1px solid rgb(35 39 36 / 25%);
+  padding: 1.25rem;
+  background: rgb(255 255 255 / 10%);
+}
+
+.celebration-map-slot svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.celebration-map-slot strong {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.celebration-map-slot span {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #535023;
+}
+.celebration-footer-bottom {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgb(35 39 36 / 22%);
+  font-size: 0.875rem;
+}
+.celebration-footer-bottom a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.celebration-contact a:focus-visible,
+.celebration-footer a:focus-visible,
+.motion-film a:focus-visible {
+  outline: 2px solid #5f282e;
+  outline-offset: 6px;
+}
+
+@media (max-width: 1000px) {
+  .celebration-contact {
+    padding-inline: 5vw 2vw;
+  }
+  .celebration-contact h2 {
+    font-size: clamp(3rem, 6.2vw, 4rem);
+  }
+  .celebration-footer {
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: 2rem;
+    padding-inline: 5vw;
+  }
+  .celebration-footer-location {
+    grid-column: 2 / -1;
+  }
+  .celebration-map-slot {
+    min-height: 7rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .motion-film {
+    height: 760svh;
+  }
+  .motion-film-heading {
+    top: 1.5rem;
+    align-items: flex-start;
+  }
+  .motion-film-heading h2 {
+    max-width: 12rem;
+    line-height: 1.35;
+  }
+  .motion-film-heading a {
+    max-width: 8rem;
+    font-size: 0.875rem;
+  }
+  .motion-film-heading svg {
+    flex: none;
+  }
+  .motion-film-caption {
+    bottom: 1.5rem;
+  }
+  .motion-film-ending {
+    top: 35%;
+    left: 6vw;
+    max-width: 48%;
+  }
+  .motion-film-ending span {
+    line-height: 1.4;
+  }
+  .motion-film-ending strong {
+    font-size: 4.25rem;
+  }
+  .celebration-contact {
+    display: flex;
+    min-height: 0;
+    flex-direction: column;
+    padding: 0 6vw;
+  }
+  .celebration-contact-copy {
+    padding: 3rem 0 0;
+  }
+  .celebration-eyebrow {
+    margin-bottom: 1.5rem;
+  }
+  .celebration-contact h2 {
+    font-size: clamp(3rem, 11vw, 4.5rem);
+  }
+  .celebration-contact-link {
+    width: 100%;
+    margin-top: 1.75rem;
+  }
+  .celebration-contact-description {
+    margin: 1.75rem 0 0;
+    font-size: 1rem;
+    max-width: 26rem;
+  }
+  .celebration-contact-art {
+    margin: 0 -2vw;
+    padding-top: 2rem;
+  }
+  .celebration-contact-art img {
+    width: auto;
+    max-width: 100%;
+    max-height: 34rem;
+  }
+  .celebration-footer {
+    grid-template-columns: 1fr 1.2fr;
+    gap: 2.5rem 1.25rem;
+    padding: 3rem 6vw 1.5rem;
+  }
+  .celebration-footer-about,
+  .celebration-footer-location {
+    grid-column: 1 / -1;
+  }
+  .celebration-footer h3 {
+    margin-bottom: 1.25rem;
+  }
+  .celebration-footer-brand {
+    font-size: 2.2rem;
+  }
+  .celebration-footer-about p {
+    max-width: 26rem;
+  }
+  .celebration-footer-bottom {
+    margin-top: 0;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-film {
+    height: auto;
+    background: #fff;
+  }
+  .motion-film-stage {
+    position: relative;
+    height: 65svh;
+    background: #fff !important;
+  }
+  .motion-film-scene {
+    opacity: 1;
+  }
+  .motion-film-scene > g[mask],
+  .motion-film-ending,
+  .motion-film-caption {
+    display: none;
+  }
+  .motion-film-heading {
+    opacity: 1;
+  }
+  .motion-film-accessible-gallery {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    padding: 0 4vw 4rem;
+  }
+  .motion-film-accessible-gallery img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+  }
+  .celebration-contact-link,
+  .celebration-contact-link svg {
+    transition: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (max-width: 600px) and (prefers-reduced-motion: reduce) {
+  .motion-film-stage {
+    height: 40svh;
+  }
+  .motion-film-accessible-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
