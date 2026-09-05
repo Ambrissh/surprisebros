@@ -340,7 +340,7 @@ export function ActOne() {
           <div ref={filmTrackRef} className="film-roll-track">
             <div className="film-reel" aria-hidden="true">
               <Image
-                src="/assets/film-reel-burgundy-v1.png"
+                src="/assets/film-reel-burgundy-v2.png"
                 alt=""
                 width={1536}
                 height={1024}

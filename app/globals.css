@@ -882,7 +882,7 @@
   z-index: 2;
   width: clamp(31rem, 48vw, 48rem);
   flex: none;
-  margin-right: clamp(-15rem, -15vw, -10rem);
+  margin-right: clamp(-22rem, -23vw, -15rem);
   filter: drop-shadow(0 2.6rem 2rem rgb(67 31 25 / 18%));
   pointer-events: none;
 }
@@ -1185,7 +1185,7 @@
 
   .film-reel {
     width: clamp(30rem, 60vw, 40rem);
-    margin-right: -10rem;
+    margin-right: -18.5rem;
   }
 
   .film-card {
@@ -1352,7 +1352,7 @@
 
   .film-reel {
     width: 30rem;
-    margin-right: -10rem;
+    margin-right: -14rem;
   }
 
   .film-sprockets {
