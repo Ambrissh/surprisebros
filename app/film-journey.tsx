@@ -17,6 +17,9 @@ import {
   filmPose,
 } from './film-geometry';
 import './film-journey.css';
+import { advanceFilmProgress } from './film-motion';
+import { filmMediaSlots, filmMediaPresentation } from './film-media';
+import { FilmMediaFrame } from './film-media-frame';
 
 const contactLink =
   'https://wa.me/918488991284?text=Hi%20Surprise%20Bro%27s%2C%20I%27d%20like%20to%20plan%20an%20event.';
@@ -27,14 +30,6 @@ const firstFrames = [
   { x: 1012, y: 343, width: 216, height: 261, label: 'Celebration' },
   { x: 1241, y: 343, width: 209, height: 261, label: 'Floral styling' },
   { x: 1465, y: 343, width: 203, height: 261, label: 'Wedding aisle' },
-];
-const filmPhotos = [
-  { number: '09', label: 'Marigold moments' },
-  { number: '02', label: 'A beautiful beginning' },
-  { number: '03', label: 'Made for you' },
-  { number: '07', label: 'A little magic' },
-  { number: '17', label: 'Beautifully personal' },
-  { number: '28', label: 'A night to remember' },
 ];
 const ribbonOutline = filmBand(
   0,
@@ -62,16 +57,46 @@ export function FilmJourney() {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     let animationFrame = 0;
     let lastProgress = -1;
+    let progress = 0;
+    let target = 0;
+    let lastTimestamp = 0;
+    let needsSample = true;
+    let snapNext = true;
     let viewportWidth = stage.clientWidth;
     let viewportHeight = stage.clientHeight;
     let travel = Math.max(1, section.offsetHeight - viewportHeight);
 
-    const render = () => {
+    const render = (timestamp: number) => {
       animationFrame = 0;
-      if (reduced.matches) return;
-      const progress = clamp(-section.getBoundingClientRect().top / travel);
+      if (reduced.matches) {
+        scene.setAttribute('viewBox', '-54 0 1780 1000');
+        reveal.setAttribute('stroke-dashoffset', String(FILM_LENGTH));
+        stage.removeAttribute('style');
+        lastProgress = -1;
+        lastTimestamp = 0;
+        return;
+      }
+      if (needsSample) {
+        const bounds = section.getBoundingClientRect();
+        // Finish just before the sticky stage releases, giving the last frame
+        // time to settle into the contact section without a last-second snap.
+        target = clamp(
+          -bounds.top / Math.max(1, travel - viewportHeight * 0.25),
+        );
+        if (snapNext || bounds.top >= viewportHeight || bounds.bottom <= 0) {
+          progress = target;
+        }
+        needsSample = false;
+        snapNext = false;
+      }
+      const elapsed = lastTimestamp ? timestamp - lastTimestamp : 1000 / 60;
+      lastTimestamp = timestamp;
+      progress = advanceFilmProgress(progress, target, elapsed);
       // Do not repaint the entire SVG while the user is elsewhere on the page.
-      if (progress === lastProgress) return;
+      if (progress === lastProgress) {
+        lastTimestamp = 0;
+        return;
+      }
       lastProgress = progress;
       const camera = filmCamera(progress, viewportWidth, viewportHeight);
       scene.setAttribute('viewBox', camera.viewBox);
@@ -89,13 +114,20 @@ export function FilmJourney() {
         Math.round(255 + (channel - 255) * camera.settling),
       );
       stage.style.backgroundColor = `rgb(${background.join(' ')})`;
+      if (progress !== target) {
+        animationFrame = window.requestAnimationFrame(render);
+      } else {
+        lastTimestamp = 0;
+      }
     };
     const requestRender = () => {
+      needsSample = true;
       if (!animationFrame)
         animationFrame = window.requestAnimationFrame(render);
     };
     const measure = () => {
       lastProgress = -1;
+      snapNext = true;
       viewportWidth = stage.clientWidth;
       viewportHeight = stage.clientHeight;
       travel = Math.max(1, section.offsetHeight - viewportHeight);
@@ -106,7 +138,7 @@ export function FilmJourney() {
     window.addEventListener('scroll', requestRender, { passive: true });
     window.addEventListener('resize', measure);
     reduced.addEventListener('change', measure);
-    render();
+    requestRender();
     return () => {
       window.cancelAnimationFrame(animationFrame);
       window.removeEventListener('scroll', requestRender);
@@ -176,24 +208,39 @@ export function FilmJourney() {
               width="1672"
               height="941"
             />
-            {firstFrames.map((frame, index) => (
-              <g
-                key={frame.label}
-                data-video-slot={String(index + 1).padStart(2, '0')}
-                aria-label={frame.label}
-              >
-                <title>{frame.label}</title>
-                <rect
-                  {...{
-                    x: frame.x,
-                    y: frame.y,
-                    width: frame.width,
-                    height: frame.height,
+            {firstFrames.map((frame, index) => {
+              const slot = filmMediaSlots[index];
+              const media = filmMediaPresentation(slot);
+              return (
+                <FilmMediaFrame
+                  key={slot.id}
+                  slot={slot}
+                  center={{
+                    x: frame.x + frame.width / 2,
+                    y: frame.y + frame.height / 2,
                   }}
-                  fill="transparent"
-                />
-              </g>
-            ))}
+                >
+                  {media.image ? (
+                    <image
+                      href={media.image}
+                      x={frame.x}
+                      y={frame.y}
+                      width={frame.width}
+                      height={frame.height}
+                      preserveAspectRatio={media.preserveAspectRatio}
+                    />
+                  ) : (
+                    <rect
+                      x={frame.x}
+                      y={frame.y}
+                      width={frame.width}
+                      height={frame.height}
+                      fill="transparent"
+                    />
+                  )}
+                </FilmMediaFrame>
+              );
+            })}
             <g mask="url(#film-scroll-reveal)">
               <path
                 d={ribbonOutline}
@@ -203,26 +250,24 @@ export function FilmJourney() {
               />
               <path d={ribbonWindows} fill="#fff" />
               {FILM_EXTENSION_FRAMES.map((frame, index) => {
-                const photo = filmPhotos[index];
+                const slot = filmMediaSlots[index + firstFrames.length];
+                const media = filmMediaPresentation(slot);
                 return (
-                  <g
-                    key={frame.number}
-                    data-video-slot={String(frame.number).padStart(2, '0')}
-                    aria-label={photo.label}
-                  >
-                    <title>{photo.label}</title>
+                  <FilmMediaFrame key={slot.id} slot={slot} center={frame.pose}>
                     <g clipPath={`url(#film-window-${frame.number})`}>
-                      <image
-                        href={`/assets/gallery/optimized/moment-${photo.number}-1280.jpg`}
-                        x={frame.image.x}
-                        y={frame.image.y}
-                        width={frame.image.width}
-                        height={frame.image.height}
-                        preserveAspectRatio="xMidYMid slice"
-                        transform={`rotate(${frame.pose.angle} ${frame.pose.x} ${frame.pose.y})`}
-                      />
+                      {media.image && (
+                        <image
+                          href={media.image}
+                          x={frame.image.x}
+                          y={frame.image.y}
+                          width={frame.image.width}
+                          height={frame.image.height}
+                          preserveAspectRatio={media.preserveAspectRatio}
+                          transform={`rotate(${frame.pose.angle} ${frame.pose.x} ${frame.pose.y})`}
+                        />
+                      )}
                     </g>
-                  </g>
+                  </FilmMediaFrame>
                 );
               })}
               {FILM_HOLES.map((hole, index) => (
@@ -260,16 +305,32 @@ export function FilmJourney() {
           </div>
         </div>
         <div className="motion-film-accessible-gallery">
-          {filmPhotos.map((photo) => (
-            <Image
-              key={photo.number}
-              src={`/assets/gallery/optimized/moment-${photo.number}-1280.jpg`}
-              alt={photo.label}
-              width={400}
-              height={520}
-              sizes="(max-width: 600px) 45vw, 22vw"
-            />
-          ))}
+          {filmMediaSlots.map((slot) => {
+            const media = filmMediaPresentation(slot);
+            if (!media.image) return null;
+            const preview = (
+              <Image
+                src={media.image}
+                alt={media.label}
+                width={400}
+                height={520}
+                sizes="(max-width: 600px) 45vw, 22vw"
+              />
+            );
+            return media.href ? (
+              <a
+                key={slot.id}
+                href={media.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Watch ${slot.label} (opens in a new tab)`}
+              >
+                {preview}
+              </a>
+            ) : (
+              <div key={slot.id}>{preview}</div>
+            );
+          })}
         </div>
       </section>
 

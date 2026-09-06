@@ -100,6 +100,19 @@
   letter-spacing: 2px;
 }
 
+.motion-film-media-link {
+  cursor: pointer;
+}
+.motion-film-media-link:focus-visible {
+  outline: 3px solid #f3dfab;
+  outline-offset: 4px;
+}
+.motion-film-media-link:hover .motion-film-play circle,
+.motion-film-media-link:focus-visible .motion-film-play circle {
+  fill: #512d36;
+  fill-opacity: 1;
+}
+
 .motion-film-ending {
   position: absolute;
   top: 45%;
