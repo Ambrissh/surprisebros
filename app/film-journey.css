@@ -1,8 +1,9 @@
 .motion-film,
 .celebration-contact,
 .celebration-footer {
-  --celebration-gray: #cbd2cc;
-  --celebration-yellow: #ffbf12;
+  --celebration-champagne: #e5dfd6;
+  --celebration-burgundy: #512d36;
+  --celebration-gold: #f3dfab;
   --celebration-ink: #232724;
   font-family:
     'SF Pro Display',
@@ -17,8 +18,8 @@
 
 .motion-film {
   position: relative;
-  height: 870svh;
-  background: var(--celebration-gray);
+  height: 460svh;
+  background: var(--celebration-champagne);
 }
 
 .motion-film-stage {
@@ -136,7 +137,7 @@
   min-height: min(880px, 88svh);
   padding-inline: 6vw 3vw;
   overflow: hidden;
-  background: var(--celebration-gray);
+  background: var(--celebration-champagne);
   scroll-margin-top: 0;
 }
 
@@ -233,7 +234,8 @@
   grid-template-columns: 1.6fr 0.65fr 0.95fr 1fr;
   gap: 3rem;
   padding: clamp(3rem, 6vw, 6rem) 6vw 1.75rem;
-  background: var(--celebration-yellow);
+  background: var(--celebration-burgundy);
+  color: #faf1e5;
 }
 
 .celebration-footer a {
@@ -245,6 +247,7 @@
   text-underline-offset: 5px;
 }
 .celebration-footer h3 {
+  color: var(--celebration-gold);
   margin: 0 0 1.65rem;
   font-size: 0.875rem;
   font-weight: 650;
@@ -299,9 +302,9 @@
   align-items: flex-start;
   justify-content: center;
   gap: 0.65rem;
-  border: 1px solid rgb(35 39 36 / 25%);
+  border: 1px solid rgb(243 223 171 / 35%);
   padding: 1.25rem;
-  background: rgb(255 255 255 / 10%);
+  background: rgb(243 223 171 / 6%);
 }
 
 .celebration-map-slot svg {
@@ -316,7 +319,7 @@
 .celebration-map-slot span {
   font-size: 0.875rem;
   line-height: 1.4;
-  color: #535023;
+  color: #ead9cc;
 }
 .celebration-footer-bottom {
   grid-column: 1 / -1;
@@ -326,7 +329,7 @@
   gap: 1.5rem;
   margin-top: 2rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgb(35 39 36 / 22%);
+  border-top: 1px solid rgb(243 223 171 / 25%);
   font-size: 0.875rem;
 }
 .celebration-footer-bottom a {
@@ -339,6 +342,9 @@
 .motion-film a:focus-visible {
   outline: 2px solid #5f282e;
   outline-offset: 6px;
+}
+.celebration-footer a:focus-visible {
+  outline-color: var(--celebration-gold);
 }
 
 @media (max-width: 1000px) {
@@ -363,7 +369,7 @@
 
 @media (max-width: 600px) {
   .motion-film {
-    height: 760svh;
+    height: 410svh;
   }
   .motion-film-heading {
     top: 1.5rem;

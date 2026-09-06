@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { ArrowDown, ArrowRight, ArrowUpRight, MapPin } from 'lucide-react';
 import {
   FILM_EXTENSION_FRAMES,
+  FILM_FRAME_COUNT,
   FILM_HALF_WIDTH,
   FILM_HOLES,
   FILM_LENGTH,
@@ -31,18 +32,8 @@ const filmPhotos = [
   { number: '09', label: 'Marigold moments' },
   { number: '02', label: 'A beautiful beginning' },
   { number: '03', label: 'Made for you' },
-  { number: '04', label: 'Evenings together' },
-  { number: '05', label: 'Down the aisle' },
-  { number: '06', label: 'In full bloom' },
   { number: '07', label: 'A little magic' },
-  { number: '08', label: 'Time to celebrate' },
-  { number: '10', label: 'All the colour' },
-  { number: '11', label: 'The little details' },
-  { number: '12', label: 'Just the two of you' },
   { number: '17', label: 'Beautifully personal' },
-  { number: '18', label: 'A golden evening' },
-  { number: '19', label: 'Something special' },
-  { number: '24', label: 'Gather together' },
   { number: '28', label: 'A night to remember' },
 ];
 const ribbonOutline = filmBand(
@@ -70,6 +61,7 @@ export function FilmJourney() {
     if (!section || !stage || !scene || !reveal || !counter) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     let animationFrame = 0;
+    let lastProgress = -1;
     let viewportWidth = stage.clientWidth;
     let viewportHeight = stage.clientHeight;
     let travel = Math.max(1, section.offsetHeight - viewportHeight);
@@ -78,19 +70,22 @@ export function FilmJourney() {
       animationFrame = 0;
       if (reduced.matches) return;
       const progress = clamp(-section.getBoundingClientRect().top / travel);
+      // Do not repaint the entire SVG while the user is elsewhere on the page.
+      if (progress === lastProgress) return;
+      lastProgress = progress;
       const camera = filmCamera(progress, viewportWidth, viewportHeight);
       scene.setAttribute('viewBox', camera.viewBox);
       reveal.setAttribute(
         'stroke-dashoffset',
         String(FILM_LENGTH - camera.reveal),
       );
-      counter.textContent = `${String(camera.frame).padStart(2, '0')} / 22`;
+      counter.textContent = `${String(camera.frame).padStart(2, '0')} / ${FILM_FRAME_COUNT}`;
       stage.style.setProperty('--film-settle', String(camera.settling));
       stage.style.setProperty(
         '--film-heading',
         String(1 - clamp(progress / 0.12)),
       );
-      const background = [203, 210, 204].map((channel) =>
+      const background = [229, 223, 214].map((channel) =>
         Math.round(255 + (channel - 255) * camera.settling),
       );
       stage.style.backgroundColor = `rgb(${background.join(' ')})`;
@@ -100,6 +95,7 @@ export function FilmJourney() {
         animationFrame = window.requestAnimationFrame(render);
     };
     const measure = () => {
+      lastProgress = -1;
       viewportWidth = stage.clientWidth;
       viewportHeight = stage.clientHeight;
       travel = Math.max(1, section.offsetHeight - viewportHeight);
@@ -139,7 +135,7 @@ export function FilmJourney() {
             ref={sceneRef}
             className="motion-film-scene"
             viewBox="-54 0 1780 1000"
-            aria-label="A continuous film of 22 celebration moments"
+            aria-label={`A continuous film of ${FILM_FRAME_COUNT} celebration moments`}
           >
             <defs>
               <linearGradient id="film-material" x1="0" y1="0" x2="1" y2="0">
@@ -260,7 +256,7 @@ export function FilmJourney() {
           </div>
           <div className="motion-film-caption">
             <span>Moments in motion</span>
-            <span ref={counterRef}>01 / 22</span>
+            <span ref={counterRef}>01 / {FILM_FRAME_COUNT}</span>
           </div>
         </div>
         <div className="motion-film-accessible-gallery">

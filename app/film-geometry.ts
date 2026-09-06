@@ -5,26 +5,16 @@ type Curve = [Point, Point, Point, Point];
 
 export const FILM_JOIN = { x: 1671, y: 472 };
 export const FILM_HALF_WIDTH = 171;
+export const FILM_FRAME_COUNT = 12;
+const extensionFrameCount = FILM_FRAME_COUNT - 6;
 
 const curves: Curve[] = [
-  [FILM_JOIN, { x: 2200, y: 472 }, { x: 2270, y: 1180 }, { x: 1580, y: 1380 }],
+  [FILM_JOIN, { x: 2180, y: 472 }, { x: 2240, y: 1100 }, { x: 1700, y: 1320 }],
   [
-    { x: 1580, y: 1380 },
-    { x: 890, y: 1580 },
-    { x: 930, y: 2150 },
-    { x: 1610, y: 2350 },
-  ],
-  [
-    { x: 1610, y: 2350 },
-    { x: 2290, y: 2550 },
-    { x: 2240, y: 3100 },
-    { x: 1650, y: 3300 },
-  ],
-  [
-    { x: 1650, y: 3300 },
-    { x: 1237, y: 3440 },
-    { x: 1190, y: 3700 },
-    { x: 1190, y: 4040 },
+    { x: 1700, y: 1320 },
+    { x: 1376, y: 1452 },
+    { x: 1190, y: 1640 },
+    { x: 1190, y: 2100 },
   ],
 ];
 
@@ -120,41 +110,44 @@ export function filmBand(
   return `M ${sides[0].join(' L ')} L ${sides[1].reverse().join(' L ')} Z`;
 }
 
-export const FILM_EXTENSION_FRAMES = Array.from({ length: 16 }, (_, index) => {
-  const pitch = (FILM_LENGTH - 170) / 16;
-  const start = index * pitch + 7;
-  const end = (index + 1) * pitch - 7;
-  const pose = filmPose((start + end) / 2);
-  const radians = (pose.angle * Math.PI) / 180;
-  const corners = Array.from({ length: 41 }, (_, sample) =>
-    [-131, 131].map((offset) => {
-      const point = filmPose(start + ((end - start) * sample) / 40, offset);
-      const dx = point.x - pose.x;
-      const dy = point.y - pose.y;
-      return {
-        x: dx * Math.cos(radians) + dy * Math.sin(radians),
-        y: -dx * Math.sin(radians) + dy * Math.cos(radians),
-      };
-    }),
-  ).flat();
-  const left = Math.min(...corners.map((point) => point.x)) - 2;
-  const top = Math.min(...corners.map((point) => point.y)) - 2;
-  const right = Math.max(...corners.map((point) => point.x)) + 2;
-  const bottom = Math.max(...corners.map((point) => point.y)) + 2;
-  return {
-    number: index + 7,
-    start,
-    end,
-    pose,
-    image: {
-      x: precision(pose.x + left),
-      y: precision(pose.y + top),
-      width: precision(right - left),
-      height: precision(bottom - top),
-    },
-    clip: filmBand(start, end, -131, 131),
-  };
-});
+export const FILM_EXTENSION_FRAMES = Array.from(
+  { length: extensionFrameCount },
+  (_, index) => {
+    const pitch = (FILM_LENGTH - 170) / extensionFrameCount;
+    const start = index * pitch + 7;
+    const end = (index + 1) * pitch - 7;
+    const pose = filmPose((start + end) / 2);
+    const radians = (pose.angle * Math.PI) / 180;
+    const corners = Array.from({ length: 41 }, (_, sample) =>
+      [-131, 131].map((offset) => {
+        const point = filmPose(start + ((end - start) * sample) / 40, offset);
+        const dx = point.x - pose.x;
+        const dy = point.y - pose.y;
+        return {
+          x: dx * Math.cos(radians) + dy * Math.sin(radians),
+          y: -dx * Math.sin(radians) + dy * Math.cos(radians),
+        };
+      }),
+    ).flat();
+    const left = Math.min(...corners.map((point) => point.x)) - 2;
+    const top = Math.min(...corners.map((point) => point.y)) - 2;
+    const right = Math.max(...corners.map((point) => point.x)) + 2;
+    const bottom = Math.max(...corners.map((point) => point.y)) + 2;
+    return {
+      number: index + 7,
+      start,
+      end,
+      pose,
+      image: {
+        x: precision(pose.x + left),
+        y: precision(pose.y + top),
+        width: precision(right - left),
+        height: precision(bottom - top),
+      },
+      clip: filmBand(start, end, -131, 131),
+    };
+  },
+);
 
 export const FILM_HOLES = Array.from(
   { length: Math.floor(FILM_LENGTH / 31) },
@@ -172,7 +165,7 @@ export function filmCamera(progress: number, width: number, height: number) {
       ? { x: initialX + distance, y: FILM_JOIN.y }
       : filmPoint(distance - leadIn);
   // Let the final tip settle at the lower-right, directly above the cake scene.
-  const settling = smoothstep((progress - 0.87) / 0.13);
+  const settling = smoothstep((progress - 0.78) / 0.22);
   const x = point.x - viewWidth * 0.23 * settling;
   const y = point.y - viewHeight * 0.3 * settling;
   return {
@@ -182,8 +175,11 @@ export function filmCamera(progress: number, width: number, height: number) {
       distance < leadIn
         ? Math.round(1 + (distance / leadIn) * 5)
         : Math.min(
-            22,
-            7 + Math.floor(((distance - leadIn) / FILM_LENGTH) * 16),
+            FILM_FRAME_COUNT,
+            7 +
+              Math.floor(
+                ((distance - leadIn) / FILM_LENGTH) * extensionFrameCount,
+              ),
           ),
     settling,
   };

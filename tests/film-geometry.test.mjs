@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import {
   FILM_EXTENSION_FRAMES,
+  FILM_FRAME_COUNT,
   FILM_JOIN,
   FILM_LENGTH,
   filmCamera,
@@ -9,10 +10,12 @@ import {
   filmPose,
 } from '../app/film-geometry.ts';
 
-await test('the strip starts at the reel edge and has 22 total frames', () => {
+await test('the shorter strip starts at the reel edge and has 12 total frames', () => {
   assert.deepEqual(filmPoint(0), FILM_JOIN);
   assert.ok(Math.abs(filmPose(0).angle) < 0.5);
-  assert.equal(FILM_EXTENSION_FRAMES.length + 6, 22);
+  assert.equal(FILM_EXTENSION_FRAMES.length + 6, FILM_FRAME_COUNT);
+  assert.equal(FILM_FRAME_COUNT, 12);
+  assert.ok(FILM_LENGTH < 2600);
 });
 
 await test('every curved window stays covered by its photo, including tight bends', () => {
@@ -58,7 +61,7 @@ await test('camera follows one continuous path and reaches the complete film at 
       assert.ok(camera.frame >= previous.frame);
       previous = camera;
     }
-    assert.equal(previous.frame, 22);
+    assert.equal(previous.frame, FILM_FRAME_COUNT);
     assert.equal(previous.reveal, FILM_LENGTH);
     assert.equal(previous.settling, 1);
   }
