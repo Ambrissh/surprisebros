@@ -1,12 +1,12 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '../../lib/site-seo';
 import { ReviewsExperience } from './reviews-experience';
 import './reviews.css';
 
-export const metadata: Metadata = {
-  title: "Reviews | Surprise Bro's, Tirunelveli",
-  description:
-    "Read what families say about Surprise Bro's balloon decor, cakes, engagement stages, and celebrations in Tirunelveli.",
-};
+export const metadata = pageMetadata(
+  "Client Reviews | Surprise Bro's Event Planning, Tirunelveli",
+  "Read what families say about Surprise Bro's balloon decor, cakes, engagement stages and event planning in Tirunelveli.",
+  '/reviews',
+);
 
 export default function ReviewsPage() {
   return <ReviewsExperience />;

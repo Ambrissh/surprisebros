@@ -3,14 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { FilmJourney } from './film-journey';
 import Image from 'next/image';
-import Link from 'next/link';
-
-const navItems = [
-  { label: 'Home', href: '/#home' },
-  { label: 'Gallery', href: '/gallery' },
-  { label: 'Reviews', href: '/reviews' },
-  { label: 'Reach out', href: '/#reach-out' },
-];
+import { SiteHeader } from '@/components/site-header';
 
 export function ActOne() {
   const heroImageRef = useRef<HTMLImageElement>(null);
@@ -84,11 +77,13 @@ export function ActOne() {
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let frame = 0;
+    let lastStoryProgress = -1;
 
     const render = () => {
       frame = 0;
 
       if (reduceMotion.matches) {
+        lastStoryProgress = -1;
         title.removeAttribute('style');
         story.removeAttribute('style');
         decor.removeAttribute('style');
@@ -98,6 +93,10 @@ export function ActOne() {
       const bounds = section.getBoundingClientRect();
       const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
       const progress = Math.min(Math.max(-bounds.top / travel, 0), 1);
+      // The story is settled while the film is on screen. Avoid repeated writes
+      // to its perspective layers on every film scroll frame.
+      if (progress === lastStoryProgress) return;
+      lastStoryProgress = progress;
       const titleExit = Math.min(Math.max((progress - 0.06) / 0.24, 0), 1);
       const storyEntrance = Math.min(Math.max((progress - 0.04) / 0.9, 0), 1);
       const celebrationEntrance = Math.min(progress / 0.32, 1);
@@ -183,19 +182,7 @@ export function ActOne() {
           </div>
         </div>
 
-        <header className="site-header">
-          <nav className="primary-nav" aria-label="Primary navigation">
-            {navItems.map((item, index) => (
-              <Link
-                key={item.label}
-                href={item.href}
-                className={index === 0 ? 'is-active' : undefined}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-        </header>
+        <SiteHeader page="home" visible={navVisible} />
 
         <div className="hero-copy">
           <p className="hero-kicker" aria-hidden="true">

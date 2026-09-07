@@ -1,3 +1,49 @@
+.gallery-photo-index {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 24px 48px;
+}
+.gallery-photo-index summary {
+  cursor: pointer;
+  padding: 18px 0;
+  font-size: 16px;
+}
+.gallery-index-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+.gallery-index-grid button {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 4 / 3;
+  background: #f8f1dc;
+  padding: 12px;
+  cursor: zoom-in;
+}
+.gallery-index-grid img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.gallery-shell img.is-thumbnail {
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  margin: auto;
+}
+.album-photo:has(.is-thumbnail) {
+  display: grid;
+  place-items: center;
+}
+.album-last-page {
+  grid-column: 1 / -1;
+  align-self: center;
+  text-align: center;
+  line-height: 1.8;
+  color: #55472f;
+}
 .gallery-shell {
   --ink: #09110f;
   --ink-soft: #17201d;
@@ -14,42 +60,8 @@
   overflow-x: hidden;
   color: #4c211f;
   background: #f7f3ee;
-  font-family: var(--font-seasons-fallback), "Bodoni 72", "Bodoni MT", Didot, serif;
-}
-
-.gallery-site-header {
-  position: relative;
-  min-height: 86px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(1.35rem, 2.1vw, 2rem) clamp(1.25rem, 4.5vw, 5rem) 1.15rem;
-  border-bottom: 1px solid rgb(76 33 31 / 12%);
-  color: #4c211f;
-  background: #f7f3ee;
-  opacity: 1;
-  transform: none;
-}
-
-.gallery-site-header .primary-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: clamp(2rem, 4.3vw, 5.25rem);
-}
-
-.gallery-site-header .primary-nav a {
-  color: rgb(72 38 33 / 66%);
-  font-family: var(--font-seasons-fallback), "Bodoni 72", "Bodoni MT", Didot, serif;
-  font-size: clamp(0.64rem, 0.72vw, 0.78rem);
-  font-weight: 500;
-  letter-spacing: 0.15em;
-}
-
-.gallery-site-header .primary-nav a:hover,
-.gallery-site-header .primary-nav a:focus-visible,
-.gallery-site-header .primary-nav a.is-active {
-  color: #4c211f;
+  font-family:
+    var(--font-seasons-fallback), 'Bodoni 72', 'Bodoni MT', Didot, serif;
 }
 
 .gallery-header {
@@ -111,10 +123,12 @@
   left: 0;
   height: 1px;
   background: var(--brass-lit);
-  content: "";
+  content: '';
   opacity: 0;
   transform: scaleX(0.35);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .gallery-nav a:hover,
@@ -159,7 +173,7 @@
   border-radius: 50%;
   background: rgba(39, 52, 46, 0.34);
   filter: blur(26px);
-  content: "";
+  content: '';
   transform: translateZ(-30px);
 }
 
@@ -196,7 +210,7 @@
     #9c8958 2px,
     #e6d8ad 3px
   );
-  content: "";
+  content: '';
 }
 
 .album-pages::before {
@@ -215,7 +229,7 @@
     #ecdfb8 4px
   );
   box-shadow: 5px 7px 14px rgba(0, 0, 0, 0.28);
-  content: "";
+  content: '';
   transform: skewY(24deg);
   transform-origin: left top;
 }
@@ -259,8 +273,14 @@
   top: 3.8%;
   bottom: 3.8%;
   width: 9px;
-  content: "";
-  background: radial-gradient(circle, #5d4d28 0 2.2px, rgba(255, 255, 255, 0.58) 2.5px 3.2px, transparent 3.5px) center top / 9px 8.333% repeat-y;
+  content: '';
+  background: radial-gradient(
+      circle,
+      #5d4d28 0 2.2px,
+      rgba(255, 255, 255, 0.58) 2.5px 3.2px,
+      transparent 3.5px
+    )
+    center top / 9px 8.333% repeat-y;
   opacity: 0.72;
 }
 
@@ -297,7 +317,7 @@
   position: absolute;
   inset: 0;
   border: 1px solid rgba(24, 18, 7, 0.12);
-  content: "";
+  content: '';
   pointer-events: none;
 }
 
@@ -305,8 +325,10 @@
   width: 100%;
   height: 100%;
   display: block;
-  object-fit: cover;
-  transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1), filter 260ms ease;
+  object-fit: contain;
+  transition:
+    transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 260ms ease;
 }
 
 .album-photo:hover img,
@@ -328,7 +350,12 @@
   z-index: 25;
   min-width: 72px;
   background:
-    linear-gradient(90deg, rgba(71, 51, 16, 0.13), rgba(255, 255, 255, 0.08) 45%, rgba(71, 51, 16, 0.13)),
+    linear-gradient(
+      90deg,
+      rgba(71, 51, 16, 0.13),
+      rgba(255, 255, 255, 0.08) 45%,
+      rgba(71, 51, 16, 0.13)
+    ),
     var(--paper);
   transform: translateZ(24px);
   transform-style: preserve-3d;
@@ -343,7 +370,14 @@
   width: 11px;
   border: 1px solid #624014;
   border-radius: 999px;
-  background: linear-gradient(90deg, #674315 0%, #d99d40 22%, #f7e3ad 46%, #a56d22 72%, #57350e 100%);
+  background: linear-gradient(
+    90deg,
+    #674315 0%,
+    #d99d40 22%,
+    #f7e3ad 46%,
+    #a56d22 72%,
+    #57350e 100%
+  );
   box-shadow:
     2px 0 3px rgba(65, 40, 8, 0.46),
     inset 1px 0 1px rgba(255, 245, 199, 0.75);
@@ -389,7 +423,7 @@
   transform-style: preserve-3d;
   will-change: transform;
   pointer-events: none;
-  filter: drop-shadow(0 9px 9px rgba(37, 24, 4, 0.14));
+  /* Filters flatten 3D descendants and can expose the mirrored reverse face. */
 }
 
 .turning-hold {
@@ -430,6 +464,7 @@
   overflow: hidden;
   background: var(--paper);
   backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
   transform-style: preserve-3d;
 }
 
@@ -448,7 +483,7 @@
   position: absolute;
   z-index: 5;
   inset: 0;
-  content: "";
+  content: '';
   pointer-events: none;
 }
 
@@ -473,7 +508,11 @@
   color: #e8c879;
   background:
     linear-gradient(128deg, rgba(255, 255, 255, 0.16), transparent 24%),
-    radial-gradient(circle at 62% 22%, rgba(35, 182, 126, 0.2), transparent 30%),
+    radial-gradient(
+      circle at 62% 22%,
+      rgba(35, 182, 126, 0.2),
+      transparent 30%
+    ),
     linear-gradient(134deg, #126c4e 0%, #0d5741 33%, #073d30 72%, #0d6248 100%);
   box-shadow:
     inset 0 0 0 8px rgba(0, 20, 17, 0.22),
@@ -485,7 +524,9 @@
   transform-origin: left center;
   transform-style: preserve-3d;
   backface-visibility: visible;
-  transition: transform 780ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 520ms ease;
+  transition:
+    transform 780ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 520ms ease;
 }
 
 .album-cover::after {
@@ -495,7 +536,7 @@
   bottom: 11px;
   width: 7px;
   background: linear-gradient(90deg, #062d26, #0c5f4e, #021e1a);
-  content: "";
+  content: '';
   transform: translateZ(-8px);
 }
 
@@ -503,9 +544,19 @@
   position: absolute;
   inset: 0;
   background:
-    repeating-linear-gradient(112deg, transparent 0 5px, rgba(255, 255, 255, 0.012) 6px, transparent 7px 12px),
-    linear-gradient(105deg, transparent 18%, rgba(255, 255, 255, 0.12) 45%, transparent 64%);
-  content: "";
+    repeating-linear-gradient(
+      112deg,
+      transparent 0 5px,
+      rgba(255, 255, 255, 0.012) 6px,
+      transparent 7px 12px
+    ),
+    linear-gradient(
+      105deg,
+      transparent 18%,
+      rgba(255, 255, 255, 0.12) 45%,
+      transparent 64%
+    );
+  content: '';
   mix-blend-mode: screen;
   pointer-events: none;
 }
@@ -605,9 +656,16 @@
   width: 11px;
   border: 1px solid #5c390f;
   border-radius: 999px;
-  background: linear-gradient(90deg, #5c390f, #d39435 25%, #f4dda0 48%, #8f5c1d 78%, #492a09);
+  background: linear-gradient(
+    90deg,
+    #5c390f,
+    #d39435 25%,
+    #f4dda0 48%,
+    #8f5c1d 78%,
+    #492a09
+  );
   box-shadow: 2px 0 3px rgba(0, 0, 0, 0.55);
-  content: "";
+  content: '';
 }
 
 .cover-binding > span {
@@ -637,7 +695,9 @@
   opacity: 0;
   pointer-events: none;
   transform: translateY(8px);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
 }
 
 .album-controls.is-visible {
@@ -660,7 +720,11 @@
   background: rgba(255, 255, 255, 0.86);
   box-shadow: 0 5px 16px rgba(29, 54, 44, 0.08);
   cursor: pointer;
-  transition: color 180ms ease, background 180ms ease, border-color 180ms ease, transform 180ms ease;
+  transition:
+    color 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
 }
 
 .album-controls > button:hover:not(:disabled) {
@@ -696,7 +760,10 @@
   border-radius: 50%;
   background: transparent;
   cursor: pointer;
-  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
 }
 
 .spread-dots button.is-active {
@@ -709,7 +776,7 @@
   margin-left: 8px;
 }
 
-[data-slot="dialog-overlay"] {
+[data-slot='dialog-overlay'] {
   background: rgba(1, 10, 8, 0.94);
   backdrop-filter: blur(14px);
 }
@@ -837,25 +904,6 @@
 }
 
 @media (max-width: 780px) {
-  .gallery-site-header {
-    min-height: 72px;
-    padding: 0.9rem 0.9rem 0.7rem;
-  }
-
-  .gallery-site-header .primary-nav {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    width: 100%;
-    gap: 0;
-  }
-
-  .gallery-site-header .primary-nav a {
-    display: block;
-    font-size: 0.48rem;
-    letter-spacing: 0.06em;
-    text-align: center;
-  }
-
   .gallery-header {
     width: min(100% - 30px, 680px);
     min-height: 72px;

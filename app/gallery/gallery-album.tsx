@@ -1,203 +1,30 @@
-"use client";
+'use client';
 
-import { useCallback, useEffect, useRef, useState } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
+import { useCallback, useEffect, useReducer, useRef, useState } from 'react';
+import { albumReducer, initialAlbumState } from './album-state.mjs';
+import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import Image from 'next/image';
+import { SiteHeader } from '@/components/site-header';
+import nativePhotos from '../../lib/native-photos.json';
 
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
-import "./gallery.css";
+import './gallery.css';
 
 type GalleryPhoto = {
   src: string;
   alt: string;
   width: number;
   height: number;
+  thumbnail: boolean;
 };
 
-const photos: GalleryPhoto[] = [
-  {
-    src: "/assets/gallery/optimized/moment-01-1280.jpg",
-    alt: "Bride and groom smiling beneath a floral wedding canopy",
-    width: 1280,
-    height: 1920,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-02-1280.jpg",
-    alt: "Warmly lit wedding stage framed with flowers",
-    width: 1280,
-    height: 854,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-03-1280.jpg",
-    alt: "Pastel reception decor with layered floral details",
-    width: 1280,
-    height: 854,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-04-1280.jpg",
-    alt: "Outdoor celebration table set beneath string lights",
-    width: 1280,
-    height: 854,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-05-1280.jpg",
-    alt: "Elegant wedding aisle with white flowers",
-    width: 1280,
-    height: 854,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-06-1280.jpg",
-    alt: "Wedding ceremony stage glowing in warm light",
-    width: 1280,
-    height: 854,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-07-1280.jpg",
-    alt: "Floral arch arranged for an evening celebration",
-    width: 1280,
-    height: 848,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-08-1280.jpg",
-    alt: "Reception venue dressed with flowers and candlelight",
-    width: 1280,
-    height: 822,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-09-1280.jpg",
-    alt: "Outdoor wedding stage beneath hanging marigold garlands",
-    width: 1280,
-    height: 1920,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-10-1280.jpg",
-    alt: "Colourful Indian celebration decorated with flowers",
-    width: 1280,
-    height: 854,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-11-1280.jpg",
-    alt: "Ceremonial flowers and brass vessels arranged for a wedding",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-12-1280.jpg",
-    alt: "Newlywed couple standing beneath a flower arch",
-    width: 1280,
-    height: 1834,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-13-1280.jpg",
-    alt: "Red and gold wedding stage with traditional details",
-    width: 1280,
-    height: 719,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-14-1280.jpg",
-    alt: "Ornate red ceremony stage surrounded by flowers",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-15-1280.jpg",
-    alt: "Traditional red and gold celebration decor",
-    width: 1280,
-    height: 719,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-16-1280.jpg",
-    alt: "Bright striped event stage with a floral sofa",
-    width: 1280,
-    height: 848,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-17-1280.jpg",
-    alt: "Modern white wedding aisle with sculptural flowers",
-    width: 1280,
-    height: 960,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-18-1280.jpg",
-    alt: "Cream and gold reception stage with mirrored arches",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-19-1280.jpg",
-    alt: "Pink floral wedding stage with layered blooms",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-20-1280.jpg",
-    alt: "Garden venue entrance framed by a flower arch",
-    width: 1280,
-    height: 719,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-21-1280.jpg",
-    alt: "Reception entrance dressed in white drapery and flowers",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-22-1280.jpg",
-    alt: "Warm hanging lights against rich red curtains",
-    width: 1280,
-    height: 960,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-23-1280.jpg",
-    alt: "Soft pink celebration stage with floral arrangements",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-24-1280.jpg",
-    alt: "Wedding table details with flowers and place settings",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-25-1280.jpg",
-    alt: "Outdoor ceremony aisle lined with white flowers",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-26-1280.jpg",
-    alt: "Candlelit banquet table in a dark reception room",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-27-1280.jpg",
-    alt: "Purple evening banquet table with elegant place settings",
-    width: 1280,
-    height: 853,
-  },
-  {
-    src: "/assets/gallery/optimized/moment-28-1280.jpg",
-    alt: "Luxury reception room filled with candles and flowers",
-    width: 1280,
-    height: 853,
-  },
-];
-
-const navItems = [
-  { label: "Home", href: "/#home" },
-  { label: "Gallery", href: "/gallery" },
-  { label: "Reviews", href: "/reviews" },
-  { label: "Reach out", href: "/#reach-out" },
-];
+const photos: GalleryPhoto[] = nativePhotos;
 
 const photosPerSpread = 4;
 const spreadCount = Math.ceil(photos.length / photosPerSpread);
@@ -210,12 +37,27 @@ type TurnState = {
 };
 
 export function GalleryAlbum() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [isClosing, setIsClosing] = useState(false);
-  const [spreadIndex, setSpreadIndex] = useState(0);
-  const [turning, setTurning] = useState<TurnState | null>(null);
+  const [albumState, dispatch] = useReducer(albumReducer, initialAlbumState);
+  const isOpen = ['opening', 'open', 'turning'].includes(albumState.phase);
+  const isClosing = albumState.phase === 'closing';
+  const spreadIndex = albumState.spread;
+  const turning = albumState.turn as TurnState | null;
+  const busy = albumState.phase !== 'open';
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
   const swipeOrigin = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (albumState.phase === 'open' || albumState.phase === 'closed') return;
+    const reduced = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    // Also settle if the browser cancels an animation or backgrounds the tab.
+    const timer = window.setTimeout(
+      () => dispatch({ type: 'settled', revision: albumState.revision }),
+      reduced ? 0 : 1000,
+    );
+    return () => window.clearTimeout(timer);
+  }, [albumState.phase, albumState.revision]);
 
   const showPreviousPhoto = useCallback(() => {
     setSelectedPhoto((current) => {
@@ -235,12 +77,12 @@ export function GalleryAlbum() {
     if (selectedPhoto === null) return;
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "ArrowLeft") showPreviousPhoto();
-      if (event.key === "ArrowRight") showNextPhoto();
+      if (event.key === 'ArrowLeft') showPreviousPhoto();
+      if (event.key === 'ArrowRight') showNextPhoto();
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedPhoto, showNextPhoto, showPreviousPhoto]);
 
   useEffect(() => {
@@ -256,11 +98,7 @@ export function GalleryAlbum() {
   }, [spreadIndex]);
 
   const beginTurn = (to: number, direction: -1 | 1) => {
-    if (turning || to === spreadIndex) return;
-
-    const from = spreadIndex;
-    setTurning({ direction, from, to });
-    setSpreadIndex(to);
+    dispatch({ type: 'turn', to, direction, count: spreadCount });
   };
 
   const changeSpread = (direction: -1 | 1) => {
@@ -269,9 +107,7 @@ export function GalleryAlbum() {
   };
 
   const closeAlbum = () => {
-    if (turning || isClosing) return;
-    setIsClosing(true);
-    setIsOpen(false);
+    dispatch({ type: 'close' });
   };
 
   const spreadStart = spreadIndex * photosPerSpread;
@@ -280,22 +116,15 @@ export function GalleryAlbum() {
 
   return (
     <main className="gallery-shell">
-      <header className="site-header gallery-site-header">
-        <nav className="primary-nav" aria-label="Primary navigation">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              href={item.href}
-              className={item.label === "Gallery" ? "is-active" : undefined}
-            >
-              {item.label}
-            </Link>
-          ))}
-        </nav>
-      </header>
+      <SiteHeader page="gallery" />
+      <h1 className="sr-only">
+        Surprise Bro&apos;s event decoration gallery in Tirunelveli
+      </h1>
 
       <section className="album-stage" aria-label="Celebration gallery">
-        <div className={`album ${isOpen ? "is-open" : ""} ${isClosing ? "is-closing" : ""}`}>
+        <div
+          className={`album ${isOpen ? 'is-open' : ''} ${isClosing ? 'is-closing' : ''}`}
+        >
           <div id="album-pages" className="album-pages" aria-hidden={!isOpen}>
             <div className="spread-content">
               <AlbumPage
@@ -326,7 +155,9 @@ export function GalleryAlbum() {
               <TurningPage
                 turn={turning}
                 onSelect={setSelectedPhoto}
-                onComplete={() => setTurning(null)}
+                onComplete={() =>
+                  dispatch({ type: 'settled', revision: albumState.revision })
+                }
               />
             ) : null}
           </div>
@@ -340,15 +171,19 @@ export function GalleryAlbum() {
           <button
             className="album-cover"
             type="button"
-            onClick={() => setIsOpen(true)}
+            onClick={() => dispatch({ type: 'open' })}
             aria-controls="album-pages"
             aria-expanded={isOpen}
             tabIndex={isOpen || isClosing ? -1 : 0}
             disabled={isClosing}
             onTransitionEnd={(event) => {
-              if (event.propertyName !== "transform" || !isClosing) return;
-              setSpreadIndex(0);
-              setIsClosing(false);
+              if (
+                event.target !== event.currentTarget ||
+                event.propertyName !== 'transform'
+              )
+                return;
+              if (albumState.phase === 'opening' || isClosing)
+                dispatch({ type: 'settled', revision: albumState.revision });
             }}
           >
             <span className="cover-inset" aria-hidden="true" />
@@ -358,12 +193,15 @@ export function GalleryAlbum() {
           </button>
         </div>
 
-        <div className={`album-controls ${isOpen ? "is-visible" : ""}`} aria-hidden={!isOpen}>
+        <div
+          className={`album-controls ${isOpen ? 'is-visible' : ''}`}
+          aria-hidden={!isOpen}
+        >
           <button
             type="button"
             onClick={() => changeSpread(-1)}
             aria-label="Previous album pages"
-            disabled={!isOpen || turning !== null}
+            disabled={busy}
           >
             <ChevronLeft aria-hidden="true" />
           </button>
@@ -373,11 +211,11 @@ export function GalleryAlbum() {
               <button
                 type="button"
                 key={index}
-                className={index === spreadIndex ? "is-active" : undefined}
+                className={index === spreadIndex ? 'is-active' : undefined}
                 onClick={() => beginTurn(index, index > spreadIndex ? 1 : -1)}
                 aria-label={`Open album pages ${index + 1}`}
-                aria-current={index === spreadIndex ? "page" : undefined}
-                disabled={!isOpen || turning !== null}
+                aria-current={index === spreadIndex ? 'page' : undefined}
+                disabled={busy}
               />
             ))}
           </div>
@@ -386,7 +224,7 @@ export function GalleryAlbum() {
             type="button"
             onClick={() => changeSpread(1)}
             aria-label="Next album pages"
-            disabled={!isOpen || turning !== null}
+            disabled={busy}
           >
             <ChevronRight aria-hidden="true" />
           </button>
@@ -396,12 +234,36 @@ export function GalleryAlbum() {
             type="button"
             onClick={closeAlbum}
             aria-label="Close album"
-            disabled={!isOpen || turning !== null}
+            disabled={busy}
           >
             <X aria-hidden="true" />
           </button>
         </div>
       </section>
+
+      <details className="gallery-photo-index">
+        <summary>Browse all {photos.length} celebration photos</summary>
+        <div className="gallery-index-grid">
+          {photos.map((photo, index) => (
+            <button
+              type="button"
+              key={photo.src}
+              onClick={() => setSelectedPhoto(index)}
+              aria-label={`View ${photo.alt}`}
+            >
+              <Image
+                src={photo.src}
+                alt={photo.alt}
+                width={photo.width}
+                height={photo.height}
+                unoptimized
+                loading="lazy"
+                className={photo.thumbnail ? 'is-thumbnail' : undefined}
+              />
+            </button>
+          ))}
+        </div>
+      </details>
 
       <Dialog
         open={selectedPhoto !== null}
@@ -412,7 +274,8 @@ export function GalleryAlbum() {
         <DialogContent className="photo-lightbox" showCloseButton={false}>
           <DialogTitle className="sr-only">Expanded photograph</DialogTitle>
           <DialogDescription className="sr-only">
-            Use the arrow buttons or keyboard arrow keys to view another photograph.
+            Use the arrow buttons or keyboard arrow keys to view another
+            photograph.
           </DialogDescription>
 
           {selected && selectedPhoto !== null ? (
@@ -434,6 +297,8 @@ export function GalleryAlbum() {
                 key={selected.src}
                 src={selected.src}
                 alt={selected.alt}
+                unoptimized
+                className={selected.thumbnail ? 'is-thumbnail' : undefined}
                 width={selected.width}
                 height={selected.height}
                 sizes="94vw"
@@ -495,13 +360,18 @@ function TurningPage({
   const frontOffset = (isForward ? turn.from : turn.to) * photosPerSpread + 2;
   const backPhotos = isForward ? toPhotos.slice(0, 2) : fromPhotos.slice(0, 2);
   const backOffset = (isForward ? turn.to : turn.from) * photosPerSpread;
-  const heldPhotos = isForward ? fromPhotos.slice(0, 2) : fromPhotos.slice(2, 4);
+  const heldPhotos = isForward
+    ? fromPhotos.slice(0, 2)
+    : fromPhotos.slice(2, 4);
   const heldOffset = turn.from * photosPerSpread + (isForward ? 0 : 2);
-  const heldSide = isForward ? "left" : "right";
+  const heldSide = isForward ? 'left' : 'right';
 
   return (
     <>
-      <div className={`turning-hold turning-hold-${heldSide}`} aria-hidden="true">
+      <div
+        className={`turning-hold turning-hold-${heldSide}`}
+        aria-hidden="true"
+      >
         <AlbumPage
           side={heldSide}
           photos={heldPhotos}
@@ -512,9 +382,11 @@ function TurningPage({
       </div>
 
       <div
-        className={`turning-page ${isForward ? "turning-forward" : "turning-backward"}`}
+        className={`turning-page ${isForward ? 'turning-forward' : 'turning-backward'}`}
         aria-hidden="true"
-        onAnimationEnd={onComplete}
+        onAnimationEnd={(event) => {
+          if (event.target === event.currentTarget) onComplete();
+        }}
       >
         <div className="turn-face turn-front">
           <AlbumPage
@@ -546,7 +418,7 @@ function AlbumPage({
   onSelect,
   inactive = false,
 }: {
-  side: "left" | "right";
+  side: 'left' | 'right';
   photos: GalleryPhoto[];
   offset: number;
   onSelect: (index: number) => void;
@@ -555,6 +427,13 @@ function AlbumPage({
   return (
     <div className={`album-page album-page-${side}`}>
       <div className="photo-grid">
+        {pagePhotos.length === 0 && (
+          <p className="album-last-page">
+            Every celebration, a new story.
+            <br />
+            Yours could be next.
+          </p>
+        )}
         {pagePhotos.map((photo, index) => {
           const photoIndex = offset + index;
 
@@ -564,12 +443,15 @@ function AlbumPage({
               type="button"
               key={photo.src}
               onClick={() => onSelect(photoIndex)}
-              aria-label={`View photograph ${photoIndex + 1}`}
+              aria-label={`View ${photo.alt}`}
               tabIndex={inactive ? -1 : 0}
             >
               <Image
                 src={photo.src}
-                alt=""
+                alt={photo.alt}
+                unoptimized
+                loading="eager"
+                className={photo.thumbnail ? 'is-thumbnail' : undefined}
                 width={photo.width}
                 height={photo.height}
                 sizes="(max-width: 720px) 42vw, 36vw"

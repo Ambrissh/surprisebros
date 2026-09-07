@@ -155,9 +155,9 @@ export const FILM_HOLES = Array.from(
 ).flat();
 
 export function filmCamera(progress: number, width: number, height: number) {
-  const viewWidth = width < 600 ? 840 : width < 1000 ? 1300 : 1780;
+  const viewWidth = width < 600 ? 672 : width < 1000 ? 1040 : 1424;
   const viewHeight = (viewWidth * height) / width;
-  const initialX = width < 600 ? 420 : 836;
+  const initialX = width < 600 ? 420 : Math.min(836, viewWidth / 2 - 54);
   const leadIn = FILM_JOIN.x - initialX;
   const distance = clamp(progress) * (leadIn + FILM_LENGTH);
   const point =

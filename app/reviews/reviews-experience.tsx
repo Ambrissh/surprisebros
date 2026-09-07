@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { ArrowDown, ArrowUpRight, Star } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { SiteHeader } from '@/components/site-header';
 
 type BalloonColor = 'wine' | 'pearl' | 'champagne';
 
@@ -261,16 +262,7 @@ export function ReviewsExperience() {
 
   return (
     <main ref={pageRef} className="reviews-page">
-      <header className="reviews-site-header">
-        <nav aria-label="Primary navigation">
-          <Link href="/#home">Home</Link>
-          <Link href="/gallery">Gallery</Link>
-          <Link href="/reviews" aria-current="page">
-            Reviews
-          </Link>
-          <Link href="/#reach-out">Reach out</Link>
-        </nav>
-      </header>
+      <SiteHeader page="reviews" />
 
       <section className="reviews-intro" aria-labelledby="reviews-title">
         <div className="reviews-intro-copy">

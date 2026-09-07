@@ -1,0 +1,18 @@
+import Image from "next/image";
+import Link from "next/link";
+import styles from './site-header.module.css';
+
+export function SiteBrandMark() {
+  return (
+    <Link className={styles.brand} href="/#home" aria-label="Surprise Bro's home">
+      <Image
+        src="/assets/surprise-bros-logo.png"
+        alt="Surprise Bro's"
+        width={1636}
+        height={1473}
+        priority
+        sizes="(max-width: 600px) 64px, (max-width: 900px) 72px, 88px"
+      />
+    </Link>
+  );
+}
