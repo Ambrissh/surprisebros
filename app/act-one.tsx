@@ -103,10 +103,10 @@ export function ActOne() {
       title.style.transform = `translate3d(0, ${-titleExit * 14}svh, 0) scale(${1 - titleExit * 0.08})`;
 
       const storyY = 96 - storyEntrance * 90;
-      const storyTilt = 55 - storyEntrance * 35;
-      const storyZ = -160 + storyEntrance * 210;
       story.style.opacity = `${Math.min(storyEntrance * 2.8, 1)}`;
-      story.style.transform = `translate3d(0, ${storyY}svh, ${storyZ}px) rotateX(${storyTilt}deg)`;
+      // Keep reading text upright. Perspective projection enlarged the lower
+      // lines beyond laptop edges even when the document had no overflow.
+      story.style.transform = `translate3d(0, ${storyY}svh, 0)`;
 
       const celebrationY = 14 - celebrationEntrance * 18;
       const celebrationTilt = 48 - celebrationEntrance * 26;

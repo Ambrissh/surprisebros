@@ -996,9 +996,9 @@
 .who-we-are-story {
   position: relative;
   z-index: 1;
-  width: min(92vw, 90rem);
+  width: min(86%, 68rem);
   opacity: 0;
-  transform: translate3d(0, 96svh, -160px) rotateX(55deg);
+  transform: translate3d(0, 96svh, 0);
   transform-origin: center top;
   transform-style: preserve-3d;
   will-change: transform, opacity;
@@ -1009,7 +1009,7 @@
   color: #a65c38;
   font-family:
     var(--font-seasons-fallback), 'Bodoni 72', 'Bodoni MT', Didot, serif;
-  font-size: clamp(3rem, 5vw, 5.75rem);
+  font-size: clamp(2rem, 4vw, 4.5rem);
   font-weight: 500;
   letter-spacing: -0.062em;
   line-height: 1.06;
@@ -1246,7 +1246,7 @@
   }
 
   .who-we-are-story {
-    /* Reserve room for the perspective projection at the end of the scroll. */
+    /* Keep a consistent reading margin on narrow screens. */
     width: 86%;
   }
 
