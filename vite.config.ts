@@ -34,7 +34,17 @@ const localBindingConfig = {
     : [],
 };
 
-export default defineConfig(async () => {
+export default defineConfig(async ({ mode }) => {
+  // Vercel needs its own server function and routing manifest. Cloudflare Worker
+  // output can build successfully there while leaving every page as a 404.
+  if (mode === 'vercel' || process.env.VERCEL === '1') {
+    const { nitro } = await import('nitro/vite');
+    const { default: tailwindVite } = await import('@tailwindcss/vite');
+    return {
+      plugins: [tailwindVite(), vinext(), nitro({ preset: 'vercel' })],
+    };
+  }
+
   // Keep Wrangler and Miniflare state project-local. These are non-secret tool
   // settings; application environment belongs in ignored `.env*` files.
   process.env.WRANGLER_WRITE_LOGS ??= 'false';
