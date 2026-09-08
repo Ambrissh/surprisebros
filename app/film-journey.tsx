@@ -503,6 +503,10 @@ export function FilmJourney() {
         </div>
         <div className="celebration-footer-bottom">
           <span>Made for your moments.</span>
+          <p className="celebration-built-credit">
+            Website built by Ambrissh
+            <a href="tel:+919952222309">9952222309</a>
+          </p>
           <Link href="/#home">
             Back to top <ArrowUpRight aria-hidden="true" />
           </Link>

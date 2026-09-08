@@ -26,6 +26,31 @@
   height: 100%;
   object-fit: contain;
 }
+.gallery-footer {
+  width: min(1160px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 0 0 32px;
+  color: #4c211f;
+}
+.gallery-footer p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem 0.85rem;
+  margin: 0;
+  border-top: 1px solid rgba(76, 33, 31, 0.16);
+  padding-top: 22px;
+  font-size: 0.8125rem;
+}
+.gallery-footer a {
+  color: #0d5a42;
+  text-decoration: none;
+}
+.gallery-footer a:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
 .gallery-shell img.is-thumbnail {
   width: auto;
   height: auto;

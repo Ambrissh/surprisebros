@@ -265,6 +265,13 @@ export function GalleryAlbum() {
         </div>
       </details>
 
+      <footer className="gallery-footer">
+        <p>
+          Website built by Ambrissh
+          <a href="tel:+919952222309">9952222309</a>
+        </p>
+      </footer>
+
       <Dialog
         open={selectedPhoto !== null}
         onOpenChange={(open) => {

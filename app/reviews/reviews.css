@@ -56,11 +56,6 @@
   margin: auto;
   padding: 5rem 0 7rem;
 }
-.reviews-eyebrow {
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-}
 .reviews-intro h1 {
   margin-top: 2rem;
   font-family: var(--reviews-serif);
@@ -147,13 +142,6 @@
   z-index: 2;
   transform: rotate(-3deg);
 }
-.reviews-note-number {
-  display: block;
-  margin: 0 0 0.9rem 0.4rem;
-  color: var(--reviews-muted);
-  font-size: 0.75rem;
-  letter-spacing: 0.03em;
-}
 .reviews-gift-card {
   position: relative;
   padding: clamp(1.75rem, 3vw, 3rem);
@@ -219,13 +207,9 @@
 .reviews-card-top {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
+  justify-content: flex-end;
   font-size: 0.75rem;
   color: var(--reviews-muted);
-}
-.reviews-card-top > span:first-child {
-  max-width: 65%;
 }
 .reviews-stars {
   display: inline-flex;
@@ -279,39 +263,6 @@
   right: -3.5rem;
   width: clamp(10rem, 17vw, 15rem);
 }
-.reviews-handwritten {
-  display: block;
-  margin: 2rem 0 0;
-  padding-right: 2rem;
-  text-align: right;
-  font-family: var(--font-peristiwa-fallback), cursive;
-  font-size: 1.85rem;
-  color: #8e7461;
-  transform: rotate(-6deg);
-}
-.reviews-intro-bottom {
-  position: absolute;
-  bottom: 1.75rem;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  border-top: 1px solid var(--reviews-rule);
-  padding-top: 1.2rem;
-  font-size: 0.75rem;
-  color: var(--reviews-muted);
-}
-.reviews-intro-bottom > span:last-child {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-}
-.reviews-intro-bottom svg {
-  width: 0.85rem;
-  height: 0.85rem;
-}
 
 .reviews-stories {
   padding: clamp(4rem, 8vw, 8rem) 6% 5rem;
@@ -353,12 +304,7 @@
   display: block;
   width: 100%;
   height: auto;
-  margin-bottom: -1.5rem;
   transform: rotate(-7deg);
-}
-.reviews-section-art span {
-  color: var(--reviews-muted);
-  font-size: 0.875rem;
 }
 .reviews-notes {
   position: relative;
@@ -372,16 +318,6 @@
 .reviews-note {
   position: relative;
   min-width: 0;
-}
-.reviews-note-heading {
-  display: flex;
-  gap: 1.2rem;
-  margin-bottom: 1rem;
-  font-size: 0.75rem;
-  color: var(--reviews-muted);
-}
-.reviews-note-heading > :first-child {
-  color: #a08764;
 }
 .reviews-note-1 .reviews-gift-card {
   background: #ede5d8;
@@ -435,13 +371,6 @@
   width: 42%;
   max-width: 13rem;
   height: auto;
-}
-.reviews-art-pause > span {
-  color: #8e7461;
-  font-family: var(--font-peristiwa-fallback), cursive;
-  font-size: clamp(1.6rem, 2.4vw, 2.6rem);
-  line-height: 1.15;
-  transform: rotate(-6deg);
 }
 
 .reviews-ratings {
@@ -605,6 +534,19 @@
   max-width: 38rem;
   font-size: 0.75rem;
 }
+.reviews-built-credit {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem 0.8rem;
+  margin: 0;
+  color: #f3dfab;
+  white-space: nowrap;
+}
+.reviews-built-credit a {
+  color: #fff8ec;
+}
 .reviews-footer-bottom a {
   white-space: nowrap;
   font-size: 0.75rem;
@@ -737,20 +679,6 @@
   .reviews-card-top {
     flex-wrap: nowrap;
   }
-  .reviews-handwritten {
-    font-size: 1.8rem;
-  }
-  .reviews-intro-bottom {
-    bottom: 1.3rem;
-    font-size: 0.75rem;
-  }
-  .reviews-intro-bottom > span:first-child {
-    max-width: 65%;
-  }
-  .reviews-intro-bottom > span:last-child {
-    font-size: 0;
-    gap: 0;
-  }
   .reviews-stories {
     padding: 3.5rem 1.25rem;
   }
@@ -788,9 +716,6 @@
   }
   .reviews-art-pause img {
     max-width: 10rem;
-  }
-  .reviews-art-pause > span {
-    font-size: 2rem;
   }
   .reviews-ratings {
     margin-top: 3rem;
@@ -835,6 +760,10 @@
     flex-direction: column;
     align-items: flex-start;
     gap: 1.25rem;
+  }
+  .reviews-built-credit {
+    justify-content: flex-start;
+    white-space: normal;
   }
   .reviews-footer-brand {
     font-size: 1.75rem;

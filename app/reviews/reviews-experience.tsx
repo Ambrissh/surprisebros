@@ -12,7 +12,6 @@ type Review = {
   id: string;
   name: string;
   date: string;
-  occasion?: string;
   quote?: string;
 };
 
@@ -21,7 +20,6 @@ const reviews: Review[] = [
     id: 'pratheep',
     name: 'Pratheep',
     date: '26 Feb 2023',
-    occasion: "Son's first birthday",
     quote:
       'We planned our son’s first birthday from out of town. The team stayed responsive, shared options, and had the home ready when we arrived. We loved the result, and our baby enjoyed every bit of it.',
   },
@@ -34,7 +32,6 @@ const reviews: Review[] = [
     id: 'nisha',
     name: 'Mrs. Nisha',
     date: '19 Jun 2022',
-    occasion: "Father's Day surprise",
     quote:
       'The video-call cake cutting, the photo slam book, and the three little pieces on the cake made every detail feel personal to our family. It was our fourth celebration with the team, and they made the day memorable again.',
   },
@@ -47,7 +44,6 @@ const reviews: Review[] = [
     id: 'gifty',
     name: 'Gifty Sahana',
     date: '26 Apr 2021',
-    occasion: 'Engagement celebration',
     quote:
       'They listened to every preference with patience and were genuinely friendly throughout. The decor made our engagement feel grander and more special than we had imagined.',
   },
@@ -60,7 +56,6 @@ const reviews: Review[] = [
     id: 'niyaz',
     name: 'Niyaz',
     date: '02 Apr 2022',
-    occasion: 'Event decor',
     quote: 'Awesome work by the Surprise Bro’s team.',
   },
   {
@@ -139,7 +134,6 @@ function GiftCard({
         </span>
       )}
       <div className="reviews-card-top">
-        <span>{review.occasion}</span>
         <Stars />
       </div>
       <blockquote>“{review.quote}”</blockquote>
@@ -266,7 +260,6 @@ export function ReviewsExperience() {
 
       <section className="reviews-intro" aria-labelledby="reviews-title">
         <div className="reviews-intro-copy">
-          <p className="reviews-eyebrow">Surprise Bro&apos;s · Tirunelveli</p>
           <h1 id="reviews-title">
             Good days.<span>Kind words.</span>
           </h1>
@@ -291,20 +284,8 @@ export function ReviewsExperience() {
         <div className="reviews-first-note">
           <Balloon color="wine" className="reviews-balloon-hero" />
           <div className="reviews-featured-wrap" data-tilt>
-            <span className="reviews-note-number" aria-hidden="true">
-              01 / A first birthday
-            </span>
             <GiftCard review={writtenReviews[0]} featured />
           </div>
-          <span className="reviews-handwritten" aria-hidden="true">
-            A day to remember.
-          </span>
-        </div>
-        <div className="reviews-intro-bottom" aria-hidden="true">
-          <span>A few words from the people we celebrate with.</span>
-          <span>
-            Scroll to read <ArrowDown />
-          </span>
         </div>
       </section>
 
@@ -328,7 +309,6 @@ export function ReviewsExperience() {
               sizes="(max-width: 700px) 200px, 370px"
               aria-hidden="true"
             />
-            <span>In their own words</span>
           </div>
         </div>
         <div className="reviews-notes">
@@ -339,10 +319,6 @@ export function ReviewsExperience() {
               data-reveal
               data-tilt
             >
-              <div className="reviews-note-heading">
-                <span>0{index + 2}</span>
-                <span>{review.occasion}</span>
-              </div>
               <GiftCard review={review} />
               {index === 1 && (
                 <Balloon color="champagne" className="reviews-balloon-note" />
@@ -357,11 +333,6 @@ export function ReviewsExperience() {
               height={1448}
               sizes="(max-width: 700px) 180px, 230px"
             />
-            <span>
-              For all the little
-              <br />
-              and big occasions.
-            </span>
           </div>
         </div>
 
@@ -394,7 +365,6 @@ export function ReviewsExperience() {
         aria-labelledby="reviews-closing-title"
       >
         <div className="reviews-closing-copy" data-reveal>
-          <p className="reviews-eyebrow">Your next occasion</p>
           <h2 id="reviews-closing-title">
             Planning a<br />
             <em>celebration?</em>
@@ -416,7 +386,6 @@ export function ReviewsExperience() {
             height={1230}
             sizes="(max-width: 700px) 200px, 300px"
           />
-          <span>Made for your occasion.</span>
         </div>
         <div className="reviews-closing-edge" aria-hidden="true">
           <span>Surprise Bro&apos;s</span>
@@ -441,6 +410,10 @@ export function ReviewsExperience() {
           <p>
             Reviews edited for length and clarity. Ratings and dates from the
             public listing.
+          </p>
+          <p className="reviews-built-credit">
+            Website built by Ambrissh
+            <a href="tel:+919952222309">9952222309</a>
           </p>
           <a href={sourceUrl} target="_blank" rel="noreferrer">
             Review source <ArrowUpRight aria-hidden="true" />
