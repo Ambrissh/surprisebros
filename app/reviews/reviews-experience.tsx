@@ -3,7 +3,6 @@
 import { useEffect, useRef } from 'react';
 import { ArrowDown, ArrowUpRight, Star } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { SiteHeader } from '@/components/site-header';
 
 type BalloonColor = 'wine' | 'pearl' | 'champagne';
@@ -428,16 +427,16 @@ export function ReviewsExperience() {
 
       <footer className="reviews-footer">
         <div className="reviews-footer-top" data-reveal>
-          <Link href="/" className="reviews-footer-brand">
+          <a href="/" className="reviews-footer-brand">
             Surprise Bro&apos;s
-          </Link>
+          </a>
           <nav aria-label="Footer navigation">
-            <Link href="/gallery">
+            <a href="/gallery">
               Gallery <ArrowUpRight aria-hidden="true" />
-            </Link>
-            <Link href="/#reach-out">
+            </a>
+            <a href="/#reach-out">
               Reach out <ArrowUpRight aria-hidden="true" />
-            </Link>
+            </a>
           </nav>
         </div>
         <div className="reviews-footer-bottom" data-reveal>

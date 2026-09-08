@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { ArrowDown, ArrowRight, ArrowUpRight } from 'lucide-react';
 import {
   FILM_EXTENSION_FRAMES,
@@ -441,9 +440,9 @@ export function FilmJourney() {
 
       <footer className="celebration-footer" id="services">
         <div className="celebration-footer-about">
-          <Link href="/#home" className="celebration-footer-brand">
+          <a href="/#home" className="celebration-footer-brand">
             Surprise Bro&apos;s<span>Tirunelveli</span>
-          </Link>
+          </a>
           <p>
             Event styling, celebrations, and the little details that make a big
             difference.
@@ -454,9 +453,9 @@ export function FilmJourney() {
         </div>
         <nav aria-label="Footer navigation">
           <h3>Explore</h3>
-          <Link href="/#home">Home</Link>
-          <Link href="/gallery">Gallery</Link>
-          <Link href="/reviews">Reviews</Link>
+          <a href="/#home">Home</a>
+          <a href="/gallery">Gallery</a>
+          <a href="/reviews">Reviews</a>
           <a href="#reach-out">Contact</a>
         </nav>
         <div className="celebration-footer-services">
@@ -499,9 +498,9 @@ export function FilmJourney() {
             Website built by Ambrissh
             <a href="tel:+919952222309">9952222309</a>
           </p>
-          <Link href="/#home">
+          <a href="/#home">
             Back to top <ArrowUpRight aria-hidden="true" />
-          </Link>
+          </a>
         </div>
       </footer>
     </>

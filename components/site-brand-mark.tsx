@@ -1,10 +1,9 @@
 import Image from "next/image";
-import Link from "next/link";
 import styles from './site-header.module.css';
 
 export function SiteBrandMark() {
   return (
-    <Link className={styles.brand} href="/#home" aria-label="Surprise Bro's home">
+    <a className={styles.brand} href="/#home" aria-label="Surprise Bro's home">
       <Image
         src="/assets/optimized/surprise-bros-logo.webp"
         alt="Surprise Bro's"
@@ -13,6 +12,6 @@ export function SiteBrandMark() {
         priority
         sizes="(max-width: 600px) 64px, (max-width: 900px) 72px, 88px"
       />
-    </Link>
+    </a>
   );
 }
