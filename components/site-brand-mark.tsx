@@ -6,7 +6,7 @@ export function SiteBrandMark() {
   return (
     <Link className={styles.brand} href="/#home" aria-label="Surprise Bro's home">
       <Image
-        src="/assets/surprise-bros-logo.png"
+        src="/assets/optimized/surprise-bros-logo.webp"
         alt="Surprise Bro's"
         width={1636}
         height={1473}

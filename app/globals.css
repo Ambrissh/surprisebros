@@ -125,6 +125,7 @@
     @apply font-sans;
     background: #070605;
     scroll-behavior: smooth;
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -245,7 +246,7 @@
 }
 
 .hero-lamp::before {
-  background: url('/assets/surprise-bros-final-stage-v6.png') center / 100% 100% no-repeat;
+  background: url('/assets/optimized/surprise-bros-final-stage-v6.webp') center / 100% 100% no-repeat;
   mask-image: radial-gradient(
     ellipse var(--lamp-width) var(--lamp-height) at var(--lamp-x) var(--lamp-y),
     #000 0% 48%,
@@ -593,7 +594,7 @@
   width: clamp(4.5rem, 7.5vw, 7.5rem);
   content: '';
   background-color: #210007;
-  background-image: url('/assets/maroon-satin-curtain-v2.png');
+  background-image: url('/assets/optimized/maroon-satin-curtain-v2.webp');
   background-repeat: no-repeat;
   background-size: 100vw 103%;
   opacity: 0;
@@ -660,7 +661,7 @@
   overflow: hidden;
   backface-visibility: hidden;
   background-color: #210007;
-  background-image: url('/assets/maroon-satin-curtain-v2.png');
+  background-image: url('/assets/optimized/maroon-satin-curtain-v2.webp');
   background-repeat: no-repeat;
   background-size: 100vw 100%;
   box-shadow: none;
@@ -827,7 +828,7 @@
 }
 
 .who-we-are-eyebrow {
-  margin-bottom: clamp(1rem, 2vh, 1.5rem);
+  margin-bottom: clamp(1rem, 2svh, 1.5rem);
   color: #a65c38;
 }
 
@@ -846,7 +847,7 @@
 .who-we-are-cue {
   position: relative;
   display: inline-block;
-  margin-top: clamp(2rem, 5vh, 3.5rem);
+  margin-top: clamp(2rem, 5svh, 3.5rem);
   padding-bottom: 0;
   color: rgb(82 43 40 / 54%);
   font-size: 0.66rem;
@@ -871,9 +872,9 @@
   --celebration-right-shift: 0vw;
   position: absolute;
   z-index: 0;
-  inset: 6vh 0 3vh;
+  inset: 6svh 0 3svh;
   opacity: 0.34;
-  transform: translate3d(0, 14vh, -180px) rotateX(48deg) scale(0.84);
+  transform: translate3d(0, 14svh, -180px) rotateX(48deg) scale(0.84);
   transform-origin: center 44%;
   transform-style: preserve-3d;
   will-change: transform, opacity;
@@ -997,7 +998,7 @@
   z-index: 1;
   width: min(92vw, 90rem);
   opacity: 0;
-  transform: translate3d(0, 96vh, -160px) rotateX(55deg);
+  transform: translate3d(0, 96svh, -160px) rotateX(55deg);
   transform-origin: center top;
   transform-style: preserve-3d;
   will-change: transform, opacity;
@@ -1033,7 +1034,7 @@
   right: 0;
   bottom: 0;
   left: 0;
-  height: 24vh;
+  height: 24svh;
   background: linear-gradient(180deg, transparent, #fff 88%);
   pointer-events: none;
 }
@@ -1244,20 +1245,21 @@
   }
 
   .who-we-are-story {
-    width: 100%;
+    /* Reserve room for the perspective projection at the end of the scroll. */
+    width: 86%;
   }
 
   .who-we-are-story p {
-    font-size: clamp(2rem, 8.2vw, 3.2rem);
+    font-size: clamp(1.65rem, 7.5vw, 2.7rem);
     line-height: 1.1;
   }
 
   .who-we-are-fade {
-    height: 18vh;
+    height: 18svh;
   }
 
   .who-we-are-celebration {
-    inset: 8vh -1.25rem 6vh;
+    inset: 8svh -1.25rem 6svh;
   }
 
   .celebration-burst {
@@ -1769,3 +1771,17 @@
   }
 }
 */
+
+/* Native wheel/touch momentum; only deliberate anchor navigation is eased. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+@media (max-width: 700px) {
+  .hero-lamp::before {
+    background-image: url('/assets/optimized/hero-mobile.webp');
+  }
+}
+/* Release the large curtain layers after the introduction has finished. */
+.act-one-stage.nav-visible .curtain-panel {
+  will-change: auto;
+}

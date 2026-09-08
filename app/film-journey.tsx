@@ -17,6 +17,7 @@ import {
   filmPose,
 } from './film-geometry';
 import './film-journey.css';
+import { observeScrollScene } from '../lib/scroll-scene';
 import { advanceFilmProgress } from './film-motion';
 import { filmChapters, filmMediaPresentation } from './film-media';
 import nativePhotos from '../lib/native-photos.json';
@@ -64,14 +65,15 @@ export function FilmJourney() {
     const motion = { velocity: 0 };
     let target = 0;
     let lastTimestamp = 0;
-    let needsSample = true;
-    let snapNext = true;
     let viewportWidth = stage.clientWidth;
     let viewportHeight = stage.clientHeight;
-    let travel = Math.max(1, section.offsetHeight - viewportHeight);
 
     const render = (timestamp: number) => {
       animationFrame = 0;
+      if (document.hidden) {
+        lastTimestamp = 0;
+        return;
+      }
       if (reduced.matches) {
         scene.setAttribute('viewBox', '-54 0 1780 1000');
         reveal.setAttribute('stroke-dashoffset', String(FILM_LENGTH));
@@ -80,20 +82,6 @@ export function FilmJourney() {
         lastTimestamp = 0;
         motion.velocity = 0;
         return;
-      }
-      if (needsSample) {
-        const bounds = section.getBoundingClientRect();
-        // Finish just before the sticky stage releases, giving the last frame
-        // time to settle into the contact section without a last-second snap.
-        target = clamp(
-          -bounds.top / Math.max(1, travel - viewportHeight * 0.25),
-        );
-        if (snapNext || bounds.top >= viewportHeight || bounds.bottom <= 0) {
-          progress = target;
-          motion.velocity = 0;
-        }
-        needsSample = false;
-        snapNext = false;
       }
       const elapsed = lastTimestamp ? timestamp - lastTimestamp : 1000 / 60;
       lastTimestamp = timestamp;
@@ -106,17 +94,19 @@ export function FilmJourney() {
       lastProgress = progress;
       const camera = filmCamera(progress, viewportWidth, viewportHeight);
       scene.setAttribute('viewBox', camera.viewBox);
-      reveal.setAttribute(
-        'stroke-dashoffset',
-        String(FILM_LENGTH - camera.reveal),
-      );
+      const revealOffset = String(FILM_LENGTH - camera.reveal);
+      if (reveal.getAttribute('stroke-dashoffset') !== revealOffset)
+        reveal.setAttribute('stroke-dashoffset', revealOffset);
       const caption = `${String(camera.frame).padStart(2, '0')} / ${FILM_FRAME_COUNT}`;
       if (counter.textContent !== caption) counter.textContent = caption;
-      stage.style.setProperty('--film-settle', String(camera.settling));
-      stage.style.setProperty(
-        '--film-heading',
-        String(1 - clamp(progress / 0.12)),
-      );
+      // Custom properties inherit through the SVG: don't invalidate its entire
+      // subtree when the heading and ending are already settled.
+      const settling = String(camera.settling);
+      const heading = String(1 - clamp(progress / 0.12));
+      if (stage.style.getPropertyValue('--film-settle') !== settling)
+        stage.style.setProperty('--film-settle', settling);
+      if (stage.style.getPropertyValue('--film-heading') !== heading)
+        stage.style.setProperty('--film-heading', heading);
       const background = [229, 223, 214].map((channel) =>
         Math.round(255 + (channel - 255) * camera.settling),
       );
@@ -130,47 +120,49 @@ export function FilmJourney() {
       }
     };
     const requestRender = () => {
-      needsSample = true;
-      if (!animationFrame)
+      if (!animationFrame && !document.hidden)
         animationFrame = window.requestAnimationFrame(render);
     };
-    const measure = () => {
-      const width = stage.clientWidth;
-      const height = stage.clientHeight;
-      const distance = Math.max(1, section.offsetHeight - height);
-      if (
-        width === viewportWidth &&
-        height === viewportHeight &&
-        distance === travel
-      ) {
-        requestRender();
-        return;
-      }
-      lastProgress = -1;
-      snapNext = true;
+    const sample = ({
+      top,
+      travel,
+      width,
+      height,
+      snap,
+    }: {
+      top: number;
+      travel: number;
+      width: number;
+      height: number;
+      snap: boolean;
+    }) => {
       viewportWidth = width;
       viewportHeight = height;
-      travel = distance;
+      target = clamp(-top / Math.max(1, travel - height * 0.25));
+      if (
+        snap ||
+        (progress !== target && (top >= height || top + travel + height <= 0))
+      ) {
+        progress = target;
+        motion.velocity = 0;
+        lastProgress = -1;
+        lastTimestamp = 0;
+      }
+      if (progress !== target || lastProgress !== progress) requestRender();
+    };
+    let stop = observeScrollScene(section, stage, sample);
+    const changeMotionPreference = () => {
+      stop();
+      lastProgress = -1;
+      motion.velocity = 0;
+      stop = observeScrollScene(section, stage, sample);
       requestRender();
     };
-    const observer = new ResizeObserver(measure);
-    observer.observe(stage);
-    window.addEventListener('scroll', requestRender, { passive: true });
-    window.addEventListener('resize', measure);
-    const changeMotionPreference = () => {
-      lastProgress = -1;
-      snapNext = true;
-      motion.velocity = 0;
-      measure();
-    };
     reduced.addEventListener('change', changeMotionPreference);
-    requestRender();
     return () => {
       window.cancelAnimationFrame(animationFrame);
-      window.removeEventListener('scroll', requestRender);
-      window.removeEventListener('resize', measure);
       reduced.removeEventListener('change', changeMotionPreference);
-      observer.disconnect();
+      stop();
     };
   }, []);
 
@@ -234,7 +226,7 @@ export function FilmJourney() {
               ))}
             </defs>
             <image
-              href="/assets/film-roll-reference-composite.png"
+              href="/assets/optimized/film-roll-reference-composite.webp"
               clipPath="url(#film-hardware-only)"
               x="0"
               y="0"

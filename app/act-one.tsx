@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { observeScrollScene } from '../lib/scroll-scene';
 import { FilmJourney } from './film-journey';
-import Image from 'next/image';
 import { SiteHeader } from '@/components/site-header';
 
 export function ActOne() {
   const heroImageRef = useRef<HTMLImageElement>(null);
   const storySectionRef = useRef<HTMLElement>(null);
+  const storyStageRef = useRef<HTMLDivElement>(null);
   const storyTitleRef = useRef<HTMLDivElement>(null);
   const storyTextRef = useRef<HTMLDivElement>(null);
   const storyDecorRef = useRef<HTMLDivElement>(null);
@@ -29,7 +30,7 @@ export function ActOne() {
 
     curtain.onload = () => active && setCurtainReady(true);
     curtain.onerror = () => active && setCurtainReady(true);
-    curtain.src = '/assets/maroon-satin-curtain-v2.png';
+    curtain.src = '/assets/optimized/maroon-satin-curtain-v2.webp';
 
     return () => {
       active = false;
@@ -69,19 +70,17 @@ export function ActOne() {
 
   useEffect(() => {
     const section = storySectionRef.current;
+    const stage = storyStageRef.current;
     const title = storyTitleRef.current;
     const story = storyTextRef.current;
     const decor = storyDecorRef.current;
 
-    if (!section || !title || !story || !decor) return;
+    if (!section || !stage || !title || !story || !decor) return;
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let frame = 0;
     let lastStoryProgress = -1;
 
-    const render = () => {
-      frame = 0;
-
+    const render = ({ top, travel }: { top: number; travel: number }) => {
       if (reduceMotion.matches) {
         lastStoryProgress = -1;
         title.removeAttribute('style');
@@ -90,9 +89,7 @@ export function ActOne() {
         return;
       }
 
-      const bounds = section.getBoundingClientRect();
-      const travel = Math.max(section.offsetHeight - window.innerHeight, 1);
-      const progress = Math.min(Math.max(-bounds.top / travel, 0), 1);
+      const progress = Math.min(Math.max(-top / travel, 0), 1);
       // The story is settled while the film is on screen. Avoid repeated writes
       // to its perspective layers on every film scroll frame.
       if (progress === lastStoryProgress) return;
@@ -103,13 +100,13 @@ export function ActOne() {
       const celebrationExit = Math.min(Math.max((progress - 0.36) / 0.2, 0), 1);
 
       title.style.opacity = `${1 - titleExit}`;
-      title.style.transform = `translate3d(0, ${-titleExit * 14}vh, 0) scale(${1 - titleExit * 0.08})`;
+      title.style.transform = `translate3d(0, ${-titleExit * 14}svh, 0) scale(${1 - titleExit * 0.08})`;
 
       const storyY = 96 - storyEntrance * 90;
       const storyTilt = 55 - storyEntrance * 35;
       const storyZ = -160 + storyEntrance * 210;
       story.style.opacity = `${Math.min(storyEntrance * 2.8, 1)}`;
-      story.style.transform = `translate3d(0, ${storyY}vh, ${storyZ}px) rotateX(${storyTilt}deg)`;
+      story.style.transform = `translate3d(0, ${storyY}svh, ${storyZ}px) rotateX(${storyTilt}deg)`;
 
       const celebrationY = 14 - celebrationEntrance * 18;
       const celebrationTilt = 48 - celebrationEntrance * 26;
@@ -119,7 +116,7 @@ export function ActOne() {
         (0.34 + celebrationEntrance * 0.52) * (1 - celebrationExit);
       decor.style.opacity = `${celebrationOpacity}`;
       decor.style.visibility = celebrationExit >= 0.995 ? 'hidden' : 'visible';
-      decor.style.transform = `translate3d(0, ${celebrationY}vh, ${celebrationZ}px) rotateX(${celebrationTilt}deg) scale(${celebrationScale})`;
+      decor.style.transform = `translate3d(0, ${celebrationY}svh, ${celebrationZ}px) rotateX(${celebrationTilt}deg) scale(${celebrationScale})`;
       decor.style.setProperty(
         '--celebration-left-shift',
         `${-celebrationEntrance * 4.5}vw`,
@@ -130,21 +127,16 @@ export function ActOne() {
       );
     };
 
-    const requestRender = () => {
-      if (frame) return;
-      frame = window.requestAnimationFrame(render);
+    let stop = observeScrollScene(section, stage, render);
+    const changeMotion = () => {
+      stop();
+      lastStoryProgress = -1;
+      stop = observeScrollScene(section, stage, render);
     };
-
-    render();
-    window.addEventListener('scroll', requestRender, { passive: true });
-    window.addEventListener('resize', requestRender);
-    reduceMotion.addEventListener('change', requestRender);
-
+    reduceMotion.addEventListener('change', changeMotion);
     return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.removeEventListener('scroll', requestRender);
-      window.removeEventListener('resize', requestRender);
-      reduceMotion.removeEventListener('change', requestRender);
+      stop();
+      reduceMotion.removeEventListener('change', changeMotion);
     };
   }, []);
 
@@ -158,18 +150,30 @@ export function ActOne() {
         <div className="hero-media" aria-hidden="true">
           <div className="hero-artwork">
             <div className="hero-quality-frame">
-              <Image
-                ref={heroImageRef}
-                src="/assets/surprise-bros-final-stage-v6.png"
-                alt=""
-                fill
-                priority
-                unoptimized
-                sizes="100vw"
-                style={{ objectFit: 'contain' }}
-                onLoad={() => setHeroReady(true)}
-                onError={() => setHeroReady(true)}
-              />
+              <picture>
+                <source
+                  media="(max-width: 700px)"
+                  srcSet="/assets/optimized/hero-mobile.webp"
+                />
+                <img
+                  ref={heroImageRef}
+                  src="/assets/optimized/surprise-bros-final-stage-v6.webp"
+                  alt=""
+                  width={1920}
+                  height={1080}
+                  fetchPriority="high"
+                  decoding="async"
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'contain',
+                  }}
+                  onLoad={() => setHeroReady(true)}
+                  onError={() => setHeroReady(true)}
+                />
+              </picture>
             </div>
           </div>
           <div className="hero-blackout" />
@@ -207,7 +211,7 @@ export function ActOne() {
         className="who-we-are"
         aria-labelledby="who-we-are-title"
       >
-        <div className="who-we-are-sticky">
+        <div ref={storyStageRef} className="who-we-are-sticky">
           <div ref={storyTitleRef} className="who-we-are-title-wrap">
             <p className="who-we-are-eyebrow">
               Surprise Bro&apos;s · Tirunelveli

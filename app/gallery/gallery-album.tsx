@@ -44,7 +44,7 @@ export function GalleryAlbum() {
   const turning = albumState.turn as TurnState | null;
   const busy = albumState.phase !== 'open';
   const [selectedPhoto, setSelectedPhoto] = useState<number | null>(null);
-  const swipeOrigin = useRef<number | null>(null);
+  const swipeOrigin = useRef<{ x: number; y: number; id: number } | null>(null);
 
   useEffect(() => {
     if (albumState.phase === 'open' || albumState.phase === 'closed') return;
@@ -86,6 +86,7 @@ export function GalleryAlbum() {
   }, [selectedPhoto, showNextPhoto, showPreviousPhoto]);
 
   useEffect(() => {
+    if (!isOpen || albumState.phase !== 'open') return;
     const adjacentPhotos = [
       ...getSpreadPhotos((spreadIndex + 1) % spreadCount),
       ...getSpreadPhotos((spreadIndex - 1 + spreadCount) % spreadCount),
@@ -93,9 +94,11 @@ export function GalleryAlbum() {
 
     adjacentPhotos.forEach((photo) => {
       const image = new window.Image();
+      image.decoding = 'async';
+      image.fetchPriority = 'low';
       image.src = photo.src;
     });
-  }, [spreadIndex]);
+  }, [spreadIndex, isOpen, albumState.phase]);
 
   const beginTurn = (to: number, direction: -1 | 1) => {
     dispatch({ type: 'turn', to, direction, count: spreadCount });
@@ -289,15 +292,34 @@ export function GalleryAlbum() {
             <div
               className="lightbox-frame"
               onPointerDown={(event) => {
-                swipeOrigin.current = event.clientX;
+                if (
+                  !event.isPrimary ||
+                  event.button !== 0 ||
+                  (event.target as HTMLElement).closest('button')
+                )
+                  return;
+                swipeOrigin.current = {
+                  x: event.clientX,
+                  y: event.clientY,
+                  id: event.pointerId,
+                };
               }}
               onPointerUp={(event) => {
-                if (swipeOrigin.current === null) return;
-                const distance = event.clientX - swipeOrigin.current;
+                const origin = swipeOrigin.current;
+                if (!origin || origin.id !== event.pointerId) return;
+                const distance = event.clientX - origin.x;
+                const vertical = event.clientY - origin.y;
                 swipeOrigin.current = null;
-                if (Math.abs(distance) < 45) return;
+                if (
+                  Math.abs(distance) < 45 ||
+                  Math.abs(distance) <= Math.abs(vertical) * 1.25
+                )
+                  return;
                 if (distance > 0) showPreviousPhoto();
                 else showNextPhoto();
+              }}
+              onPointerCancel={() => {
+                swipeOrigin.current = null;
               }}
             >
               <Image

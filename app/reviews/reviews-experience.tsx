@@ -76,9 +76,9 @@ const reviews: Review[] = [
 ];
 
 const balloonSource: Record<BalloonColor, string> = {
-  wine: '/assets/reviews/balloon-wine.png',
-  pearl: '/assets/reviews/balloon-pearl.png',
-  champagne: '/assets/reviews/balloon-champagne.png',
+  wine: '/assets/optimized/balloon-wine.webp',
+  pearl: '/assets/optimized/balloon-pearl.webp',
+  champagne: '/assets/optimized/balloon-champagne.webp',
 };
 
 const writtenReviews = reviews.filter((review) => review.quote);
@@ -159,12 +159,16 @@ export function ReviewsExperience() {
     ).map((surface) => {
       let frame = 0;
       let bounds: DOMRect | null = null;
+      let active = false;
       let x = 0;
       let y = 0;
       const enter = () => {
+        if (!motion.matches) return;
         bounds = surface.getBoundingClientRect();
       };
       const reset = () => {
+        if (!active && !frame && !bounds) return;
+        active = false;
         if (frame) cancelAnimationFrame(frame);
         frame = 0;
         bounds = null;
@@ -190,6 +194,7 @@ export function ReviewsExperience() {
           surface.style.setProperty('--review-tilt-x', `${-y * 2.2}deg`);
           surface.style.setProperty('--review-tilt-y', `${x * 2.8}deg`);
           surface.classList.add('is-hovered');
+          active = true;
         });
       };
       surface.addEventListener('pointerenter', enter);
@@ -198,6 +203,7 @@ export function ReviewsExperience() {
       surface.addEventListener('pointercancel', reset);
       motion.addEventListener('change', reset);
       window.addEventListener('scroll', reset, { passive: true });
+      window.addEventListener('resize', reset, { passive: true });
       return () => {
         reset();
         surface.removeEventListener('pointerenter', enter);
@@ -206,6 +212,7 @@ export function ReviewsExperience() {
         surface.removeEventListener('pointercancel', reset);
         motion.removeEventListener('change', reset);
         window.removeEventListener('scroll', reset);
+        window.removeEventListener('resize', reset);
       };
     });
     return () => cleanups.forEach((cleanup) => cleanup());
@@ -251,6 +258,33 @@ export function ReviewsExperience() {
       observer.disconnect();
       reducedMotion.removeEventListener('change', showAll);
       items.forEach((item) => item.classList.remove('will-reveal'));
+    };
+  }, []);
+
+  useEffect(() => {
+    const balloons = Array.from(
+      pageRef.current?.querySelectorAll<HTMLElement>('.reviews-balloon') ?? [],
+    );
+    const visible = new Set<Element>();
+    const update = () =>
+      balloons.forEach((balloon) => {
+        balloon.classList.toggle(
+          'is-animating',
+          visible.has(balloon) && !document.hidden,
+        );
+      });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) visible.add(entry.target);
+        else visible.delete(entry.target);
+      });
+      update();
+    });
+    balloons.forEach((balloon) => observer.observe(balloon));
+    document.addEventListener('visibilitychange', update);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', update);
     };
   }, []);
 
@@ -302,7 +336,7 @@ export function ReviewsExperience() {
           </h2>
           <div className="reviews-section-art">
             <Image
-              src="/assets/reviews/burgundy-satin-ribbon.png"
+              src="/assets/optimized/burgundy-satin-ribbon.webp"
               alt=""
               width={1536}
               height={1024}
@@ -327,7 +361,7 @@ export function ReviewsExperience() {
           ))}
           <div className="reviews-art-pause" data-reveal aria-hidden="true">
             <Image
-              src="/assets/celebration-cake-gift.png"
+              src="/assets/optimized/celebration-cake-gift.webp"
               alt=""
               width={1086}
               height={1448}
@@ -380,7 +414,7 @@ export function ReviewsExperience() {
         </div>
         <div className="reviews-closing-art" data-reveal aria-hidden="true">
           <Image
-            src="/assets/reviews/christmas-wreath-premium.png"
+            src="/assets/optimized/christmas-wreath-premium.webp"
             alt=""
             width={1278}
             height={1230}

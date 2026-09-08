@@ -823,7 +823,7 @@
   max-height: 95svh;
   display: grid;
   place-items: center;
-  touch-action: pan-y;
+  touch-action: pan-y pinch-zoom;
 }
 
 .lightbox-frame > img {

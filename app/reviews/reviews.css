@@ -595,6 +595,10 @@
   .reviews-balloon img {
     animation: review-balloon-drift 7s ease-in-out infinite alternate;
     transform-origin: center top;
+    animation-play-state: paused;
+  }
+  .reviews-balloon.is-animating img {
+    animation-play-state: running;
   }
   .reviews-balloon-note img {
     animation-delay: -2s;
