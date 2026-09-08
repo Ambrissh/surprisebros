@@ -1043,6 +1043,7 @@
   .hero-kicker {
     top: 28%;
     left: 56%;
+    font-size: 2.1vw;
   }
 
   .headline-line-one {
@@ -1278,6 +1279,54 @@
 
   .celebration-burst span:nth-child(n + 8) {
     display: none;
+  }
+}
+
+/* Short landscape screens need the entire sticky scene inside the viewport. */
+@media (min-width: 561px) and (max-height: 600px) and (orientation: landscape) {
+  .act-one-stage,
+  .who-we-are-sticky {
+    min-height: 0;
+  }
+
+  .hero-kicker {
+    top: 32%;
+    right: 5%;
+    left: auto;
+    font-size: min(1.8vw, 3.5svh);
+    letter-spacing: 0.16em;
+  }
+
+  .headline-line-one,
+  .headline-line-two {
+    right: 5%;
+    left: auto;
+    font-size: min(14vw, 22svh);
+  }
+
+  .headline-line-one {
+    top: 41%;
+  }
+
+  .headline-line-two {
+    top: 66%;
+  }
+
+  .who-we-are {
+    min-height: 0;
+  }
+
+  .who-we-are-title-wrap h2 {
+    font-size: min(11vw, 20svh);
+  }
+
+  .who-we-are-story {
+    width: min(86%, 48rem);
+  }
+
+  .who-we-are-story p {
+    font-size: min(4vw, 6svh);
+    line-height: 1.1;
   }
 }
 
