@@ -806,13 +806,16 @@
 .who-we-are-title-wrap {
   position: absolute;
   z-index: 2;
-  top: 50%;
-  left: 50%;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   width: min(92vw, 78rem);
+  margin-inline: auto;
   text-align: center;
   transform: translate3d(0, 0, 0);
   transform-origin: center;
-  translate: -50% -50%;
+  /* Layout owns centering so scroll transforms cannot overwrite it. */
   will-change: transform, opacity;
 }
 
@@ -1391,7 +1394,6 @@
 
   .who-we-are-title-wrap {
     left: auto;
-    translate: none;
   }
 
   .who-we-are-cue,
